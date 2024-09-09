@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class) // Enable auditing for this class
 @Data
-public abstract class BaseEntity {
+public abstract class LogEntity {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

@@ -1,27 +1,28 @@
 package com.goonok.equalbangla.config;
 
-import com.goonok.equalbangla.security.RateLimitingFilter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.web.filter.DelegatingFilterProxy;
-
-import jakarta.servlet.FilterRegistration;
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletException;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class SecurityConfig implements ServletContextInitializer {
+public class SecurityConfig {
 
-    @Autowired
-    private RateLimitingFilter rateLimitingFilter;
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/", "/images/**", "/about", "/verification/**", "/victims/**").permitAll()  // Public URLs
+                        .anyRequest().authenticated()  // Other requests require authentication
+                )
+                // Disable form login and basic authentication using the new approach
+                .formLogin(AbstractHttpConfigurer::disable)  // Disable form-based login
+                .httpBasic(AbstractHttpConfigurer::disable);  // Disable HTTP Basic authentication
 
-    @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-        // Register rate limiting filter for specific endpoints
-        FilterRegistration.Dynamic rateLimitFilter = servletContext.addFilter("rateLimitingFilter", new DelegatingFilterProxy("rateLimitingFilter"));
-        rateLimitFilter.addMappingForUrlPatterns(null, false, "/verification/send-code");
-        rateLimitFilter.addMappingForUrlPatterns(null, false, "/victims/submit-death-form", "/victims/submit-missing-form", "/victims/submit-injured-form");
+        // Disable CSRF protection for APIs or if not needed
+        http.csrf(AbstractHttpConfigurer::disable);
+
+        return http.build();
     }
 }

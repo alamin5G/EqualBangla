@@ -1,4 +1,4 @@
-package com.goonok.equalbangla;
+package com.goonok.equalbangla.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
