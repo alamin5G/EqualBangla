@@ -5,9 +5,7 @@ import com.goonok.equalbangla.repository.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class VerificationService {
@@ -19,13 +17,19 @@ public class VerificationService {
     private EmailService emailService;
 
     // Generate a verification token and send it via email
-    public String generateVerificationToken(String email) {
-        // Generate a random token
-        String token = UUID.randomUUID().toString();
+    public boolean generateVerificationToken(String email) {
+
 
         // Check if a token already exists for the email and remove it (to avoid multiple tokens)
         Optional<VerificationToken> existingToken = verificationTokenRepository.findByEmail(email);
-        existingToken.ifPresent(verificationTokenRepository::delete);
+       // existingToken.ifPresent(verificationTokenRepository::delete);
+        if (existingToken.isPresent()) {
+            return false;
+        }
+
+        // Generate a random token
+        int verificationCode = (int) (Math.random()*999999);
+        String token = String.valueOf(verificationCode);
 
         // Create a new VerificationToken
         VerificationToken verificationToken = new VerificationToken();
@@ -35,23 +39,33 @@ public class VerificationService {
         verificationTokenRepository.save(verificationToken);
 
         // Send the verification email with the token
-        emailService.sendEmail(email, "Verification Code", "Your verification code is: " + token);
+        emailService.sendEmail(email, "Equal Bangladesh - Verification Code", "Your verification code is: " + token +
+                " It is valid for the next 24 hours.");
 
-        return token;
+        return true;
     }
 
     // Verify if the token is valid
-    public boolean verifyToken(String token) {
-        Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
-        if (verificationToken.isPresent()) {
-            VerificationToken tokenEntity = verificationToken.get();
-            // Check if the token is still valid
-            if (tokenEntity.isValid()) {
-                // Token is valid; delete it to prevent reuse
-                verificationTokenRepository.delete(tokenEntity);
+    // Verify the OTP
+    public boolean verifyOtp(String email, String otp) {
+        // Fetch the token for the given email from the database
+        Optional<VerificationToken> tokenOptional = verificationTokenRepository.findByEmail(email);
+
+        if (tokenOptional.isPresent()) {
+            VerificationToken token = tokenOptional.get();
+
+            // Check if the token matches and is still valid (not expired)
+            if (token.getToken().equals(otp) && token.isValid()) {
+                // Token is valid and not expired
                 return true;
             }
         }
-        return false;  // Invalid or expired token
+        // OTP is invalid or expired
+        return false;
+    }
+
+    public void deleteToken(String email) {
+        Optional<VerificationToken> tokenOptional = verificationTokenRepository.findByEmail(email);
+        tokenOptional.ifPresent(verificationToken -> verificationTokenRepository.delete(verificationToken));
     }
 }

@@ -13,7 +13,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/images/**", "/about", "/verification/**", "/victims/**").permitAll()  // Public URLs
+                        .requestMatchers("/", "/static/images/**", "/about", "/verification/**", "/victims/**").permitAll()  // Public URLs
                         .anyRequest().authenticated()  // Other requests require authentication
                 )
                 // Disable form login and basic authentication using the new approach

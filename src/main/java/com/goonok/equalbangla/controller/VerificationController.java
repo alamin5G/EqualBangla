@@ -1,11 +1,11 @@
 package com.goonok.equalbangla.controller;
-
 import com.goonok.equalbangla.service.VerificationService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -21,30 +21,46 @@ public class VerificationController {
         return "verify-email";  // Thymeleaf page for entering the email
     }
 
-    // Process email input and send verification code
+    // Process email input and send verification code (OTP)
     @PostMapping("/send-code")
     public String sendVerificationCode(@RequestParam String email, Model model) {
-        // Validate email domain (gmail, yahoo, hotmail)
+        // Validate email domain (only allow Gmail, Yahoo, Hotmail)
         if (email.matches("^[\\w-\\.]+@(gmail|yahoo|hotmail)\\.com$")) {
-            verificationService.generateVerificationToken(email);
-            model.addAttribute("message", "Verification code sent to your email.");
+            // Generate and send OTP
+            boolean isExist = verificationService.generateVerificationToken(email);
+            if (!isExist) {
+                model.addAttribute("error", "This email already exists, you can't use this email");
+                return "verify-email";
+            }
+            model.addAttribute("email", email);
+            return "otp-form";  // Redirect to OTP form after sending OTP
         } else {
             model.addAttribute("error", "Invalid email domain. Please use Gmail, Yahoo, or Hotmail.");
+            return "verify-email";  // Return to the email form with error
         }
-        return "verify-email";  // Return to the email form
     }
 
-    // Process token verification
+    // Process token (OTP) verification
     @PostMapping("/verify")
-    public String verifyToken(@RequestParam String token, Model model, HttpSession session) {
-        boolean isValid = verificationService.verifyToken(token);
+    public String verifyToken(@RequestParam String email, @RequestParam String token, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        boolean isValid = verificationService.verifyOtp(email, token);  // Verify OTP for the given email
         if (isValid) {
-            session.setAttribute("verifiedEmail", true);  // Store verification status in session
+
+            // If OTP is valid, redirect to the victim form
+            redirectAttributes.addFlashAttribute("message", "OTP verified successfully!");
+            // If valid, store the verified email status in the session
+            session.setAttribute("verifiedEmail", true);
+            session.setAttribute("verifiedEmailAddress", email);  // Store email in session for future use
             model.addAttribute("message", "Email verified successfully!");
-            return "form-selection";  // Allow the user to proceed to the form selection page
+
+            // Redirect the user to the form selection page
+            return "redirect:/victims/form-selection";  // Redirect to victim form
         } else {
-            model.addAttribute("error", "Invalid or expired token.");
-            return "verify-email";  // Return to the verification page
+            // If OTP is invalid or expired, show an error and return to the OTP form
+            model.addAttribute("error", "Invalid or expired OTP.");
+            redirectAttributes.addFlashAttribute("email", email);  // Keep the email in the form
+            verificationService.deleteToken(email); //as email is not verified yet.
+            return "redirect:/verification/email";  // Show OTP form again
         }
     }
 }
