@@ -12,7 +12,11 @@
 
     <!-- Bind the form to the 'victim' object -->
     <form action="/victims/submit-death-form" method="post" th:object="${victim}" enctype="multipart/form-data">
-
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+            <ul>
+                <li th:each="err : ${#fields.errors('*')}" th:text="${err}" class="text-danger"></li>
+            </ul>
+        </div>
         <!-- Hidden Field for Incident Type -->
         <input type="hidden" th:field="*{incidentType}" value="Death" />
 
@@ -140,34 +144,108 @@
             <input type="text" class="form-control" id="policeCaseReference" th:field="*{policeCaseReference}">
         </div>
 
-        <!-- Specific Fields for DeathDetails -->
-        <h4>Death Details</h4>
-        <!-- Cause of Death Field -->
+        <!--death fields-->
+        <!-- Cause of Death -->
         <div class="mb-3">
             <label for="causeOfDeath" class="form-label">Cause of Death</label>
-            <textarea class="form-control" id="causeOfDeath" th:field="*{deathDetails.causeOfDeath}" required></textarea>
-            <div th:if="${#fields.hasErrors('deathDetails.causeOfDeath')}" class="text-danger">
-                <p th:errors="*{deathDetails.causeOfDeath}"></p>
-            </div>
+            <input type="text" id="causeOfDeath" name="causeOfDeath" class="form-control" th:field="*{deathDetails.causeOfDeath}" placeholder="Enter cause of death" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.causeOfDeath')}" th:errors="*{deathDetails.causeOfDeath}"></div>
         </div>
 
-        <!-- Date of Death Field -->
+        <!-- Date of Death -->
         <div class="mb-3">
             <label for="dateOfDeath" class="form-label">Date of Death</label>
-            <input type="date" class="form-control" id="dateOfDeath" th:field="*{deathDetails.dateOfDeath}" required>
-            <div th:if="${#fields.hasErrors('deathDetails.dateOfDeath')}" class="text-danger">
-                <p th:errors="*{deathDetails.dateOfDeath}"></p>
+            <input type="date" id="dateOfDeath" name="dateOfDeath" class="form-control" th:field="*{deathDetails.dateOfDeath}" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.dateOfDeath')}" th:errors="*{deathDetails.dateOfDeath}"></div>
+        </div>
+
+        <!-- Time of Death (Optional) -->
+        <div class="mb-3">
+            <label for="timeOfDeath" class="form-label">Time of Death (Optional)</label>
+            <input type="time" id="timeOfDeath" name="timeOfDeath" class="form-control" th:field="*{deathDetails.timeOfDeath}">
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.timeOfDeath')}" th:errors="*{deathDetails.timeOfDeath}"></div>
+        </div>
+
+        <!-- Burial or Cremation Details -->
+        <div class="mb-3">
+            <label for="burialCremationDetails" class="form-label">Burial/Cremation Details</label>
+            <textarea id="burialCremationDetails" name="burialCremationDetails" class="form-control" rows="3" th:field="*{deathDetails.burialCremationDetails}" placeholder="Enter burial/cremation details" required></textarea>
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.burialCremationDetails')}" th:errors="*{deathDetails.burialCremationDetails}"></div>
+        </div>
+
+        <!-- Witness Account -->
+        <div class="mb-3">
+            <label for="witnessAccount" class="form-label">Witness Account</label>
+            <textarea id="witnessAccount" name="witnessAccount" class="form-control" rows="3" th:field="*{deathDetails.witnessAccount}" placeholder="Enter witness account"></textarea>
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.witnessAccount')}" th:errors="*{deathDetails.witnessAccount}"></div>
+        </div>
+
+        <!-- Autopsy Performed -->
+        <div class="mb-3">
+            <label class="form-label">Autopsy Performed?</label>
+            <div class="form-check">
+                <input type="radio" id="autopsyYes" name="deathDetails.autopsyPerformed"  value="true" class="form-check-input" th:field="*{deathDetails.autopsyPerformed}">
+                <label for="autopsyYes" class="form-check-label">Yes</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" id="autopsyNo" name="deathDetails.autopsyPerformed" value="false" class="form-check-input" th:field="*{deathDetails.autopsyPerformed}">
+                <label for="autopsyNo" class="form-check-label">No</label>
+            </div>
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.autopsyPerformed')}" th:errors="*{deathDetails.autopsyPerformed}"></div>
+        </div>
+
+        <!-- Death Certificate Upload -->
+        <div class="mb-3">
+            <label for="deathCertificate" class="form-label">Death Certificate (Optional)</label>
+            <input type="file" id="deathCertificate" name="deathCertificatePath" class="form-control" th:field="*{deathDetails.deathCertificatePath}" accept=".pdf,.jpg,.png">
+        </div>
+
+
+        <!-- Contact Person Information -->
+        <h4>Contact Person Information</h4>
+        <div class="mb-3">
+            <label for="contactPersonName" class="form-label">Contact Person Name</label>
+            <input type="text" class="form-control" id="contactPersonName" th:field="*{conatactName}" required>
+            <div th:if="${#fields.hasErrors('conatactName')}" class="text-danger">
+                <p th:errors="*{conatactName}">Contact person name is required</p>
             </div>
         </div>
 
-        <!-- Burial Information Field -->
         <div class="mb-3">
-            <label for="burialInfo" class="form-label">Burial/Cremation Information</label>
-            <textarea class="form-control" id="burialInfo" th:field="*{deathDetails.burialInfo}" required></textarea>
-            <div th:if="${#fields.hasErrors('deathDetails.burialInfo')}" class="text-danger">
-                <p th:errors="*{deathDetails.burialInfo}"></p>
+            <label for="contactPersonRelationship" class="form-label">Relationship to Victim</label>
+            <input type="text" class="form-control" id="contactPersonRelationship" th:field="*{relationshipToVictim}" required>
+            <div th:if="${#fields.hasErrors('relationshipToVictim')}" class="text-danger">
+                <p th:errors="*{relationshipToVictim}">Relationship to the victim is required</p>
             </div>
         </div>
+
+        <div class="mb-3">
+            <label for="contactPersonPhoneNumber" class="form-label">Contact Person Phone Number</label>
+            <input type="text" class="form-control" id="contactPersonPhoneNumber" th:field="*{contactPhone}" required>
+            <div th:if="${#fields.hasErrors('contactPhone')}" class="text-danger">
+                <p th:errors="*{contactPhone}">Phone number is required</p>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="contactPersonAddress" class="form-label">Contact Person Address</label>
+            <input type="text" class="form-control" id="contactPersonAddress" th:field="*{contactAddress}" required>
+            <div th:if="${#fields.hasErrors('contactAddress')}" class="text-danger">
+                <p th:errors="*{contactAddress}">Phone number is required</p>
+            </div>
+        </div>
+
+        <!-- Optional fields for Contact Person -->
+        <div class="mb-3">
+            <label for="contactEmail" class="form-label">Contact Person Email (Optional)</label>
+            <input type="email" class="form-control" id="contactEmail" th:field="*{contactEmail}">
+        </div>
+
+        <div class="mb-3">
+            <label for="identificationDocument" class="form-label">Identification Document (Optional)</label>
+            <input type="text" class="form-control" id="identificationDocument" th:field="*{contactIdentificationDocument}">
+        </div>
+
 
         <button type="submit" class="btn btn-primary">Submit Death Case</button>
     </form>

@@ -3,6 +3,8 @@ package com.goonok.equalbangla.model;
 
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,21 +20,25 @@ public class DeathDetails extends LogEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "victim_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "victim_id")
     private Victim victim;
 
-    private String causeOfDeath; // Known cause such as "police brutality", "gunfire", etc.
+    @NotEmpty(message = "Cause of death is required")
+    private String causeOfDeath;
 
-    private LocalDate dateOfDeath; // Date when the death occurred
+    @NotNull(message = "Date of death is required")
+    private LocalDate dateOfDeath;
 
-    private String timeOfDeath; // Time of death (optional)
+    private String timeOfDeath;
 
-    private String burialCremationDetails; // Burial or cremation information
+    @NotEmpty(message = "Burial/cremation details are required")
+    private String burialCremationDetails;
 
-    private String witnessAccount; // Witnesses' description of what happened
+    private String witnessAccount;
 
-    private Boolean autopsyPerformed; // Whether an autopsy was conducted
+    @NotNull(message = "Autopsy information is required")
+    private Boolean autopsyPerformed;
 
     private String deathCertificatePath; // Path to the uploaded death certificate
 }

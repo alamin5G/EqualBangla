@@ -3,25 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Missing Case</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Submit Injured Case</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="container mt-5">
-    <h2>Submit Missing Case</h2>
+    <h2>Submit Injured Case</h2>
 
-    <!-- Bind the form to the 'victim' object -->
     <form action="/victims/submit-missing-form" method="post" th:object="${victim}" enctype="multipart/form-data">
 
-        <!-- Hidden Field for Incident Type -->
-        <input type="hidden" th:field="*{incidentType}" value="Missing" />
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+            <h5 class="text-danger">Validation Error</h5>
+            <ul>
+                <li th:each="err : ${#fields.errors('*')}" th:text="${err}" class="text-danger"></li>
+            </ul>
+        </div>
 
         <!-- Full Name Field -->
         <div class="mb-3">
             <label for="fullName" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="fullName" th:field="*{fullName}" placeholder="Enter full name" required>
+            <input type="text" class="form-control" id="fullName" th:field="*{fullName}" placeholder="Enter injured person's full name" required>
             <div th:if="${#fields.hasErrors('fullName')}" class="text-danger">
-                <p th:errors="*{fullName}"></p>
+                <p th:errors="*{fullName}">Full name is required</p>
             </div>
         </div>
 
@@ -30,7 +38,7 @@
             <label for="guardianName" class="form-label">Guardian's Name</label>
             <input type="text" class="form-control" id="guardianName" th:field="*{guardianName}" required>
             <div th:if="${#fields.hasErrors('guardianName')}" class="text-danger">
-                <p th:errors="*{guardianName}"></p>
+                <p th:errors="*{guardianName}">Guardian's name is required</p>
             </div>
         </div>
 
@@ -43,7 +51,7 @@
                 <option value="Other">Other</option>
             </select>
             <div th:if="${#fields.hasErrors('gender')}" class="text-danger">
-                <p th:errors="*{gender}"></p>
+                <p th:errors="*{gender}">Gender is required</p>
             </div>
         </div>
 
@@ -52,7 +60,17 @@
             <label for="age" class="form-label">Age</label>
             <input type="number" class="form-control" id="age" th:field="*{age}" required>
             <div th:if="${#fields.hasErrors('age')}" class="text-danger">
-                <p th:errors="*{age}"></p>
+                <p th:errors="*{age}">Age is required</p>
+            </div>
+        </div>
+
+
+        <!-- Address Field -->
+        <div class="mb-3">
+            <label for="address" class="form-label">Address</label>
+            <input type="text" class="form-control" id="address" th:field="*{address}" required>
+            <div th:if="${#fields.hasErrors('address')}" class="text-danger">
+                <p th:errors="*{address}">Address is required</p>
             </div>
         </div>
 
@@ -61,34 +79,29 @@
             <label for="contactNumber" class="form-label">Contact Number</label>
             <input type="text" class="form-control" id="contactNumber" th:field="*{contactNumber}" required>
             <div th:if="${#fields.hasErrors('contactNumber')}" class="text-danger">
-                <p th:errors="*{contactNumber}"></p>
+                <p th:errors="*{contactNumber}">Contact number is required</p>
             </div>
         </div>
 
-        <!-- Address Field -->
-        <div class="mb-3">
-            <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="address" th:field="*{address}" required>
-            <div th:if="${#fields.hasErrors('address')}" class="text-danger">
-                <p th:errors="*{address}"></p>
-            </div>
-        </div>
 
         <!-- National ID Field -->
         <div class="mb-3">
             <label for="nationalId" class="form-label">National ID / Birth Certificate</label>
             <input type="text" class="form-control" id="nationalId" th:field="*{nationalId}" required>
             <div th:if="${#fields.hasErrors('nationalId')}" class="text-danger">
-                <p th:errors="*{nationalId}"></p>
+                <p th:errors="*{nationalId}">National ID/Birth Certificate is required</p>
             </div>
         </div>
+
+        <!-- Hidden Field for Incident Type -->
+        <input type="hidden" th:field="*{incidentType}" name="incidentType" th:value="*{incidentType}"/>
 
         <!-- Incident Location Field -->
         <div class="mb-3">
             <label for="incidentLocation" class="form-label">Location of the Incident</label>
             <input type="text" class="form-control" id="incidentLocation" th:field="*{incidentLocation}" required>
             <div th:if="${#fields.hasErrors('incidentLocation')}" class="text-danger">
-                <p th:errors="*{incidentLocation}"></p>
+                <p th:errors="*{incidentLocation}">Incident location is required</p>
             </div>
         </div>
 
@@ -97,7 +110,7 @@
             <label for="incidentDate" class="form-label">Incident Date</label>
             <input type="date" class="form-control" id="incidentDate" th:field="*{incidentDate}" required>
             <div th:if="${#fields.hasErrors('incidentDate')}" class="text-danger">
-                <p th:errors="*{incidentDate}"></p>
+                <p th:errors="*{incidentDate}">Incident date is required</p>
             </div>
         </div>
 
@@ -106,9 +119,10 @@
             <label for="incidentDescription" class="form-label">Incident Description</label>
             <textarea class="form-control" id="incidentDescription" th:field="*{incidentDescription}" required></textarea>
             <div th:if="${#fields.hasErrors('incidentDescription')}" class="text-danger">
-                <p th:errors="*{incidentDescription}"></p>
+                <p th:errors="*{incidentDescription}">Incident description is required</p>
             </div>
         </div>
+
 
         <!-- Additional Fields -->
         <!-- Email Field (Optional) -->
@@ -140,43 +154,126 @@
             <input type="text" class="form-control" id="policeCaseReference" th:field="*{policeCaseReference}">
         </div>
 
-        <!-- Specific Fields for MissingDetails -->
-        <h4>Missing Details</h4>
-        <!-- Date of Last Contact Field -->
-        <div class="mb-3">
-            <label for="dateOfLastContact" class="form-label">Date of Last Contact</label>
-            <input type="date" class="form-control" id="dateOfLastContact" th:field="*{missingDetails.dateOfLastContact}" required>
-            <div th:if="${#fields.hasErrors('missingDetails.dateOfLastContact')}" class="text-danger">
-                <p th:errors="*{missingDetails.dateOfLastContact}"></p>
-            </div>
-        </div>
 
-        <!-- Last Known Location Field -->
-        <div class="mb-3">
-            <label for="lastKnownLocation" class="form-label">Last Known Location</label>
-            <input type="text" class="form-control" id="lastKnownLocation" th:field="*{missingDetails.lastKnownLocation}" required>
-            <div th:if="${#fields.hasErrors('missingDetails.lastKnownLocation')}" class="text-danger">
-                <p th:errors="*{missingDetails.lastKnownLocation}"></p>
-            </div>
-        </div>
+<!--Missing Fields-->
 
-        <!-- Physical Description Field -->
+        <!-- Physical Description -->
         <div class="mb-3">
             <label for="physicalDescription" class="form-label">Physical Description</label>
-            <textarea class="form-control" id="physicalDescription" th:field="*{missingDetails.physicalDescription}" required></textarea>
+            <textarea class="form-control" id="physicalDescription" th:field="*{missingDetails.physicalDescription}" placeholder="Enter height, complexion, and unique identifiers" required></textarea>
             <div th:if="${#fields.hasErrors('missingDetails.physicalDescription')}" class="text-danger">
-                <p th:errors="*{missingDetails.physicalDescription}"></p>
+                <p th:errors="*{missingDetails.physicalDescription}">Physical description is required</p>
             </div>
         </div>
 
-        <!-- Upload Recent Photo -->
+        <!-- Last Seen Location -->
         <div class="mb-3">
-            <label for="recentPhoto" class="form-label">Upload Recent Photo (Optional)</label>
-            <input type="file" class="form-control" id="recentPhoto" name="recentPhoto">
+            <label for="lastSeenLocation" class="form-label">Last Seen Location</label>
+            <input type="text" class="form-control" id="lastSeenLocation" th:field="*{missingDetails.lastSeenLocation}" placeholder="Enter the last known location" required>
+            <div th:if="${#fields.hasErrors('missingDetails.lastSeenLocation')}" class="text-danger">
+                <p th:errors="*{missingDetails.lastSeenLocation}">Last seen location is required</p>
+            </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit Missing Case</button>
+        <!-- Date Last Contacted -->
+        <div class="mb-3">
+            <label for="dateLastContacted" class="form-label">Date Last Contacted</label>
+            <input type="date" class="form-control" id="dateLastContacted" th:field="*{missingDetails.dateLastContacted}" required>
+            <div th:if="${#fields.hasErrors('missingDetails.dateLastContacted')}" class="text-danger">
+                <p th:errors="*{missingDetails.dateLastContacted}">Date of last contact is required</p>
+            </div>
+        </div>
+
+        <!-- Witness Account -->
+        <div class="mb-3">
+            <label for="witnessAccount" class="form-label">Witness Account</label>
+            <textarea class="form-control" id="witnessAccount" th:field="*{missingDetails.witnessAccount}" placeholder="Description of last sighting or any witness accounts" required></textarea>
+            <div th:if="${#fields.hasErrors('missingDetails.witnessAccount')}" class="text-danger">
+                <p th:errors="*{missingDetails.witnessAccount}">Witness account is required</p>
+            </div>
+        </div>
+
+        <!-- Relationship with Last Contact -->
+        <div class="mb-3">
+            <label for="relationshipWithLastContact" class="form-label">Relationship with Last Contact</label>
+            <input type="text" class="form-control" id="relationshipWithLastContact" th:field="*{missingDetails.relationshipWithLastContact}" placeholder="Friend, colleague, etc." required>
+            <div th:if="${#fields.hasErrors('missingDetails.relationshipWithLastContact')}" class="text-danger">
+                <p th:errors="*{missingDetails.relationshipWithLastContact}">Relationship with last contact is required</p>
+            </div>
+        </div>
+
+        <!-- Authorities Notified -->
+        <div class="mb-3">
+            <label for="authoritiesNotified" class="form-label">Were authorities notified?</label>
+            <select class="form-select" id="authoritiesNotified" th:field="*{missingDetails.authoritiesNotified}" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+            <div th:if="${#fields.hasErrors('missingDetails.authoritiesNotified')}" class="text-danger">
+                <p th:errors="*{missingDetails.authoritiesNotified}">This field is required</p>
+            </div>
+        </div>
+
+        <!-- Photograph Upload -->
+        <!--<div class="mb-3">
+            <label for="photographPath" class="form-label">Upload Photograph</label>
+            <input type="file" class="form-control" id="photographPath" th:field="*{missingDetails.photographPath}" >
+            <div th:if="${#fields.hasErrors('missingDetails.photographPath')}" class="text-danger">
+                <p th:errors="*{missingDetails.photographPath}">Photograph is required</p>
+            </div>
+        </div>-->
+
+
+
+        <!-- Contact Person Information -->
+        <h4>Contact Person Information</h4>
+        <div class="mb-3">
+            <label for="contactPersonName" class="form-label">Contact Person Name</label>
+            <input type="text" class="form-control" id="contactPersonName" th:field="*{conatactName}" required>
+            <div th:if="${#fields.hasErrors('conatactName')}" class="text-danger">
+                <p th:errors="*{conatactName}">Contact person name is required</p>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="contactPersonRelationship" class="form-label">Relationship to Victim</label>
+            <input type="text" class="form-control" id="contactPersonRelationship" th:field="*{relationshipToVictim}" required>
+            <div th:if="${#fields.hasErrors('relationshipToVictim')}" class="text-danger">
+                <p th:errors="*{relationshipToVictim}">Relationship to the victim is required</p>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="contactPersonPhoneNumber" class="form-label">Contact Person Phone Number</label>
+            <input type="text" class="form-control" id="contactPersonPhoneNumber" th:field="*{contactPhone}" required>
+            <div th:if="${#fields.hasErrors('contactPhone')}" class="text-danger">
+                <p th:errors="*{contactPhone}">Phone number is required</p>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="contactPersonAddress" class="form-label">Contact Person Address</label>
+            <input type="text" class="form-control" id="contactPersonAddress" th:field="*{contactAddress}" required>
+            <div th:if="${#fields.hasErrors('contactAddress')}" class="text-danger">
+                <p th:errors="*{contactAddress}">Phone number is required</p>
+            </div>
+        </div>
+
+        <!-- Optional fields for Contact Person -->
+        <div class="mb-3">
+            <label for="contactEmail" class="form-label">Contact Person Email (Optional)</label>
+            <input type="email" class="form-control" id="contactEmail" th:field="*{contactEmail}">
+        </div>
+
+        <div class="mb-3">
+            <label for="identificationDocument" class="form-label">Identification Document (Optional)</label>
+            <input type="text" class="form-control" id="identificationDocument" th:field="*{contactIdentificationDocument}">
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Submit Injured Case</button>
     </form>
+
 </div>
 </body>
 </html>

@@ -15,9 +15,10 @@ public class MissingDetails extends LogEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "victim_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "victim_id")
     private Victim victim;
+
 
     private String physicalDescription; // Height, complexion, unique identifiers
 

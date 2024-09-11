@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
 @Controller
@@ -33,7 +34,11 @@ public class VictimController {
 
     // Show form selection after verification
     @GetMapping("/form-selection")
-    public String showFormSelection() {
+    public String showFormSelection(HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!isVerified(session)) {
+            redirectAttributes.addFlashAttribute("message", "Your request is not verified! Please, verify your (another) email for a new submission");
+            return "redirect:/verification/email";
+        }
         return "form-selection";  // A Thymeleaf page with links to specific forms (Death, Missing, Injured)
     }
 
@@ -41,12 +46,15 @@ public class VictimController {
 
     // Show Death Form
     @GetMapping("/form-death")
-    public String showDeathForm(Model model, HttpSession session) {
+    public String showDeathForm(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         if (!isVerified(session)) {
-            return "redirect:/verification/email";  // Redirect if the user is not verified
+            redirectAttributes.addFlashAttribute("message", "Your request is not verified! Please, verify your (another) email for a new submission");
+            return "redirect:/verification/email";
         }
-        model.addAttribute("victim", new Victim());
-        model.addAttribute("deathDetails", new DeathDetails());
+        Victim victim = new Victim();
+        victim.setIncidentType("Death");
+        victim.setDeathDetails(new DeathDetails());
+        model.addAttribute("victim", victim);
         return "form-death";  // Thymeleaf form page for submitting a death case
     }
 
@@ -54,18 +62,20 @@ public class VictimController {
     @PostMapping("/submit-death-form")
     public String submitDeathForm(@Valid @ModelAttribute Victim victim,
                                   BindingResult victimBindingResult,
-                                  @Valid @ModelAttribute DeathDetails deathDetails,
-                                  BindingResult deathBindingResult,
-                                  Model model) {
+                                  Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+        if (!isVerified(session)) {
+            redirectAttributes.addFlashAttribute("message", "Your request is not verified! Please, verify your (another) email for a new submission");
+            return "redirect:/verification/email";
+        }
+
         // Check if there are any validation errors for the Victim or DeathDetails
-        if (victimBindingResult.hasErrors() || deathBindingResult.hasErrors()) {
+        if (victimBindingResult.hasErrors()) {
             model.addAttribute("victim", victim);
-            model.addAttribute("deathDetails", deathDetails);
             return "form-death";  // Return to the death form with errors
         }
 
         // If there are no errors, save the death case
-        victimService.saveDeathCase(victim, deathDetails);
+        victimService.saveDeathCase(victim, victim.getDeathDetails());
         model.addAttribute("message", "Death case submitted successfully!");
         return "confirmation";  // Return confirmation page after submission
     }
@@ -74,12 +84,16 @@ public class VictimController {
 
     // Show Missing Form
     @GetMapping("/form-missing")
-    public String showMissingForm(Model model, HttpSession session) {
+    public String showMissingForm(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         if (!isVerified(session)) {
+            redirectAttributes.addFlashAttribute("message", "Your request is not verified! Please, verify your (another) email for a new submission");
             return "redirect:/verification/email";  // Redirect if the user is not verified
         }
-        model.addAttribute("victim", new Victim());
-        model.addAttribute("missingDetails", new MissingDetails());
+        Victim victim = new Victim();
+
+        victim.setIncidentType("Missing");  // Set the default incident type
+        model.addAttribute("victim",victim);
+        victim.setMissingDetails(new MissingDetails());
         return "form-missing";  // Thymeleaf form page for submitting a missing case
     }
 
@@ -87,19 +101,26 @@ public class VictimController {
     @PostMapping("/submit-missing-form")
     public String submitMissingForm(@Valid @ModelAttribute Victim victim,
                                     BindingResult victimBindingResult,
-                                    @Valid @ModelAttribute MissingDetails missingDetails,
-                                    BindingResult missingBindingResult,
-                                    Model model) {
+                                    Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         // Check if there are any validation errors for the Victim or MissingDetails
-        if (victimBindingResult.hasErrors() || missingBindingResult.hasErrors()) {
+
+        if (!isVerified(session)) {
+            redirectAttributes.addFlashAttribute("message", "Your request is not verified! Please, verify your (another) email for a new submission");
+            return "redirect:/verification/email";  // Redirect if the user is not verified
+        }
+
+        victim.setIncidentType("Missing");  // Set the default incident type
+
+        if (victimBindingResult.hasErrors()) {
             model.addAttribute("victim", victim);
-            model.addAttribute("missingDetails", missingDetails);
+            log.info("there is binding result error on the missing form..");
             return "form-missing";  // Return to the missing form with errors
         }
 
         // If there are no errors, save the missing case
-        victimService.saveMissingCase(victim, missingDetails);
+        victimService.saveMissingCase(victim, victim.getMissingDetails());
         model.addAttribute("message", "Missing case submitted successfully!");
+        session.invalidate();
         return "confirmation";  // Return confirmation page after submission
     }
 
@@ -107,8 +128,9 @@ public class VictimController {
 
     // Show Injured Form
     @GetMapping("/form-injured")
-    public String showInjuredForm(Model model, HttpSession session) {
+    public String showInjuredForm(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         if (!isVerified(session)) {
+            redirectAttributes.addFlashAttribute("message", "Your request is not verified! Please, verify your (another) email for a new submission");
             return "redirect:/verification/email";  // Redirect if the user is not verified
         }
         Victim victim = new Victim();
@@ -121,7 +143,7 @@ public class VictimController {
     @PostMapping("/submit-injured-form")
     public String submitInjuredForm(@Valid @ModelAttribute Victim victim,
                                     BindingResult bindingResult,
-                                    Model model) {
+                                    Model model, HttpSession session) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("victim", victim);
@@ -140,6 +162,7 @@ public class VictimController {
         // Save victim (which will also save injuryDetails due to cascading)
         victimRepository.save(victim);
         model.addAttribute("message", "Injured case submitted successfully!");
+        session.invalidate();
         return "confirmation";  // Return confirmation page after successful submission
     }
 
