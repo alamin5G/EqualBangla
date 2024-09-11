@@ -13,8 +13,8 @@ public class InjuryDetailsService {
     private InjuryDetailsRepository injuryDetailsRepository;
 
     // Save injury details
-    public InjuryDetails saveInjuryDetails(InjuryDetails injuryDetails) {
-        return injuryDetailsRepository.save(injuryDetails);
+    public void saveInjuryDetails(InjuryDetails injuryDetails) {
+        injuryDetailsRepository.save(injuryDetails);
     }
 
 }

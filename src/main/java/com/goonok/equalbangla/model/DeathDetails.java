@@ -2,12 +2,16 @@ package com.goonok.equalbangla.model;
 
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
+@Transactional
 public class DeathDetails extends LogEntity {
 
     @Id

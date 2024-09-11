@@ -1,13 +1,16 @@
 package com.goonok.equalbangla.model;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.time.LocalDate;
-
 @Entity
+@Transactional
 @Data
 public class Victim {
 
@@ -15,6 +18,7 @@ public class Victim {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Victim Fields...
     @NotBlank(message = "Full name is mandatory")
     private String fullName;
 
@@ -31,12 +35,12 @@ public class Victim {
     private String address;
 
     @NotBlank(message = "Contact number is mandatory")
+    @Pattern(regexp = "^(\\+88)?01[3-9]{1}[0-9]{2}-?[0-9]{6}$", message = "Phone number is invalid")
     private String contactNumber;
 
     @NotBlank(message = "National ID/Birth Certificate is required")
     private String nationalId;
 
-    @NotBlank(message = "Incident type is required")
     private String incidentType;  // Injured, Missing, Death
 
     @NotNull(message = "Incident date is required")
@@ -48,22 +52,36 @@ public class Victim {
     @Lob
     private String incidentDescription; // Detailed description of the incident
 
-    // Additional fields to capture more specific data
-    private String email; // Optional, in case the victim wants to provide this
-    private String occupation; // Optional field to store occupation of the victim
-    private String participationRole; // Protester, supporter, bystander, etc.
-    private String policeCaseReference; // Reference to any police report filed
+    // Optional Fields...
+    private String email;
+    private String occupation;
+    private String participationRole;
+    private String policeCaseReference;
 
-    @OneToOne(mappedBy = "victim", cascade = CascadeType.ALL)
+    @NotEmpty(message = "Contact person name is required")
+    private String conatactName;
+
+    @NotEmpty(message = "Relationship to the victim is required")
+    private String relationshipToVictim;
+
+    @NotEmpty(message = "Phone number is required.")
+    @Pattern(regexp = "^(\\+88)?01[3-9]{1}[0-9]{2}-?[0-9]{6}$", message = "Phone number is invalid")
+    private String contactPhone;
+
+    @NotEmpty(message = "Address is required")
+    private String contactAddress;
+
+    private String contactEmail;  // Optional
+
+    private String contactIdentificationDocument;  // Optional
+
+    @OneToOne(cascade = CascadeType.ALL)  // Cascade save, update, delete, etc.
+    @JoinColumn(name = "injury_details_id")
     private InjuryDetails injuryDetails;
 
-    @OneToOne(mappedBy = "victim", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "victim", cascade = CascadeType.ALL, orphanRemoval = true)
     private MissingDetails missingDetails;
 
-    @OneToOne(mappedBy = "victim", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "victim", cascade = CascadeType.ALL, orphanRemoval = true)
     private DeathDetails deathDetails;
-
-    @ManyToOne
-    @JoinColumn(name = "contact_person_id", nullable = false)
-    private ContactPerson contactPerson;
 }

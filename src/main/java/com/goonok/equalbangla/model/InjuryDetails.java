@@ -2,10 +2,13 @@ package com.goonok.equalbangla.model;
 
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 public class InjuryDetails extends LogEntity {
@@ -14,8 +17,8 @@ public class InjuryDetails extends LogEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "victim_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "victim_id")
     private Victim victim;
 
     private String natureOfInjury; // Description of the injury

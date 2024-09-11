@@ -29,7 +29,7 @@ public class VerificationController {
             // Generate and send OTP
             boolean isExist = verificationService.generateVerificationToken(email);
             if (!isExist) {
-                model.addAttribute("error", "This email already exists, you can't use this email");
+                model.addAttribute("error", "This email already exists, you can't use this email again");
                 return "verify-email";
             }
             model.addAttribute("email", email);
@@ -43,7 +43,8 @@ public class VerificationController {
     // Process token (OTP) verification
     @PostMapping("/verify")
     public String verifyToken(@RequestParam String email, @RequestParam String token, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        boolean isValid = verificationService.verifyOtp(email, token);  // Verify OTP for the given email
+        String trimToken = token.trim();
+        boolean isValid = verificationService.verifyOtp(email, trimToken);  // Verify OTP for the given email
         if (isValid) {
 
             // If OTP is valid, redirect to the victim form
@@ -60,6 +61,7 @@ public class VerificationController {
             model.addAttribute("error", "Invalid or expired OTP.");
             redirectAttributes.addFlashAttribute("email", email);  // Keep the email in the form
             verificationService.deleteToken(email); //as email is not verified yet.
+            redirectAttributes.addFlashAttribute("error", "Your OTP was wrong, please Enter a valid email");
             return "redirect:/verification/email";  // Show OTP form again
         }
     }

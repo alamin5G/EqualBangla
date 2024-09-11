@@ -1,9 +1,7 @@
 package com.goonok.equalbangla.service;
 
-import com.goonok.equalbangla.model.Victim;
-import com.goonok.equalbangla.model.DeathDetails;
-import com.goonok.equalbangla.model.MissingDetails;
-import com.goonok.equalbangla.model.InjuryDetails;
+import com.goonok.equalbangla.model.*;
+import com.goonok.equalbangla.repository.DeathDetailsRepository;
 import com.goonok.equalbangla.repository.VictimRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +11,9 @@ public class VictimService {
 
     @Autowired
     private VictimRepository victimRepository;
+
+    @Autowired
+    private InjuryDetailsService injuryDetailsService;
 
     // Save Death Case
     public void saveDeathCase(Victim victim, DeathDetails deathDetails) {
@@ -26,9 +27,12 @@ public class VictimService {
         victimRepository.save(victim);
     }
 
-    // Save Injured Case
     public void saveInjuredCase(Victim victim, InjuryDetails injuryDetails) {
+        // You don't need to separately save injuryDetails or contactPerson if cascading is set up
+
+        injuryDetailsService.saveInjuryDetails(injuryDetails);
         victim.setInjuryDetails(injuryDetails);
+        // Persist the victim, which will automatically persist the associated entities
         victimRepository.save(victim);
     }
 

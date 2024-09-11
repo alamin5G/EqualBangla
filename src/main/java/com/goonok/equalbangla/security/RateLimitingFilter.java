@@ -23,7 +23,7 @@ public class RateLimitingFilter implements Filter {
 
     // Define the rate limit parameters
     private static final long RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute window
-    private static final int MAX_REQUESTS_PER_WINDOW = 10;       // Max 5 requests per window
+    private static final int MAX_REQUESTS_PER_WINDOW = 100;       // Max 5 requests per window
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
