@@ -1,10 +1,49 @@
+<!-- layout/main.html -->
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}"></head>
 <body>
+<header th:replace="~{layout/navbar :: header}"></header>
+<main class="container mt-4">
 
+    <h2>File Upload Instructions</h2>
+    <p>Please follow the instructions below when uploading an image or PDF related to a victim's case. This will help us organize and identify the files accurately.</p>
+
+    <h3>File Naming Convention</h3>
+    <p>Before uploading a file, rename it using the following format:</p>
+    <div class="example-box">
+        <strong>Format:</strong> <code>VictimName_IncidentType_Date.FileExtension</code>
+    </div>
+
+    <h4>Examples:</h4>
+
+    <ul>
+        <li>
+            <strong>For a Death Case:</strong> <br>
+            <code>AbuSaeed_Death_2024-08-15.jpg</code> <br>
+            (Victim's Name: Abu Saeed, Incident Type: Death, Date: August 16, 2024, Image File)
+        </li>
+        <li>
+            <strong>For a Missing Case:</strong> <br>
+            <code>NahidIslam_Missing_2024-07-23.pdf</code> <br>
+            (Victim's Name: Nahid Islam, Incident Type: Missing, Date: July 20, 2024, PDF Report)
+        </li>
+        <li>
+            <strong>For an Injured Case:</strong> <br>
+            <code>RabiulIslam_Injured_2024-09-01.pdf</code> <br>
+            (Victim's Name:Rabiul Islam, Incident Type: Injured, Date: September 1, 2024, PDF Medical Report)
+        </li>
+    </ul>
+
+    <h4>File Upload Guidelines:</h4>
+    <ul>
+        <li><strong>Image files:</strong> Maximum size 1MB, allowed formats: <code>.jpg</code>, <code>.jpeg</code>, <code>.png</code></li>
+        <li><strong>PDF files:</strong> Maximum size 5MB, allowed format: <code>.pdf</code></li>
+    </ul>
+
+    <p>Ensure the file name clearly represents the victim’s case by including their name, the incident type, and the date of the incident in the filename.</p>
+
+</main>
+<footer th:replace="~{layout/footer :: footer}"></footer>
 </body>
 </html>

@@ -21,10 +21,27 @@ public class HomeController {
         return "about";  // Return the about.html Thymeleaf template
     }
 
+    // File upload instructions page
     @GetMapping("/file-upload-instruction")
-    public String fileUploadInstruction(Model model) {
-        model.addAttribute("title", "File Upload Instruction");
-
+    public String showFileUploadInstructionPage(Model model) {
         return "file-upload-instruction";
+    }
+
+    // How page
+    @GetMapping("/how")
+    public String showHowPage() {
+        return "how";
+    }
+
+    // Why page
+    @GetMapping("/why")
+    public String showWhyPage() {
+        return "why";
+    }
+
+    // Who page
+    @GetMapping("/who")
+    public String showWhoPage() {
+        return "who";
     }
 }

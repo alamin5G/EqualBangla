@@ -1,13 +1,12 @@
+<!-- layout/main.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Death Case</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}"></head>
 <body>
-<div class="container mt-5">
+<header th:replace="~{layout/navbar :: header}"></header>
+<main class="container mt-4">
+    <!--all content will be placed here-->
+
     <h2>Submit Death Case</h2>
 
     <!-- Bind the form to the 'victim' object -->
@@ -18,13 +17,14 @@
             </ul>
         </div>
         <!-- Hidden Field for Incident Type -->
-        <input type="hidden" th:field="*{incidentType}" value="Death" />
+        <input type="hidden" th:field="*{incidentType}" value="Death"/>
         <input type="hidden" th:field="*{deathDetails.deathCertificatePath}" value="uploads/death-certificates/">
 
         <!-- Full Name Field -->
         <div class="mb-3">
             <label for="fullName" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="fullName" th:field="*{fullName}" placeholder="Enter full name" required>
+            <input type="text" class="form-control" id="fullName" th:field="*{fullName}" placeholder="Enter full name"
+                   required>
             <div th:if="${#fields.hasErrors('fullName')}" class="text-danger">
                 <p th:errors="*{fullName}"></p>
             </div>
@@ -159,7 +159,8 @@
 
         <!-- National ID Field -->
         <div class="mb-3">
-            <label for="nationalId" class="form-label">National ID / Birth Certificate NO (make sure it is correct)</label>
+            <label for="nationalId" class="form-label">National ID / Birth Certificate NO (make sure it is
+                correct)</label>
             <input type="text" class="form-control" id="nationalId" th:field="*{nationalId}" required>
             <div th:if="${#fields.hasErrors('nationalId')}" class="text-danger">
                 <p th:errors="*{nationalId}"></p>
@@ -187,7 +188,8 @@
         <!-- Incident Description Field -->
         <div class="mb-3">
             <label for="incidentDescription" class="form-label">Incident Description</label>
-            <textarea class="form-control" id="incidentDescription" th:field="*{incidentDescription}" required></textarea>
+            <textarea class="form-control" id="incidentDescription" th:field="*{incidentDescription}"
+                      required></textarea>
             <div th:if="${#fields.hasErrors('incidentDescription')}" class="text-danger">
                 <p th:errors="*{incidentDescription}"></p>
             </div>
@@ -233,64 +235,84 @@
         <!-- Cause of Death -->
         <div class="mb-3">
             <label for="causeOfDeath" class="form-label">Cause of Death</label>
-            <input type="text" id="causeOfDeath" name="causeOfDeath" class="form-control" th:field="*{deathDetails.causeOfDeath}" placeholder="Enter cause of death" required>
-            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.causeOfDeath')}" th:errors="*{deathDetails.causeOfDeath}"></div>
+            <input type="text" id="causeOfDeath" name="causeOfDeath" class="form-control"
+                   th:field="*{deathDetails.causeOfDeath}" placeholder="Enter cause of death" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.causeOfDeath')}"
+                 th:errors="*{deathDetails.causeOfDeath}"></div>
         </div>
 
         <!-- Date of Death -->
         <div class="mb-3">
             <label for="dateOfDeath" class="form-label">Date of Death</label>
-            <input type="date" id="dateOfDeath" name="dateOfDeath" class="form-control" th:field="*{deathDetails.dateOfDeath}" required>
-            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.dateOfDeath')}" th:errors="*{deathDetails.dateOfDeath}"></div>
+            <input type="date" id="dateOfDeath" name="dateOfDeath" class="form-control"
+                   th:field="*{deathDetails.dateOfDeath}" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.dateOfDeath')}"
+                 th:errors="*{deathDetails.dateOfDeath}"></div>
         </div>
 
         <!-- Time of Death (Optional) -->
         <div class="mb-3">
             <label for="timeOfDeath" class="form-label">Time of Death (Optional)</label>
-            <input type="time" id="timeOfDeath" name="timeOfDeath" class="form-control" th:field="*{deathDetails.timeOfDeath}">
-            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.timeOfDeath')}" th:errors="*{deathDetails.timeOfDeath}"></div>
+            <input type="time" id="timeOfDeath" name="timeOfDeath" class="form-control"
+                   th:field="*{deathDetails.timeOfDeath}">
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.timeOfDeath')}"
+                 th:errors="*{deathDetails.timeOfDeath}"></div>
         </div>
 
         <!-- Burial or Cremation Details -->
         <div class="mb-3">
             <label for="burialCremationDetails" class="form-label">Burial/Cremation Details</label>
-            <textarea id="burialCremationDetails" name="burialCremationDetails" class="form-control" rows="3" th:field="*{deathDetails.burialCremationDetails}" placeholder="Enter burial/cremation details" required></textarea>
-            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.burialCremationDetails')}" th:errors="*{deathDetails.burialCremationDetails}"></div>
+            <textarea id="burialCremationDetails" name="burialCremationDetails" class="form-control" rows="3"
+                      th:field="*{deathDetails.burialCremationDetails}" placeholder="Enter burial/cremation details"
+                      required></textarea>
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.burialCremationDetails')}"
+                 th:errors="*{deathDetails.burialCremationDetails}"></div>
         </div>
 
         <!-- Witness Account -->
         <div class="mb-3">
             <label for="witnessAccount" class="form-label">Witness Account</label>
-            <textarea id="witnessAccount" name="witnessAccount" class="form-control" rows="3" th:field="*{deathDetails.witnessAccount}" placeholder="Enter witness account"></textarea>
-            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.witnessAccount')}" th:errors="*{deathDetails.witnessAccount}"></div>
+            <textarea id="witnessAccount" name="witnessAccount" class="form-control" rows="3"
+                      th:field="*{deathDetails.witnessAccount}" placeholder="Enter witness account"></textarea>
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.witnessAccount')}"
+                 th:errors="*{deathDetails.witnessAccount}"></div>
         </div>
 
         <!-- Autopsy Performed -->
         <div class="mb-3">
             <label class="form-label">Autopsy Performed?</label>
             <div class="form-check">
-                <input type="radio" id="autopsyYes" name="deathDetails.autopsyPerformed"  value="true" class="form-check-input" th:field="*{deathDetails.autopsyPerformed}">
+                <input type="radio" id="autopsyYes" name="deathDetails.autopsyPerformed" value="true"
+                       class="form-check-input" th:field="*{deathDetails.autopsyPerformed}">
                 <label for="autopsyYes" class="form-check-label">Yes</label>
             </div>
             <div class="form-check">
-                <input type="radio" id="autopsyNo" name="deathDetails.autopsyPerformed" value="false" class="form-check-input" th:field="*{deathDetails.autopsyPerformed}">
+                <input type="radio" id="autopsyNo" name="deathDetails.autopsyPerformed" value="false"
+                       class="form-check-input" th:field="*{deathDetails.autopsyPerformed}">
                 <label for="autopsyNo" class="form-check-label">No</label>
             </div>
-            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.autopsyPerformed')}" th:errors="*{deathDetails.autopsyPerformed}"></div>
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.autopsyPerformed')}"
+                 th:errors="*{deathDetails.autopsyPerformed}"></div>
         </div>
 
         <!-- Death Photo Upload -->
         <div class="mb-3">
-            <label for="deathPhoto" class="form-label">Death Persons Photo (Required) <a th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
-            <input type="file" id="deathPhoto" name="deathDetails.deathPhotoFile" class="form-control" th:field="*{deathDetails.deathPhotoFile}" accept=".jpg, .jpeg, .png">
-            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathPhotoFile')}" th:errors="*{deathDetails.deathPhotoFile}"></div>
+            <label for="deathPhoto" class="form-label">Death Persons Photo (Required) <a
+                    th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
+            <input type="file" id="deathPhoto" name="deathDetails.deathPhotoFile" class="form-control"
+                   th:field="*{deathDetails.deathPhotoFile}" accept=".jpg, .jpeg, .png">
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathPhotoFile')}"
+                 th:errors="*{deathDetails.deathPhotoFile}"></div>
         </div>
 
         <!-- Death Certificate Upload -->
         <div class="mb-3">
-            <label for="deathCertificate" class="form-label">Death Certificate (Required) <a th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
-            <input type="file" id="deathCertificate" name="deathDetails.deathCertificateFile" class="form-control" th:field="*{deathDetails.deathCertificateFile}" accept=".pdf">
-            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathCertificateFile')}" th:errors="*{deathDetails.deathCertificateFile}"></div>
+            <label for="deathCertificate" class="form-label">Death Certificate (Required) <a
+                    th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
+            <input type="file" id="deathCertificate" name="deathDetails.deathCertificateFile" class="form-control"
+                   th:field="*{deathDetails.deathCertificateFile}" accept=".pdf">
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathCertificateFile')}"
+                 th:errors="*{deathDetails.deathCertificateFile}"></div>
         </div>
 
         <!-- Contact Person Information -->
@@ -305,7 +327,8 @@
 
         <div class="mb-3">
             <label for="contactPersonRelationship" class="form-label">Relationship to Victim</label>
-            <input type="text" class="form-control" id="contactPersonRelationship" th:field="*{relationshipToVictim}" required>
+            <input type="text" class="form-control" id="contactPersonRelationship" th:field="*{relationshipToVictim}"
+                   required>
             <div th:if="${#fields.hasErrors('relationshipToVictim')}" class="text-danger">
                 <p th:errors="*{relationshipToVictim}">Relationship to the victim is required</p>
             </div>
@@ -335,12 +358,15 @@
 
         <div class="mb-3">
             <label for="identificationDocument" class="form-label">Identification Document (Optional)</label>
-            <input type="text" class="form-control" id="identificationDocument" th:field="*{contactIdentificationDocument}">
+            <input type="text" class="form-control" id="identificationDocument"
+                   th:field="*{contactIdentificationDocument}">
         </div>
 
 
         <button type="submit" class="btn btn-primary">Submit Death Case</button>
     </form>
-</div>
+
+</main>
+<footer th:replace="~{layout/footer :: footer}"></footer>
 </body>
 </html>
