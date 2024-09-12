@@ -80,26 +80,8 @@ public class VictimController {
             return "form-death";  // Return to the death form with errors
         }
 
-        DeathDetails deathDetails = victim.getDeathDetails();
-
-        // Handle file upload
-        MultipartFile deathCertificateFile = deathDetails.getDeathCertificateFile(); // Get the file from the object
-        if (deathCertificateFile != null && !deathCertificateFile.isEmpty()) {
-            String fileName = StringUtils.cleanPath(Objects.requireNonNull(deathCertificateFile.getOriginalFilename()));
-            String uploadDir = "uploads/death-certificates/";
-
-            try {
-                FileUploadUtil.saveFile(uploadDir, fileName, deathCertificateFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            deathDetails.setDeathCertificatePath(uploadDir + fileName);
-        }
-
-
         // If there are no errors, save the death case
-        victimService.saveDeathCase(victim, deathDetails);
+        victimService.saveDeathCase(victim, victim.getDeathDetails());
         model.addAttribute("message", "Death case submitted successfully!");
         session.invalidate();
         return "confirmation";  // Return confirmation page after submission

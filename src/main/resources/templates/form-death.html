@@ -194,10 +194,18 @@
             </div>
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.autopsyPerformed')}" th:errors="*{deathDetails.autopsyPerformed}"></div>
         </div>
+
+        <!-- Death Photo Upload -->
+        <div class="mb-3">
+            <label for="deathPhoto" class="form-label">Death Photo (Required) <a th:href="@{/}">Follow the instruction before upload the file</a> </label>
+            <input type="file" id="deathPhoto" name="deathDetails.deathPhotoFile" class="form-control" th:field="*{deathDetails.deathPhotoFile}" accept=".jpg, .jpeg, .png">
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathPhotoFile')}" th:errors="*{deathDetails.deathPhotoFile}"></div>
+        </div>
+
         <!-- Death Certificate Upload -->
         <div class="mb-3">
-            <label for="deathCertificate" class="form-label">Death Certificate (Optional)</label>
-            <input type="file" id="deathCertificate" name="deathDetails.deathCertificateFile" class="form-control" th:field="*{deathDetails.deathCertificateFile}" accept=".pdf,.jpg,.png">
+            <label for="deathCertificate" class="form-label">Death Certificate (Required) <a th:href="@{/}">Follow the instruction before upload the file</a> </label>
+            <input type="file" id="deathCertificate" name="deathDetails.deathCertificateFile" class="form-control" th:field="*{deathDetails.deathCertificateFile}" accept=".pdf">
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathCertificateFile')}" th:errors="*{deathDetails.deathCertificateFile}"></div>
         </div>
 

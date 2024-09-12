@@ -20,9 +20,9 @@ public class FileUploadUtil {
         try (InputStream inputStream = multipartFile.getInputStream()) {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            log.info("death file uploaded successfully");
+            log.info("file uploaded successfully");
         } catch (IOException ioe) {
-            log.info("death file is not uploaded successfully");
+            log.info("file is not uploaded successfully");
             throw new IOException("Could not save file: " + fileName, ioe);
 
         }

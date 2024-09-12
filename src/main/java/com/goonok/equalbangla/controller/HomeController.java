@@ -20,4 +20,11 @@ public class HomeController {
         model.addAttribute("title", "About EqualBangla");
         return "about";  // Return the about.html Thymeleaf template
     }
+
+    @GetMapping("/file-upload-instruction")
+    public String fileUploadInstruction(Model model) {
+        model.addAttribute("title", "File Upload Instruction");
+
+        return "file-upload-instruction";
+    }
 }

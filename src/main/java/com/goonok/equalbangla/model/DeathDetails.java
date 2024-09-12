@@ -42,9 +42,20 @@ public class DeathDetails extends LogEntity {
     private Boolean autopsyPerformed;
 
     // Store the file path in the database
+    @NotNull(message = "Death Certificate path is required")
     private String deathCertificatePath;
+
+    @NotNull(message = "Death photo path is required")
+    private String deathPhotoPath;
+
 
     // Transient field for file upload
     @Transient
+    @NotNull(message = "Upload .pdf format")
     private MultipartFile deathCertificateFile;
+
+    //Transient field for file upload
+    @Transient
+    @NotNull(message = "upload in .jpg format")
+    private MultipartFile deathPhotoFile;
 }
