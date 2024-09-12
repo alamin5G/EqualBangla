@@ -163,7 +163,7 @@
 
         <!-- National ID Field -->
         <div class="mb-3">
-            <label for="nationalId" class="form-label">National ID / Birth Certificate</label>
+            <label for="nationalId" class="form-label">National ID / Birth Certificate NO (make sure it is correct)</label>
             <input type="text" class="form-control" id="nationalId" th:field="*{nationalId}" required>
             <div th:if="${#fields.hasErrors('nationalId')}" class="text-danger">
                 <p th:errors="*{nationalId}">National ID/Birth Certificate is required</p>
@@ -204,14 +204,20 @@
         <!-- Additional Fields -->
         <!-- Email Field (Optional) -->
         <div class="mb-3">
-            <label for="email" class="form-label">Email (Optional)</label>
+            <label for="email" class="form-label">Email (Required)</label>
             <input type="email" class="form-control" id="email" th:field="*{email}">
+            <div th:if="${#fields.hasErrors('email')}" class="text-danger">
+                <p th:errors="*{email}">Email is required</p>
+            </div>
         </div>
 
         <!-- Occupation Field (Optional) -->
         <div class="mb-3">
             <label for="occupation" class="form-label">Occupation (Optional)</label>
             <input type="text" class="form-control" id="occupation" th:field="*{occupation}">
+            <div th:if="${#fields.hasErrors('occupation')}" class="text-danger">
+                <p th:errors="*{occupation}">Occupation is required</p>
+            </div>
         </div>
 
         <!-- Participation Role Field -->
@@ -223,6 +229,9 @@
                 <option value="Supporter">Supporter</option>
                 <option value="Bystander">Bystander</option>
             </select>
+            <div th:if="${#fields.hasErrors('participationRole')}" class="text-danger">
+                <p th:errors="*{participationRole}">Participation Role is required</p>
+            </div>
         </div>
 
         <!-- Police Case Reference Field -->

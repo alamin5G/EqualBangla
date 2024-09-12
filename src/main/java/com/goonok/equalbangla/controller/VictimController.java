@@ -157,16 +157,9 @@ public class VictimController {
             return "form-injured";  // Return the form with error messages
         }
 
-        // Set the relationship between victim and injury details
-        InjuryDetails injuryDetails = victim.getInjuryDetails();
-        if (injuryDetails != null) {
-            injuryDetails.setVictim(victim);  // Link the victim to injuryDetails
-            log.info("Injury details is not null at the Victim Controller");
-        }
-        log.info("Injury details is null at the Victim Controller");
 
         // Save victim (which will also save injuryDetails due to cascading)
-        victimRepository.save(victim);
+        victimService.saveInjuredCase(victim, victim.getInjuryDetails());
         model.addAttribute("message", "Injured case submitted successfully!");
         session.invalidate();
         return "confirmation";  // Return confirmation page after successful submission

@@ -93,7 +93,32 @@ public class VictimService {
     public void saveInjuredCase(Victim victim, InjuryDetails injuryDetails) {
         // You don't need to separately save injuryDetails or contactPerson if cascading is set up
 
-        injuryDetailsService.saveInjuryDetails(injuryDetails);
+        // Handle file upload for death certificate
+        MultipartFile injuredPersonPhotographFile = injuryDetails.getInjuredPersonPhotographFile(); // Get the file from the object
+        if (injuredPersonPhotographFile != null && !injuredPersonPhotographFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(injuredPersonPhotographFile.getOriginalFilename()));
+            String uploadDir = "uploads/injured-person-photographs/";
+            try {
+                FileUploadUtil.saveFile(uploadDir, fileName, injuredPersonPhotographFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            injuryDetails.setInjuredPersonPhotographPath(uploadDir + fileName);
+        }
+
+        //Handle photo upload for death photo
+        MultipartFile medicalReportFile = injuryDetails.getMedicalReportFile();
+        if(medicalReportFile != null && !medicalReportFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(medicalReportFile.getOriginalFilename()));
+            String uploadDir = "uploads/injured-person-medical-reports/";
+            try{
+                FileUploadUtil.saveFile(uploadDir, fileName, medicalReportFile);
+            }catch (IOException e){
+                throw new RuntimeException(e);
+            }
+            injuryDetails.setMedicalReportPath(uploadDir + fileName);
+        }
+
         victim.setInjuryDetails(injuryDetails);
         // Persist the victim, which will automatically persist the associated entities
         victimRepository.save(victim);
