@@ -77,11 +77,89 @@
             <div th:if="${#fields.hasErrors('address')}" class="text-danger">
                 <p th:errors="*{address}"></p>
             </div>
+
+            <label for="policeStation" class="form-label">Police Station</label>
+            <input type="text" class="form-control" id="policeStation" th:field="*{policeStation}" required>
+            <div th:if="${#fields.hasErrors('policeStation')}" class="text-danger">
+                <p th:errors="*{policeStation}"></p>
+            </div>
+            <!-- District Field -->
+            <div class="mb-3">
+                <label for="district" class="form-label">Select District</label>
+                <select class="form-select" id="district" th:field="*{district}">
+                    <option value="">Select District</option>
+                    <option value="Bagerhat">Bagerhat</option>
+                    <option value="Bandarban">Bandarban</option>
+                    <option value="Barguna">Barguna</option>
+                    <option value="Barisal">Barisal</option>
+                    <option value="Bhola">Bhola</option>
+                    <option value="Bogra">Bogra</option>
+                    <option value="Brahmanbaria">Brahmanbaria</option>
+                    <option value="Chandpur">Chandpur</option>
+                    <option value="Chittagong">Chittagong</option>
+                    <option value="Chuadanga">Chuadanga</option>
+                    <option value="Comilla">Comilla</option>
+                    <option value="Cox's Bazar">Cox's Bazar</option>
+                    <option value="Dhaka">Dhaka</option>
+                    <option value="Dinajpur">Dinajpur</option>
+                    <option value="Faridpur">Faridpur</option>
+                    <option value="Feni">Feni</option>
+                    <option value="Gaibandha">Gaibandha</option>
+                    <option value="Gazipur">Gazipur</option>
+                    <option value="Gopalganj">Gopalganj</option>
+                    <option value="Habiganj">Habiganj</option>
+                    <option value="Jamalpur">Jamalpur</option>
+                    <option value="Jessore">Jessore</option>
+                    <option value="Jhalokati">Jhalokati</option>
+                    <option value="Jhenaidah">Jhenaidah</option>
+                    <option value="Joypurhat">Joypurhat</option>
+                    <option value="Khagrachari">Khagrachari</option>
+                    <option value="Khulna">Khulna</option>
+                    <option value="Kishoreganj">Kishoreganj</option>
+                    <option value="Kurigram">Kurigram</option>
+                    <option value="Kushtia">Kushtia</option>
+                    <option value="Lakshmipur">Lakshmipur</option>
+                    <option value="Lalmonirhat">Lalmonirhat</option>
+                    <option value="Madaripur">Madaripur</option>
+                    <option value="Magura">Magura</option>
+                    <option value="Manikganj">Manikganj</option>
+                    <option value="Maulvibazar">Maulvibazar</option>
+                    <option value="Meherpur">Meherpur</option>
+                    <option value="Munshiganj">Munshiganj</option>
+                    <option value="Mymensingh">Mymensingh</option>
+                    <option value="Naogaon">Naogaon</option>
+                    <option value="Narail">Narail</option>
+                    <option value="Narayanganj">Narayanganj</option>
+                    <option value="Narsingdi">Narsingdi</option>
+                    <option value="Natore">Natore</option>
+                    <option value="Nawabganj">Nawabganj</option>
+                    <option value="Netrokona">Netrokona</option>
+                    <option value="Nilphamari">Nilphamari</option>
+                    <option value="Noakhali">Noakhali</option>
+                    <option value="Pabna">Pabna</option>
+                    <option value="Panchagarh">Panchagarh</option>
+                    <option value="Patuakhali">Patuakhali</option>
+                    <option value="Pirojpur">Pirojpur</option>
+                    <option value="Rajbari">Rajbari</option>
+                    <option value="Rajshahi">Rajshahi</option>
+                    <option value="Rangamati">Rangamati</option>
+                    <option value="Rangpur">Rangpur</option>
+                    <option value="Satkhira">Satkhira</option>
+                    <option value="Shariatpur">Shariatpur</option>
+                    <option value="Sherpur">Sherpur</option>
+                    <option value="Sirajgonj">Sirajgonj</option>
+                    <option value="Sunamganj">Sunamganj</option>
+                    <option value="Sylhet">Sylhet</option>
+                    <option value="Tangail">Tangail</option>
+                    <option value="Thakurgaon">Thakurgaon</option>
+                </select>
+            </div>
         </div>
+
 
         <!-- National ID Field -->
         <div class="mb-3">
-            <label for="nationalId" class="form-label">National ID / Birth Certificate</label>
+            <label for="nationalId" class="form-label">National ID / Birth Certificate NO (make sure it is correct)</label>
             <input type="text" class="form-control" id="nationalId" th:field="*{nationalId}" required>
             <div th:if="${#fields.hasErrors('nationalId')}" class="text-danger">
                 <p th:errors="*{nationalId}"></p>
@@ -118,14 +196,20 @@
         <!-- Additional Fields -->
         <!-- Email Field (Optional) -->
         <div class="mb-3">
-            <label for="email" class="form-label">Email (Optional)</label>
+            <label for="email" class="form-label">Email (required)</label>
             <input type="email" class="form-control" id="email" th:field="*{email}">
+            <div th:if="${#fields.hasErrors('email')}" class="text-danger">
+                <p th:errors="*{email}"></p>
+            </div>
         </div>
 
         <!-- Occupation Field (Optional) -->
         <div class="mb-3">
-            <label for="occupation" class="form-label">Occupation (Optional)</label>
+            <label for="occupation" class="form-label">Occupation (Required)</label>
             <input type="text" class="form-control" id="occupation" th:field="*{occupation}">
+            <div th:if="${#fields.hasErrors('occupation')}" class="text-danger">
+                <p th:errors="*{occupation}"></p>
+            </div>
         </div>
 
         <!-- Participation Role Field -->
@@ -197,14 +281,14 @@
 
         <!-- Death Photo Upload -->
         <div class="mb-3">
-            <label for="deathPhoto" class="form-label">Death Photo (Required) <a th:href="@{/}">Follow the instruction before upload the file</a> </label>
+            <label for="deathPhoto" class="form-label">Death Persons Photo (Required) <a th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
             <input type="file" id="deathPhoto" name="deathDetails.deathPhotoFile" class="form-control" th:field="*{deathDetails.deathPhotoFile}" accept=".jpg, .jpeg, .png">
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathPhotoFile')}" th:errors="*{deathDetails.deathPhotoFile}"></div>
         </div>
 
         <!-- Death Certificate Upload -->
         <div class="mb-3">
-            <label for="deathCertificate" class="form-label">Death Certificate (Required) <a th:href="@{/}">Follow the instruction before upload the file</a> </label>
+            <label for="deathCertificate" class="form-label">Death Certificate (Required) <a th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
             <input type="file" id="deathCertificate" name="deathDetails.deathCertificateFile" class="form-control" th:field="*{deathDetails.deathCertificateFile}" accept=".pdf">
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathCertificateFile')}" th:errors="*{deathDetails.deathCertificateFile}"></div>
         </div>
@@ -213,9 +297,9 @@
         <h4>Contact Person Information</h4>
         <div class="mb-3">
             <label for="contactPersonName" class="form-label">Contact Person Name</label>
-            <input type="text" class="form-control" id="contactPersonName" th:field="*{conatactName}" required>
-            <div th:if="${#fields.hasErrors('conatactName')}" class="text-danger">
-                <p th:errors="*{conatactName}">Contact person name is required</p>
+            <input type="text" class="form-control" id="contactPersonName" th:field="*{contactName}" required>
+            <div th:if="${#fields.hasErrors('contactName')}" class="text-danger">
+                <p th:errors="*{contactName}">Contact person name is required</p>
             </div>
         </div>
 

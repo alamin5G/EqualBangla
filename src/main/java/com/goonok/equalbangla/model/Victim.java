@@ -34,6 +34,12 @@ public class Victim {
     @NotBlank(message = "Address is mandatory")
     private String address;
 
+    @NotBlank(message = "Police Station is required")
+    private String policeStation;
+
+    @NotBlank(message = "District is required")
+    private String district;
+
     @NotBlank(message = "Contact number is mandatory")
     @Pattern(regexp = "^(\\+88)?01[3-9]{1}[0-9]{2}-?[0-9]{6}$", message = "Phone number is invalid")
     private String contactNumber;
@@ -41,6 +47,7 @@ public class Victim {
     @NotBlank(message = "National ID/Birth Certificate is required")
     private String nationalId;
 
+    @NotBlank(message = "select what happened with you")
     private String incidentType;  // Injured, Missing, Death
 
     @NotNull(message = "Incident date is required")
@@ -50,16 +57,21 @@ public class Victim {
     private String incidentLocation;
 
     @Lob
+    @NotBlank(message = "Explain the incident")
     private String incidentDescription; // Detailed description of the incident
 
     // Optional Fields...
+    @NotBlank(message = "email is required")
     private String email;
+    @NotBlank(message = "Occupation is required")
     private String occupation;
+    @NotBlank(message = "What was the role during movement?")
     private String participationRole;
+    //optional if have
     private String policeCaseReference;
 
     @NotEmpty(message = "Contact person name is required")
-    private String conatactName;
+    private String contactName;
 
     @NotEmpty(message = "Relationship to the victim is required")
     private String relationshipToVictim;
@@ -72,6 +84,7 @@ public class Victim {
     private String contactAddress;
 
     private String contactEmail;  // Optional
+
 
     private String contactIdentificationDocument;  // Optional
 
