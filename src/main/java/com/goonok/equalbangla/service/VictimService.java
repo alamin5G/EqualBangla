@@ -59,13 +59,36 @@ public class VictimService {
     // Save Missing Case
     public void saveMissingCase(Victim victim, MissingDetails missingDetails) {
 
-        if (missingDetails != null){
-            victim.setMissingDetails(missingDetails);
-            victimRepository.save(victim);
-        }else{
-            log.info("missing details is null on the victim service");
+        // Handle file upload for death certificate
+        MultipartFile missingPhotographFile = missingDetails.getMissingPhotographFile(); // Get the file from the object
+        if (missingPhotographFile != null && !missingPhotographFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(missingPhotographFile.getOriginalFilename()));
+            String uploadDir = "uploads/missing-person-photographs/";
+            try {
+                FileUploadUtil.saveFile(uploadDir, fileName, missingPhotographFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            missingDetails.setMissingPhotographPath(uploadDir + fileName);
         }
+
+        //Handle photo upload for death photo
+        MultipartFile missingReportFile = missingDetails.getPoliceReportFile();
+        if(missingReportFile != null && !missingReportFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(missingReportFile.getOriginalFilename()));
+            String uploadDir = "uploads/missing-person-police-reports/";
+            try{
+                FileUploadUtil.saveFile(uploadDir, fileName, missingReportFile);
+            }catch (IOException e){
+                throw new RuntimeException(e);
+            }
+            missingDetails.setPoliceReportPath(uploadDir + fileName);
+        }
+
+        victim.setMissingDetails(missingDetails);
+        victimRepository.save(victim);
     }
+
 
     public void saveInjuredCase(Victim victim, InjuryDetails injuryDetails) {
         // You don't need to separately save injuryDetails or contactPerson if cascading is set up

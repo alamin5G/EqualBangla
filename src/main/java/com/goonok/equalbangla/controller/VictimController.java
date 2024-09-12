@@ -97,10 +97,9 @@ public class VictimController {
             return "redirect:/verification/email";  // Redirect if the user is not verified
         }
         Victim victim = new Victim();
-
         victim.setIncidentType("Missing");  // Set the default incident type
-        model.addAttribute("victim",victim);
         victim.setMissingDetails(new MissingDetails());
+        model.addAttribute("victim",victim);
         return "form-missing";  // Thymeleaf form page for submitting a missing case
     }
 

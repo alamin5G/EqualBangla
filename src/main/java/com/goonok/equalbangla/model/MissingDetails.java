@@ -1,8 +1,11 @@
 package com.goonok.equalbangla.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -22,6 +25,7 @@ public class MissingDetails extends LogEntity {
 
     private String physicalDescription; // Height, complexion, unique identifiers
 
+    @NotBlank(message = "Last seen location is required")
     private String lastSeenLocation; // Last known location
 
     private LocalDate dateLastContacted; // Date of last known contact
@@ -32,5 +36,16 @@ public class MissingDetails extends LogEntity {
 
     private Boolean authoritiesNotified; // Were the police or any authorities notified?
 
-    private String photographPath; // Path to the uploaded photograph
+    @NotNull(message = "Death photo path is required")
+    private String missingPhotographPath; // Path to the uploaded photograph
+
+    private String policeReportPath; // Path to the uploaded photograph
+
+    // Transient field for file upload
+    @Transient
+    @NotNull(message = "Upload missing person photo")
+    private MultipartFile missingPhotographFile;
+
+    @Transient
+    private MultipartFile policeReportFile;
 }
