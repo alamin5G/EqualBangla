@@ -14,6 +14,7 @@ public class FileUploadUtil {
 
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
+            log.info("Folder created successfully");
         }
 
         try (InputStream inputStream = multipartFile.getInputStream()) {

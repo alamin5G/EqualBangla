@@ -101,6 +101,7 @@ public class VictimController {
         // If there are no errors, save the death case
         victimService.saveDeathCase(victim, deathDetails);
         model.addAttribute("message", "Death case submitted successfully!");
+        session.invalidate();
         return "confirmation";  // Return confirmation page after submission
     }
 
