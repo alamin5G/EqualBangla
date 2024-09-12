@@ -2,7 +2,6 @@ package com.goonok.equalbangla.model;
 
 
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

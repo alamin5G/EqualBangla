@@ -19,6 +19,7 @@
         </div>
         <!-- Hidden Field for Incident Type -->
         <input type="hidden" th:field="*{incidentType}" value="Death" />
+        <input type="hidden" th:field="*{deathDetails.deathCertificatePath}" value="uploads/death-certificates/">
 
         <!-- Full Name Field -->
         <div class="mb-3">
@@ -193,13 +194,12 @@
             </div>
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.autopsyPerformed')}" th:errors="*{deathDetails.autopsyPerformed}"></div>
         </div>
-
         <!-- Death Certificate Upload -->
         <div class="mb-3">
             <label for="deathCertificate" class="form-label">Death Certificate (Optional)</label>
-            <input type="file" id="deathCertificate" name="deathCertificatePath" class="form-control" th:field="*{deathDetails.deathCertificatePath}" accept=".pdf,.jpg,.png">
+            <input type="file" id="deathCertificate" name="deathDetails.deathCertificateFile" class="form-control" th:field="*{deathDetails.deathCertificateFile}" accept=".pdf,.jpg,.png">
+            <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathCertificateFile')}" th:errors="*{deathDetails.deathCertificateFile}"></div>
         </div>
-
 
         <!-- Contact Person Information -->
         <h4>Contact Person Information</h4>

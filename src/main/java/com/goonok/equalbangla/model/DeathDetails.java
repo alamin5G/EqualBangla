@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -40,5 +41,10 @@ public class DeathDetails extends LogEntity {
     @NotNull(message = "Autopsy information is required")
     private Boolean autopsyPerformed;
 
-    private String deathCertificatePath; // Path to the uploaded death certificate
+    // Store the file path in the database
+    private String deathCertificatePath;
+
+    // Transient field for file upload
+    @Transient
+    private MultipartFile deathCertificateFile;
 }
