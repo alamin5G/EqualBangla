@@ -97,4 +97,8 @@ public class Victim {
 
     @OneToOne(mappedBy = "victim", cascade = CascadeType.ALL, orphanRemoval = true)
     private DeathDetails deathDetails;
+
+    @Column(name = "verification_status")
+    private String verificationStatus; // Values: PENDING, VERIFIED, REJECTED
+
 }

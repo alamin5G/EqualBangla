@@ -1,5 +1,7 @@
 package com.goonok.equalbangla.security;
 
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.Filter;
@@ -10,20 +12,27 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@EnableScheduling // Enable scheduling for clearing the map
 public class RateLimitingFilter implements Filter {
 
-    // In-memory store to track the requests per IP address
+    // In-memory store to track the requests per IP address and blacklisted IPs
     private final Map<String, RequestCounter> requestCountsPerIpAddress = new ConcurrentHashMap<>();
+    private final Map<String, Long> blacklistedIps = new ConcurrentHashMap<>();
 
     // Define the rate limit parameters
-    private static final long RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute window
-    private static final int MAX_REQUESTS_PER_WINDOW = 100;       // Max 5 requests per window
+    private static final long RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000; // 5 minutes window
+    private static final int MAX_REQUESTS_PER_WINDOW = 100;      // Max 100 requests per window
+    private static final long BLACKLIST_DURATION_MS = 10 * 60 * 1000; // 10-minute ban
+
+    // Maximum size for memory consumption threshold (in number of entries)
+    private static final long MAX_MAP_ENTRIES = 10_000;  // Assuming 50MB for ~10,000 entries (estimate)
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -37,6 +46,13 @@ public class RateLimitingFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String clientIpAddress = getClientIpAddress(httpRequest);
+
+        // Check if the IP is blacklisted
+        if (isBlacklisted(clientIpAddress)) {
+            httpResponse.setStatus(429); // HTTP 429: Too Many Requests
+            httpResponse.getWriter().write("Your IP has been blacklisted due to suspicious activity. Try again later.");
+            return;
+        }
 
         // Track request count and time window for the client IP
         RequestCounter requestCounter = requestCountsPerIpAddress.computeIfAbsent(clientIpAddress, k -> new RequestCounter());
@@ -54,11 +70,46 @@ public class RateLimitingFilter implements Filter {
                 requestCounter.incrementRequestCount();
                 chain.doFilter(request, response);  // Proceed with the request
             } else {
-                // Too many requests; reject the request
+                // Too many requests; blacklist the IP
+                blacklistIp(clientIpAddress);
                 httpResponse.setStatus(429);  // HTTP 429: Too Many Requests
-                httpResponse.getWriter().write("Your (Rate) limit exceeded. Please try again later.");
+                httpResponse.getWriter().write("Too many requests. You have been temporarily blacklisted.");
                 return;
             }
+        }
+    }
+
+    // Method to check if an IP is blacklisted
+    private boolean isBlacklisted(String ipAddress) {
+        Long blacklistEndTime = blacklistedIps.get(ipAddress);
+        if (blacklistEndTime != null) {
+            // If current time is beyond the blacklist end time, remove from blacklist
+            if (Instant.now().toEpochMilli() > blacklistEndTime) {
+                blacklistedIps.remove(ipAddress);
+                return false;
+            }
+            return true; // Still blacklisted
+        }
+        return false; // Not blacklisted
+    }
+
+    // Method to add an IP to the blacklist
+    private void blacklistIp(String ipAddress) {
+        long blacklistEndTime = Instant.now().toEpochMilli() + BLACKLIST_DURATION_MS;
+        blacklistedIps.put(ipAddress, blacklistEndTime);
+    }
+
+    // Schedule clearing the in-memory map every 30 minutes OR when map size exceeds threshold
+    @Scheduled(fixedRate = 30 * 60 * 1000) // Every 30 minutes
+    public void clearRequestCounts() {
+        // Check if the size of the map exceeds the threshold
+        if (requestCountsPerIpAddress.size() > MAX_MAP_ENTRIES) {
+            requestCountsPerIpAddress.clear();
+            System.out.println("Cleared request counts due to memory usage exceeding limit at " + Instant.now());
+        } else {
+            // Clear based on time if size threshold not exceeded
+            requestCountsPerIpAddress.clear();
+            System.out.println("Cleared request counts after 30 minutes at " + Instant.now());
         }
     }
 

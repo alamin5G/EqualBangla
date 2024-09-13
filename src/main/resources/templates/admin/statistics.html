@@ -1,0 +1,17 @@
+<!-- admin-statistics.html -->
+<h2>Victim Statistics</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Incident Type</th>
+        <th>Count</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="stat : ${statistics}">
+        <td th:text="${stat[0]}"></td>
+        <td th:text="${stat[1]}"></td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,25 @@
+<!-- admin-verification.html -->
+<h2>Pending Verification</h2>
+
+<table>
+  <thead>
+  <tr>
+    <th>Full Name</th>
+    <th>Incident Type</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="victim : ${victims}">
+    <td th:text="${victim.fullName}"></td>
+    <td th:text="${victim.incidentType}"></td>
+    <td>
+      <form th:action="@{/admin/verify}" method="post">
+        <input type="hidden" name="victimId" th:value="${victim.id}"/>
+        <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+        <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>

@@ -126,4 +126,8 @@ public class VictimService {
     }
 
     // Other service methods...
+
+    public long countVictimsByIncidentType(String incidentType) {
+        return victimRepository.countByIncidentType(incidentType);
+    }
 }
