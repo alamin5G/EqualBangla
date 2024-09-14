@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+<header th:replace="~{layout/navbar :: header}"></header>
+<main class="container mt-4">
+    <h2>Victim List</h2>
+
+    <!-- Filters Form -->
+    <form th:action="@{/admin/victims/filter}" method="get">
+        <div class="row">
+            <!-- Name Field for filtering -->
+            <div class="col-md-3">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="fullName" class="form-control" placeholder="Victim Name" th:value="${fullName}">
+            </div>
+
+            <!-- Incident Type (Multi-select) -->
+            <div class="col-md-3">
+                <label for="incidentType">Incident Type:</label>
+                <select id="incidentType" name="incidentType" multiple class="form-control">
+                    <option value="Injured">Injured</option>
+                    <option value="Missing">Missing</option>
+                    <option value="Death">Death</option>
+                </select>
+            </div>
+
+            <!-- Date Range -->
+            <div class="col-md-3">
+                <label for="incidentDateFrom">Start Date:</label>
+                <input id="incidentDateFrom" type="date" name="incidentDateFrom" class="form-control" th:value="${incidentDateFrom}">
+            </div>
+
+            <div class="col-md-3">
+                <label for="incidentDateTo">End Date:</label>
+                <input id="incidentDateTo" type="date" name="incidentDateTo" class="form-control" th:value="${incidentDateTo}">
+            </div>
+
+            <!-- District (Multi-select) -->
+            <div class="col-md-3">
+                <label for="district">District:</label>
+                <select id="district" name="district" multiple class="form-control">
+                    <option value="">Select District</option>
+                    <option value="Bagerhat">Bagerhat</option>
+                    <option value="Bandarban">Bandarban</option>
+                    <option value="Barguna">Barguna</option>
+                    <option value="Barisal">Barisal</option>
+                    <option value="Bhola">Bhola</option>
+                    <option value="Bogra">Bogra</option>
+                    <option value="Brahmanbaria">Brahmanbaria</option>
+                    <option value="Chandpur">Chandpur</option>
+                    <option value="Chittagong">Chittagong</option>
+                    <option value="Chuadanga">Chuadanga</option>
+                    <option value="Comilla">Comilla</option>
+                    <option value="Cox's Bazar">Cox's Bazar</option>
+                    <option value="Dhaka">Dhaka</option>
+                    <option value="Dinajpur">Dinajpur</option>
+                    <option value="Faridpur">Faridpur</option>
+                    <option value="Feni">Feni</option>
+                    <option value="Gaibandha">Gaibandha</option>
+                    <option value="Gazipur">Gazipur</option>
+                    <option value="Gopalganj">Gopalganj</option>
+                    <option value="Habiganj">Habiganj</option>
+                    <option value="Jamalpur">Jamalpur</option>
+                    <option value="Jessore">Jessore</option>
+                    <option value="Jhalokati">Jhalokati</option>
+                    <option value="Jhenaidah">Jhenaidah</option>
+                    <option value="Joypurhat">Joypurhat</option>
+                    <option value="Khagrachari">Khagrachari</option>
+                    <option value="Khulna">Khulna</option>
+                    <option value="Kishoreganj">Kishoreganj</option>
+                    <option value="Kurigram">Kurigram</option>
+                    <option value="Kushtia">Kushtia</option>
+                    <option value="Lakshmipur">Lakshmipur</option>
+                    <option value="Lalmonirhat">Lalmonirhat</option>
+                    <option value="Madaripur">Madaripur</option>
+                    <option value="Magura">Magura</option>
+                    <option value="Manikganj">Manikganj</option>
+                    <option value="Maulvibazar">Maulvibazar</option>
+                    <option value="Meherpur">Meherpur</option>
+                    <option value="Munshiganj">Munshiganj</option>
+                    <option value="Mymensingh">Mymensingh</option>
+                    <option value="Naogaon">Naogaon</option>
+                    <option value="Narail">Narail</option>
+                    <option value="Narayanganj">Narayanganj</option>
+                    <option value="Narsingdi">Narsingdi</option>
+                    <option value="Natore">Natore</option>
+                    <option value="Nawabganj">Nawabganj</option>
+                    <option value="Netrokona">Netrokona</option>
+                    <option value="Nilphamari">Nilphamari</option>
+                    <option value="Noakhali">Noakhali</option>
+                    <option value="Pabna">Pabna</option>
+                    <option value="Panchagarh">Panchagarh</option>
+                    <option value="Patuakhali">Patuakhali</option>
+                    <option value="Pirojpur">Pirojpur</option>
+                    <option value="Rajbari">Rajbari</option>
+                    <option value="Rajshahi">Rajshahi</option>
+                    <option value="Rangamati">Rangamati</option>
+                    <option value="Rangpur">Rangpur</option>
+                    <option value="Satkhira">Satkhira</option>
+                    <option value="Shariatpur">Shariatpur</option>
+                    <option value="Sherpur">Sherpur</option>
+                    <option value="Sirajgonj">Sirajgonj</option>
+                    <option value="Sunamganj">Sunamganj</option>
+                    <option value="Sylhet">Sylhet</option>
+                    <option value="Tangail">Tangail</option>
+                    <option value="Thakurgaon">Thakurgaon</option>
+                </select>
+            </div>
+
+            <!-- Age Range -->
+            <div class="col-md-3">
+                <label for="ageFrom">Age From:</label>
+                <input type="number" id="ageFrom" name="ageFrom" class="form-control" th:value="${ageFrom}">
+            </div>
+
+            <div class="col-md-3">
+                <label for="ageTo">Age To:</label>
+                <input type="number" id="ageTo" name="ageTo" class="form-control" th:value="${ageTo}">
+            </div>
+
+            <!-- Gender (Multi-select) -->
+            <div class="col-md-3">
+                <label for="gender">Gender:</label>
+                <select name="gender" id="gender" multiple class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <!-- Occupation -->
+            <div class="col-md-3">
+                <label for="occupation">Occupation:</label>
+                <input type="text" id="occupation" name="occupation" class="form-control" th:value="${occupation}">
+            </div>
+
+            <!-- Verification Status -->
+            <div class="col-md-3">
+                <label for="verificationStatus">Verification Status:</label>
+                <select name="verificationStatus" id="verificationStatus" class="form-control">
+                    <option value="">All</option>
+                    <option value="Verified">Verified</option>
+                    <option value="Unverified">Unverified</option>
+                </select>
+            </div>
+
+            <div class="col-md-12 mt-2">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+
+
+    <!-- Victim Table -->
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th><a th:href="@{/admin/victims/filter(sortField='age', sortDir=${sortDir == 'asc' ? 'desc' : 'asc'})}">Age</a></th>
+            <th><a th:href="@{/admin/victims/filter(sortField='incidentDate', sortDir=${sortDir == 'asc' ? 'desc' : 'asc'})}">Incident Date</a></th>
+            <th><a th:href="@{/admin/victims/filter(sortField='district', sortDir=${sortDir == 'asc' ? 'desc' : 'asc'})}">District</a></th>
+            <th><a th:href="@{/admin/victims/filter(sortField='policeStation', sortDir=${sortDir == 'asc' ? 'desc' : 'asc'})}">Police Station</a></th>
+            <th>Gender</th>
+            <th>Incident Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="victim : ${victimPage.content}">
+            <td th:text="${victim.fullName}"></td>
+            <td th:text="${victim.age}"></td>
+            <td th:text="${victim.incidentDate}"></td>
+            <td th:text="${victim.district}"></td>
+            <td th:text="${victim.policeStation}"></td>
+            <td th:text="${victim.gender}"></td>
+            <td th:text="${victim.incidentType}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination Controls -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/admin/victims/filter(page=${currentPage - 1}, size=${size})}">Previous</a>
+                </li>
+                <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/admin/victims/filter(page=${pageNum}, size=${size})}" th:text="${pageNum + 1}"></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/admin/victims/filter(page=${currentPage + 1}, size=${size})}">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{layout/footer :: footer}"></footer>
+</body>
+</html>

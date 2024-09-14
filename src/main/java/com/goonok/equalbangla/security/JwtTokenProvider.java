@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,7 +19,6 @@ public class JwtTokenProvider {
 
     // Generate a SecretKey for signing the token
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long validityInMilliseconds = 3600000; // 1 hour validity
 
     // Inject CustomUserDetailsService
     private final com.goonok.equalbangla.service.AdminService userDetailsService;
@@ -31,6 +31,8 @@ public class JwtTokenProvider {
     public String createToken(String username) {
         Claims claims = Jwts.claims().setSubject(username);
         Date now = new Date();
+        // 1 hour validity
+        long validityInMilliseconds = 3600000;
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
@@ -52,11 +54,25 @@ public class JwtTokenProvider {
     }
 
     // Method to resolve the token from the request's Authorization header
+
     public String resolveToken(HttpServletRequest request) {
+        // Check if the token is present in the Authorization header
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
+
+        // Check if the token is present in cookies
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("JWT_TOKEN".equals(cookie.getName())) {
+                    return cookie.getValue();  // Return the token from the cookie
+                }
+            }
+        }
+
+        // If no token is found, return null
         return null;
     }
 

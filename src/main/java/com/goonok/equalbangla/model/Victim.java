@@ -12,6 +12,15 @@ import java.time.LocalDate;
 @Entity
 @Transactional
 @Data
+@Table(name = "victim", indexes = {
+        @Index(name = "idx_incident_type", columnList = "incidentType"),
+        @Index(name = "idx_incident_date", columnList = "incidentDate"),
+        @Index(name = "idx_district", columnList = "district"),
+        @Index(name = "idx_police_station", columnList = "policeStation"),
+        @Index(name = "idx_age", columnList = "age"),
+        @Index(name = "idx_gender", columnList = "gender"),
+        @Index(name = "idx_occupation", columnList = "occupation")
+})
 public class Victim {
 
     @Id
@@ -99,6 +108,6 @@ public class Victim {
     private DeathDetails deathDetails;
 
     @Column(name = "verification_status")
-    private String verificationStatus; // Values: PENDING, VERIFIED, REJECTED
+    private String verificationStatus = "2"; // Values: PENDING, VERIFIED, REJECTED - 2 for pending
 
 }

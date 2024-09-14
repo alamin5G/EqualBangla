@@ -2,10 +2,12 @@ package com.goonok.equalbangla.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class Admin {
+public class Admin extends LogEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,4 +17,8 @@ public class Admin {
     private String username;
 
     private String password; // Store encrypted passwords
+
+    @Column(name = "created_by", nullable = false, updatable = false)
+    private String createdBy;  // Store the username of the admin who created this user
+
 }

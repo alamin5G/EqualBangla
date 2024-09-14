@@ -2,12 +2,15 @@ package com.goonok.equalbangla.controller;
 
 import com.goonok.equalbangla.dto.JwtResponse;
 import com.goonok.equalbangla.dto.LoginRequest;
+import com.goonok.equalbangla.model.Admin;
 import com.goonok.equalbangla.model.Victim;
 import com.goonok.equalbangla.repository.VictimRepository;
 import com.goonok.equalbangla.security.JwtTokenProvider;
 import com.goonok.equalbangla.service.AdminService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -18,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +31,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -64,7 +69,7 @@ public class AdminController {
             Cookie jwtCookie = new Cookie("JWT_TOKEN", token);
             jwtCookie.setHttpOnly(true); // Prevent access via JavaScript
             jwtCookie.setPath("/"); // Make it available for the whole application
-            jwtCookie.setMaxAge(7200); // Set the cookie expiry time (2 hours)
+            jwtCookie.setMaxAge(3600); // Set the cookie expiry time (1 hour)
             response.addCookie(jwtCookie);
 
             // Redirect to the dashboard after login
@@ -73,6 +78,38 @@ public class AdminController {
             // On failure, return back to the login page with an error
             model.addAttribute("error", "Invalid credentials");
             return "admin/login";  // Redirect back to login if failed
+        }
+    }
+
+    // Registration form (GET request)
+    @GetMapping("/register")
+    public String showRegistrationForm(HttpServletRequest request, Model model) {
+        // Extract token from the cookie or header
+        String token = jwtTokenProvider.resolveToken(request);
+
+        // Validate token
+        if (token != null && jwtTokenProvider.validateToken(token)) {
+            model.addAttribute("admin", new Admin());
+            return "admin/register";  // Show registration page
+        } else {
+            log.info("Token is null: " + token);
+            return "redirect:/admin/login";  // Redirect to login if not authenticated
+        }
+    }
+
+    // POST request for registration
+    @PostMapping("/register")
+    public String registerNewAdmin(@ModelAttribute Admin newAdmin, Model model) {
+        try {
+
+            // Save the new admin to the database
+            adminService.createAdmin(newAdmin.getUsername(), newAdmin.getPassword());
+
+            model.addAttribute("success", "Admin registered successfully!");
+            return "redirect:/admin/dashboard";  // Redirect after successful registration
+        } catch (Exception e) {
+            model.addAttribute("error", "Registration failed: " + e.getMessage());
+            return "admin/register";  // Return to registration page on failure
         }
     }
 

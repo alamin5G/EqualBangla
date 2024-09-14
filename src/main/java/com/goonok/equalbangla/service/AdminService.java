@@ -4,6 +4,7 @@ import com.goonok.equalbangla.model.Admin;
 import com.goonok.equalbangla.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,9 +34,13 @@ public class AdminService implements UserDetailsService {
 
     public void createAdmin(String username, String password) {
         if (adminRepository.findByUsername(username).isEmpty()) {
+            String createdBy = SecurityContextHolder.getContext().getAuthentication().getName();
+
             Admin admin = new Admin();
             admin.setUsername(username);
             admin.setPassword(new BCryptPasswordEncoder().encode(password));  // Encrypt the password
+            admin.setCreatedBy(createdBy);  // Set the 'created_by' field
+            
             adminRepository.save(admin);
         }
     }

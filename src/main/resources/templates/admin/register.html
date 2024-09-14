@@ -1,0 +1,30 @@
+<!-- layout/main.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+<header th:replace="~{layout/navbar :: header}"></header>
+<main class="container mt-4">
+    <!--all content will be placed here-->
+
+    <h2>Register New Admin</h2>
+
+    <p th:if="${message}" th:text="${message}" class="text-success"></p>
+    <form th:action="@{/admin/register}" method="post" th:object="${admin}">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" th:field="*{username}" placeholder="Enter admin username" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Enter password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+
+
+</main>
+
+<footer th:replace="~{layout/footer :: footer}"></footer>
+</body>
+</html>

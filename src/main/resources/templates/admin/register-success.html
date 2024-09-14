@@ -1,0 +1,18 @@
+<!-- layout/main.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+<header th:replace="~{layout/navbar :: header}"></header>
+<main class="container mt-4">
+    <!--all content will be placed here-->
+
+    <h2>Admin Registration Successful</h2>
+    <p>The new admin has been registered successfully.</p>
+    <a href="/admin/login" class="btn btn-primary">Go to Login</a>
+
+</main>
+
+<footer th:replace="~{layout/footer :: footer}"></footer>
+</body>
+</html>

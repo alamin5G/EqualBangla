@@ -1,21 +1,25 @@
 package com.goonok.equalbangla.service;
 
 import com.goonok.equalbangla.model.*;
-import com.goonok.equalbangla.repository.DeathDetailsRepository;
 import com.goonok.equalbangla.repository.VictimRepository;
+import com.goonok.equalbangla.specification.VictimSpecification;
 import com.goonok.equalbangla.util.FileUploadUtil;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
 @Service
+@Transactional
 public class VictimService {
 
     @Autowired
@@ -23,6 +27,68 @@ public class VictimService {
 
     @Autowired
     private InjuryDetailsService injuryDetailsService;
+
+
+    public Page<Victim> filterVictims(
+            String fullName,
+            List<String> incidentType,
+            LocalDate startDate,
+            LocalDate endDate,
+            List<String> district,
+            String policeStation,
+            Integer ageFrom,
+            Integer ageTo,
+            List<String> gender,
+            String occupation,
+            Boolean verified,
+            int page,
+            int size,
+            String sortField,
+            String sortDir) {
+
+        // Create a pageable object for pagination and sorting
+        Pageable pageable = PageRequest.of(page, size,
+                sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending());
+
+        // Delegate filtering to VictimRepository with the criteria built in VictimSpecification
+        return victimRepository.findAll(
+                VictimSpecification.filterByCriteria(
+                        fullName, incidentType, startDate, endDate, district, policeStation,
+                        ageFrom, ageTo, gender, occupation, verified),
+                pageable
+        );
+    }
+
+    // Method to fetch victims based on verification status (PENDING, VERIFIED, REJECTED, Injured, Missing, Death)
+    public Page<Victim> getVictimsByStatus(String status, int page, int size, String sortField, String sortDir) {
+        Pageable pageable = PageRequest.of(page, size, sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending());
+        if (status != null && !status.isEmpty()) {
+            switch (status) {
+                case "Injured":
+                    return victimRepository.findByIncidentType("Injured", pageable);
+                case "Missing":
+                    return victimRepository.findByIncidentType("Missing", pageable);
+                case "Death":
+                    return victimRepository.findByIncidentType("Death", pageable);
+                case "Verified":
+                    return victimRepository.findByVerificationStatus("1", pageable);
+                case "Rejected":
+                    return victimRepository.findByVerificationStatus("0", pageable);
+                case "Pending":
+                    return victimRepository.findByVerificationStatus("2", pageable);
+                default:
+                    return victimRepository.findAll(pageable);
+            }
+        }
+        return victimRepository.findAll(pageable);
+    }
+
+    // Method to update the verification status
+    public void updateVerificationStatus(Long victimId, String status) {
+        Victim victim = victimRepository.findById(victimId).orElseThrow(() -> new RuntimeException("Victim not found"));
+        victim.setVerificationStatus(status);
+        victimRepository.save(victim);  // Persist the updated status
+    }
 
     // Save Death Case
     public void saveDeathCase(Victim victim, DeathDetails deathDetails) {
@@ -130,4 +196,6 @@ public class VictimService {
     public long countVictimsByIncidentType(String incidentType) {
         return victimRepository.countByIncidentType(incidentType);
     }
+
+
 }
