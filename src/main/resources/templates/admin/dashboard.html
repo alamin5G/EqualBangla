@@ -1,12 +1,101 @@
+<!-- layout/main.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
+<head th:replace="~{layout/head :: head}"></head>
 <body>
-<h1>Welcome to the Admin Dashboard</h1>
-<p>Here you can manage the application.</p>
-<a th:href="@{/admin/logout}">Logout</a>
+<header th:replace="~{layout/navbar :: header}"></header>
+<main class="container mt-4">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1>Admin Dashboard</h1>
+            <p>Welcome to the Admin Dashboard. You can manage the application's various components from here.</p>
+        </div>
+    </div>
+
+    <!-- Dashboard Navigation -->
+    <div class="row mt-5">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Manage Victims</h5>
+                    <p class="card-text">View Victims' Type & Status.</p>
+                    <a th:href="@{/admin/victims}" class="btn btn-primary">Manage Victims</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Filter Victims</h5>
+                    <p class="card-text">View and Filter all victim records.</p>
+                    <a th:href="@{/admin/victims/filter}" class="btn btn-primary">Filter Victims</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Manage Admins</h5>
+                    <p class="card-text">Add or manage admin users.</p>
+
+                    <!-- Check if the logged-in user can manage admins -->
+                    <a th:href="@{/admin/manage-admins}" class="btn btn-primary"
+                       th:if="${#authentication.principal.canManageAdmins()}">Manage Admins</a>
+
+                    <!-- For admins who don't have permission, show a disabled button -->
+                    <button class="btn btn-secondary" th:if="${!#authentication.principal.canManageAdmins()}" disabled>Manage Admins</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">View Reports</h5>
+                    <p class="card-text">Generate reports based on victim data.</p>
+                    <a th:href="@{/admin/reports}" class="btn btn-primary">View Reports</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Manage Verification</h5>
+                    <p class="card-text">View and verify victim submissions.</p>
+                    <a th:href="@{/admin/verification}" class="btn btn-primary">Verify Victims</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Rate Limiting Logs</h5>
+                    <p class="card-text">View rate-limiting details and blacklisted IPs.</p>
+                    <a th:href="@{/admin/rate-limiting-logs}" class="btn btn-primary">Rate Limiting</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Logout</h5>
+                    <p class="card-text">Log out of your admin account.</p>
+                    <a th:href="@{/admin/logout}" class="btn btn-danger">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{layout/footer :: footer}"></footer>
+
 </body>
 </html>

@@ -108,6 +108,6 @@ public class Victim {
     private DeathDetails deathDetails;
 
     @Column(name = "verification_status")
-    private String verificationStatus = "2"; // Values: PENDING, VERIFIED, REJECTED - 2 for pending
+    private String verificationStatus = "2"; // Values: PENDING, VERIFIED, REJECTED -0 for REJECTED, 1 for VERIFIED, 2 for PENDING
 
 }

@@ -1,9 +1,7 @@
 package com.goonok.equalbangla.controller;
 
-import com.goonok.equalbangla.dto.JwtResponse;
-import com.goonok.equalbangla.dto.LoginRequest;
 import com.goonok.equalbangla.model.Admin;
-import com.goonok.equalbangla.model.Victim;
+import com.goonok.equalbangla.power_admin.CustomAdminDetails;
 import com.goonok.equalbangla.repository.VictimRepository;
 import com.goonok.equalbangla.security.JwtTokenProvider;
 import com.goonok.equalbangla.service.AdminService;
@@ -11,24 +9,14 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -133,117 +121,77 @@ public class AdminController {
         return "admin/dashboard";  // Return the dashboard view
     }
 
-    @GetMapping("/verify")
-    public String viewPendingVerification(Model model) {
-        List<Victim> pendingVictims = victimRepository.findByVerificationStatus("PENDING");
-        model.addAttribute("victims", pendingVictims);
-        return "admin/verification";
-    }
+    @GetMapping("/manage-admins")
+    public String showAdminManagementPage(@RequestParam(value = "status", required = false) String status,  Authentication authentication, Model model) {
+        CustomAdminDetails adminDetails = (CustomAdminDetails) authentication.getPrincipal();
 
-    @PostMapping("/verify")
-    public String verifyVictim(@RequestParam Long victimId, @RequestParam String action) {
-        Victim victim = victimRepository.findById(victimId).orElseThrow();
-        victim.setVerificationStatus(action.equals("approve") ? "VERIFIED" : "REJECTED");
-        victimRepository.save(victim);
-        return "redirect:/admin/verify";
-    }
-
-
-    @GetMapping("/filter")
-    public String filterVictims(@RequestParam String incidentType,
-                                @RequestParam(required = false) LocalDate startDate,
-                                @RequestParam(required = false) LocalDate endDate,
-                                Model model) {
-
-        List<Victim> filteredVictims = victimRepository.findByIncidentTypeAndDateRange(incidentType, startDate, endDate);
-        model.addAttribute("victims", filteredVictims);
-        return "admin/dashboard"; // The Thymeleaf template name
-    }
-
-    @GetMapping("/export/csv")
-    public void exportToCSV(@RequestParam String incidentType,
-                            @RequestParam(required = false) LocalDate startDate,
-                            @RequestParam(required = false) LocalDate endDate,
-                            HttpServletResponse response) throws IOException {
-
-        // Set the response type to CSV
-        response.setContentType("text/csv");
-        response.setHeader("Content-Disposition", "attachment; filename=victims.csv");
-
-        // Retrieve the filtered victims
-        List<Victim> victims = victimRepository.findByIncidentTypeAndDateRange(incidentType, startDate, endDate);
-
-        // Write CSV headers
-        PrintWriter writer = response.getWriter();
-        writer.println("Full Name,Incident Type,Incident Date,Location,Contact Number");
-
-        // Write victim data as CSV
-        for (Victim victim : victims) {
-            writer.println(victim.getFullName() + "," +
-                    victim.getIncidentType() + "," +
-                    victim.getIncidentDate() + "," +
-                    victim.getIncidentLocation() + "," +
-                    victim.getContactNumber());
+        if (!adminDetails.canManageAdmins()) {
+            return "redirect:/admin/dashboard";  // Redirect if the admin is not authorized to manage other admins
         }
+
+        List<Admin> adminList =  adminService.findAllByStatus(status);
+
+        // Proceed with showing the admin management page
+        model.addAttribute("admins", adminList);
+        return "admin/manage-admin";
     }
 
-    @GetMapping("/export/pdf")
-    public void exportToPDF(@RequestParam String incidentType,
-                            @RequestParam(required = false) LocalDate startDate,
-                            @RequestParam(required = false) LocalDate endDate,
-                            HttpServletResponse response) throws IOException {
+    // Approve (Enable) admin
+    @PostMapping("/manage-admins/{id}/approve")
+    public String approveAdmin(@PathVariable Long id) {
+        adminService.updateAdminStatus(id, true);  // Set enabled to true
+        return "redirect:/admin/manage-admins";
+    }
 
-        // Set the response type to PDF
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=victims.pdf");
+    // Disable admin
+    @PostMapping("/manage-admins/{id}/disable")
+    public String disableAdmin(@PathVariable Long id) {
+        adminService.updateAdminStatus(id, false);  // Set enabled to false
+        return "redirect:/admin/manage-admins";
+    }
 
-        // Retrieve the filtered victims
-        List<Victim> victims = victimRepository.findByIncidentTypeAndDateRange(incidentType, startDate, endDate);
+    // Approve (Enable) admin
+    @PostMapping("/manage-admins/{id}/power")
+    public String powerManageAdmin(@PathVariable Long id) {
+        adminService.updateManageAdminStatus(id, true);  // Set enabled to true
+        return "redirect:/admin/manage-admins";
+    }
 
-        // Create a PDF document
-        try (PDDocument document = new PDDocument()) {
-            PDPage page = new PDPage();
-            document.addPage(page);
+    // Disable admin
+    @PostMapping("/manage-admins/{id}/normal")
+    public String normalManageAdmin(@PathVariable Long id) {
+        adminService.updateManageAdminStatus(id, false);  // Set enabled to false
+        return "redirect:/admin/manage-admins";
+    }
 
-            // Create a content stream to write to the PDF
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            contentStream.beginText();
-            //contentStream.setFont(PDType1Font.HELVETICA, 12);
-            contentStream.setLeading(14.5f);
-            contentStream.newLineAtOffset(25, 700);
 
-            // Write a title
-            contentStream.showText("Victim Data Report");
-            contentStream.newLine();
+    // Edit admin password (get form)
+    @GetMapping("/manage-admins/{id}/password")
+    public String editAdminPassword(@PathVariable Long id, Model model) {
+        Admin admin = adminService.getAdminById(id).orElseThrow(() -> new RuntimeException("Admin not found"));
+        model.addAttribute("admin", admin);
+        return "admin/edit-password";  // Thymeleaf template for password edit
+    }
 
-            // Write CSV-style data to the PDF
-            contentStream.showText("Full Name | Incident Type | Date | Location | Contact Number");
-            contentStream.newLine();
+    // Save new password
+    @PostMapping("/manage-admins/{id}/password")
+    public String saveAdminPassword(@PathVariable Long id, @RequestParam String password) {
+        adminService.updateAdminPassword(id, password);
+        return "redirect:/admin/manage-admins";
+    }
 
-            for (Victim victim : victims) {
-                contentStream.showText(victim.getFullName() + " | " +
-                        victim.getIncidentType() + " | " +
-                        victim.getIncidentDate() + " | " +
-                        victim.getIncidentLocation() + " | " +
-                        victim.getContactNumber());
-                contentStream.newLine();
-            }
+    @PostMapping("/add")
+    public String addAdmin(Admin admin, Authentication authentication) {
+        CustomAdminDetails adminDetails = (CustomAdminDetails) authentication.getPrincipal();
 
-            contentStream.endText();
-            contentStream.close();
-
-            // Save the document to the response
-            document.save(response.getOutputStream());
+        if (!adminDetails.canManageAdmins()) {
+            return "redirect:/admin/dashboard";  // Redirect if the admin is not authorized to manage other admins
         }
+
+        adminService.createAdmin(admin.getUsername(), admin.getPassword());
+        return "redirect:/admin/manage-admins";
     }
-
-    @GetMapping("/statistics")
-    public String viewStatistics(Model model) {
-        //List<Object[]> stats = victimRepository.countByIncidentType();
-        //model.addAttribute("statistics", stats);
-        return "admin/statistics";
-    }
-
-
-
 }
+
+
+

@@ -4,72 +4,98 @@
 <body>
 <header th:replace="~{layout/navbar :: header}"></header>
 <main class="container mt-4">
-  <h2>Victim Management</h2>
-
-  <!-- Top Filter Bar -->
-  <div class="row text-center ">
-    <div class="mb-4" >
-      <a th:href="@{/admin/victims?status=Injured}" class="btn btn-success">Injured</a>
-      -
-      <a th:href="@{/admin/victims?status=Death}" class="btn btn-danger">Death</a>
-      -
-      <a th:href="@{/admin/victims?status=Missing}" class="btn btn-warning">Missing</a>
-      -
-      <a th:href="@{/admin/victims?status=Verified}" class="btn btn-primary">Verified</a>
-      -
-      <a th:href="@{/admin/victims?status=Rejected}" class="btn btn-dark">Rejected</a>
-      -
-      <a th:href="@{/admin/victims?status=Pending}" class="btn btn-secondary">Pending</a>
+    <div class="row text-center">
+        <!--display success message-->
+            <h3 th:text="${success  != null ? success : 'Victim Management'}" class="alert alert-success text-success">Victim Management</h3>
+        <!--Display error message-->
+        <div th:if="${error}" class="alert alert-danger mt-4">
+            <span th:text="${error}"></span>
+        </div>
     </div>
-  </div>
 
-  <!-- Victim Table -->
-  <table class="table table-bordered table-hover">
-    <thead>
-    <tr>
-      <th>Full Name</th>
-      <th>Incident Type</th>
-      <th>Incident Date</th>
-      <th>District</th>
-      <th>Police Station</th>
-      <th>Gender</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="victim : ${victimPage.content}">
-      <td th:text="${victim.fullName}">Full Name</td>
-      <td th:text="${victim.incidentType}">Incident Type</td>
-      <td th:text="${victim.incidentDate}">Incident Date</td>
-      <td th:text="${victim.district}">District</td>
-      <td th:text="${victim.policeStation}">Police Station</td>
-      <td th:text="${victim.gender}">Gender</td>
-      <td th:text="${victim.verificationStatus}">Verification Status</td>
-      <td>
-        <a th:href="@{'/admin/victims/' + ${victim.id} + '/approve'}" class="btn btn-success">Approve</a>
-        <a th:href="@{'/admin/victims/' + ${victim.id} + '/reject'}" class="btn btn-warning">Reject</a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-
-  <!-- Pagination Controls -->
-  <div class="row mt-4">
-    <div class="col-md-12">
-      <ul class="pagination">
-        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-          <a class="page-link" th:href="@{/admin/victims(page=${currentPage - 1}, size=${size})}">Previous</a>
-        </li>
-        <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active'">
-          <a class="page-link" th:href="@{/admin/victims(page=${pageNum}, size=${size})}" th:text="${pageNum + 1}"></a>
-        </li>
-        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-          <a class="page-link" th:href="@{/admin/victims(page=${currentPage + 1}, size=${size})}">Next</a>
-        </li>
-      </ul>
+    <!-- Top Filter Bar -->
+    <div class="row text-center ">
+        <div class="mb-4">
+            <a th:href="@{/admin/victims?status=Injured}" class="btn btn-success">Injured</a>
+            -
+            <a th:href="@{/admin/victims?status=Death}" class="btn btn-danger">Death</a>
+            -
+            <a th:href="@{/admin/victims?status=Missing}" class="btn btn-warning">Missing</a>
+            -
+            <a th:href="@{/admin/victims?status=Verified}" class="btn btn-primary">Verified</a>
+            -
+            <a th:href="@{/admin/victims?status=Rejected}" class="btn btn-dark">Rejected</a>
+            -
+            <a th:href="@{/admin/victims?status=Pending}" class="btn btn-secondary">Pending</a>
+        </div>
     </div>
-  </div>
+
+    <!-- Victim Table -->
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Incident Type</th>
+            <th>Incident Date</th>
+            <th>District</th>
+            <th>Police Station</th>
+            <th>Gender</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="victim : ${victimPage.content}">
+            <td th:text="${victim.fullName}">Full Name</td>
+            <td th:text="${victim.incidentType}">Incident Type</td>
+            <td th:text="${victim.incidentDate}">Incident Date</td>
+            <td th:text="${victim.district}">District</td>
+            <td th:text="${victim.policeStation}">Police Station</td>
+            <td th:text="${victim.gender}">Gender</td>
+            <td th:text="${victim.verificationStatus}">Verification Status</td>
+            <td>
+                <!-- Approve/Pending Button -->
+                <form th:action="@{'/admin/victims/' + ${victim.id} + '/approveOrPending'}" method="post" style="display:inline;">
+                    <input type="hidden" th:value="${victim.id}" name="victimId">
+                    <button type="submit" class="btn btn-success btn-sm"
+                            th:disabled="${victim.verificationStatus == '0'}"
+                            th:text="${victim.verificationStatus == '1' ? 'Make Pending' : 'Approve'}">
+                        Approve
+                    </button>
+                </form>
+
+                <!-- Reject Button -->
+                <form th:action="@{'/admin/victims/' + ${victim.id} + '/reject'}" method="post" style="display:inline;">
+                    <input type="hidden" th:value="${victim.id}" name="victimId">
+                    <button type="submit" class="btn btn-warning btn-sm"
+                            th:disabled="${victim.verificationStatus == '1'}"
+                            th:text="${victim.verificationStatus == '0' ? 'Make Pending' : 'Reject'}">
+                        Reject
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination Controls -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/admin/victims(page=${currentPage - 1}, size=${size})}">Previous</a>
+                </li>
+                <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:classappend="${pageNum == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/admin/victims(page=${pageNum}, size=${size})}"
+                       th:text="${pageNum + 1}"></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/admin/victims(page=${currentPage + 1}, size=${size})}">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
 </main>
 <footer th:replace="~{layout/footer :: footer}"></footer>

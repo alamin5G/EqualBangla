@@ -1,7 +1,11 @@
 package com.goonok.equalbangla.security;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.Filter;
@@ -18,6 +22,7 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 @Component
 @EnableScheduling // Enable scheduling for clearing the map
 public class RateLimitingFilter implements Filter {
@@ -45,6 +50,16 @@ public class RateLimitingFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+        // Check if the user has the ROLE_ADMIN role and bypass rate limiting if true
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && hasAdminRole(authentication)) {
+            // Bypass rate limiting for admin users
+            chain.doFilter(request, response);
+            return;
+        }
+
+
         String clientIpAddress = getClientIpAddress(httpRequest);
 
         // Check if the IP is blacklisted
@@ -68,6 +83,7 @@ public class RateLimitingFilter implements Filter {
             // Check if the current request exceeds the allowed rate
             if (requestCounter.getRequestCount() < MAX_REQUESTS_PER_WINDOW) {
                 requestCounter.incrementRequestCount();
+                log.info("from the 100 request: you have used"  + requestCounter.getRequestCount() + " requests");
                 chain.doFilter(request, response);  // Proceed with the request
             } else {
                 // Too many requests; blacklist the IP
@@ -78,6 +94,18 @@ public class RateLimitingFilter implements Filter {
             }
         }
     }
+
+
+    // Helper method to check if the user has the ROLE_ADMIN role
+    private boolean hasAdminRole(Authentication authentication) {
+        if (authentication.getPrincipal() instanceof UserDetails userDetails) {
+            log.info("ROLE_ADMIN HAS BEEN FOUND on RATE LIMITING FILTER");
+            return userDetails.getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+        }
+        return false;
+    }
+
 
     // Method to check if an IP is blacklisted
     private boolean isBlacklisted(String ipAddress) {

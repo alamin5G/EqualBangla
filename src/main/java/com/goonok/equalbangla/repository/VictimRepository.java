@@ -23,6 +23,9 @@ public interface VictimRepository extends JpaRepository<Victim, Long>, JpaSpecif
     // Use Spring Data JPA's method name conventions
     long countByIncidentType(String incidentType);
 
+    @Query("SELECT v.incidentType, COUNT(v) FROM Victim v GROUP BY v.incidentType")
+    List<Object[]> countByIncidentType();
+
     // If you need to customize it further, you can use the @Query annotation
     @Query("SELECT COUNT(v) FROM Victim v WHERE v.incidentType = :incidentType")
     long findCountByIncidentType(String incidentType);

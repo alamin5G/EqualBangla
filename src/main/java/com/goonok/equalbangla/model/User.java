@@ -22,8 +22,5 @@ public class User {
     private Set<Role> roles;
 
 
-    public Set<Role> getAuthorities() {
-        return roles;
-    }
 }
 

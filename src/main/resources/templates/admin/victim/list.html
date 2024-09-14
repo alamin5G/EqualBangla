@@ -10,13 +10,50 @@
     <form th:action="@{/admin/victims/filter}" method="get">
         <div class="row">
             <!-- Name Field for filtering -->
-            <div class="col-md-3">
+            <div class="col-md-3 mb-2">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="fullName" class="form-control" placeholder="Victim Name" th:value="${fullName}">
             </div>
 
+            <!-- Occupation -->
+            <div class="col-md-3 mb-2">
+                <label for="occupation">Occupation:</label>
+                <input type="text" id="occupation" name="occupation" class="form-control" th:value="${occupation}">
+            </div>
+
+            <!-- Age Range -->
+            <div class="col-md-3 mb-2">
+                <label for="ageFrom">Age From:</label>
+                <input type="number" id="ageFrom" name="ageFrom" class="form-control" th:value="${ageFrom}">
+            </div>
+
+            <div class="col-md-3 mb-2">
+                <label for="ageTo">Age To:</label>
+                <input type="number" id="ageTo" name="ageTo" class="form-control" th:value="${ageTo}">
+            </div>
+
+            <!-- Date Range -->
+            <div class="col-md-3 mb-2">
+                <label for="incidentDateFrom">Start Date:</label>
+                <input id="incidentDateFrom" type="date" name="incidentDateFrom" class="form-control" th:value="${incidentDateFrom}">
+            </div>
+
+            <div class="col-md-3 mb-2">
+                <label for="incidentDateTo">End Date:</label>
+                <input id="incidentDateTo" type="date" name="incidentDateTo" class="form-control" th:value="${incidentDateTo}">
+            </div>
+            <!-- Gender (Multi-select) -->
+            <div class="col-md-3 mb-2">
+                <label for="gender">Gender:</label>
+                <select name="gender" id="gender" multiple class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
             <!-- Incident Type (Multi-select) -->
-            <div class="col-md-3">
+            <div class="col-md-3 mb-2">
                 <label for="incidentType">Incident Type:</label>
                 <select id="incidentType" name="incidentType" multiple class="form-control">
                     <option value="Injured">Injured</option>
@@ -25,19 +62,8 @@
                 </select>
             </div>
 
-            <!-- Date Range -->
-            <div class="col-md-3">
-                <label for="incidentDateFrom">Start Date:</label>
-                <input id="incidentDateFrom" type="date" name="incidentDateFrom" class="form-control" th:value="${incidentDateFrom}">
-            </div>
-
-            <div class="col-md-3">
-                <label for="incidentDateTo">End Date:</label>
-                <input id="incidentDateTo" type="date" name="incidentDateTo" class="form-control" th:value="${incidentDateTo}">
-            </div>
-
             <!-- District (Multi-select) -->
-            <div class="col-md-3">
+            <div class="col-md-3 mb-2">
                 <label for="district">District:</label>
                 <select id="district" name="district" multiple class="form-control">
                     <option value="">Select District</option>
@@ -108,45 +134,19 @@
                 </select>
             </div>
 
-            <!-- Age Range -->
-            <div class="col-md-3">
-                <label for="ageFrom">Age From:</label>
-                <input type="number" id="ageFrom" name="ageFrom" class="form-control" th:value="${ageFrom}">
-            </div>
-
-            <div class="col-md-3">
-                <label for="ageTo">Age To:</label>
-                <input type="number" id="ageTo" name="ageTo" class="form-control" th:value="${ageTo}">
-            </div>
-
-            <!-- Gender (Multi-select) -->
-            <div class="col-md-3">
-                <label for="gender">Gender:</label>
-                <select name="gender" id="gender" multiple class="form-control">
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-
-            <!-- Occupation -->
-            <div class="col-md-3">
-                <label for="occupation">Occupation:</label>
-                <input type="text" id="occupation" name="occupation" class="form-control" th:value="${occupation}">
-            </div>
-
             <!-- Verification Status -->
-            <div class="col-md-3">
+            <div class="col-md-3 mb-2">
                 <label for="verificationStatus">Verification Status:</label>
                 <select name="verificationStatus" id="verificationStatus" class="form-control">
                     <option value="">All</option>
-                    <option value="Verified">Verified</option>
-                    <option value="Unverified">Unverified</option>
+                    <option value="1">Approved</option>
+                    <option value="2">Pending</option>
+                    <option value="0">Rejected</option>
                 </select>
             </div>
 
-            <div class="col-md-12 mt-2">
-                <button type="submit" class="btn btn-primary">Filter</button>
+            <div class="col-md-12 mt-2 mb-3 text-center">
+                <button type="submit" class="btn btn-warning"> Apply Filter</button>
             </div>
         </div>
     </form>

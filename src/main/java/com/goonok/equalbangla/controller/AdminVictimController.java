@@ -69,16 +69,20 @@ public class AdminVictimController {
         LocalDate end = (incidentDateTo != null && !incidentDateTo.isEmpty()) ? LocalDate.parse(incidentDateTo) : null;
 
         // Process verification status
-        Boolean verified = null;
-        if ("Verified".equals(verificationStatus)) {
-            verified = true;
-        } else if ("Unverified".equals(verificationStatus)) {
-            verified = false;
+       // Boolean verified = null;
+        if ("0".equals(verificationStatus)) {
+            verificationStatus = "0";
+        } else if ("1".equals(verificationStatus)) {
+            verificationStatus = "1";
+        }else if ("2".equals(verificationStatus)) {
+            verificationStatus= "2";
+        }else {
+            verificationStatus = "";
         }
 
         // Call the service to filter victims
         Page<Victim> victimPage = victimService.filterVictims(
-                fullName, incidentType, start, end, district, policeStation, ageFrom, ageTo, gender, occupation, verified, page, size, sortField, sortDir);
+                fullName, incidentType, start, end, district, policeStation, ageFrom, ageTo, gender, occupation, verificationStatus, page, size, sortField, sortDir);
 
         model.addAttribute("victimPage", victimPage);
         model.addAttribute("currentPage", page);
@@ -104,6 +108,43 @@ public class AdminVictimController {
 
         return "admin/victim/list";  // Points to the Thymeleaf template for displaying the victims
     }
+
+
+    @PostMapping("/{id}/approveOrPending")
+    public String approveOrTogglePending(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Victim victim = victimService.getById(id);
+
+        // Toggle between Pending (2) and Approved (1)
+        if (victim.getVerificationStatus().equals("1")) {
+            victim.setVerificationStatus("2");  // Make it Pending
+            redirectAttributes.addFlashAttribute("success",  victim.getFullName() + " has been set to in Pending list");
+        } else {
+            victim.setVerificationStatus("1");  // Approve
+            redirectAttributes.addFlashAttribute("success",  victim.getFullName() + "'s data has been approved");
+        }
+
+        victimService.save(victim);
+        return "redirect:/admin/victims";  // Redirect back to victim list
+    }
+
+    @PostMapping("/{id}/reject")
+    public String rejectVictim(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Victim victim = victimService.getById(id);
+
+        // Set verification status to Rejected (0)
+        if (victim.getVerificationStatus().equals("2")) { //if it is in pending state
+            victim.setVerificationStatus("0"); //set to reject
+            redirectAttributes.addFlashAttribute("success", victim.getFullName() + "'s data has been transfer to rejected list");
+        }else if (victim.getVerificationStatus().equals("0")) { // if it is in rejected state
+            victim.setVerificationStatus("2"); // set to pending list
+            redirectAttributes.addFlashAttribute("success",  victim.getFullName() + " has been set to in Pending list");
+        }
+        victimService.save(victim);
+        return "redirect:/admin/victims";  // Redirect back to victim list
+    }
+
+
+
     // Method to update the verification status
     @PostMapping("/{victimId}/update-status")
     public String updateVerificationStatus(

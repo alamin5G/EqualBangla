@@ -46,6 +46,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             String username = jwtTokenProvider.getUsername(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
+            // Check if the admin is enabled
+            if (!userDetails.isEnabled()) {
+                throw new ServletException("Admin account is disabled.");
+            }
+
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

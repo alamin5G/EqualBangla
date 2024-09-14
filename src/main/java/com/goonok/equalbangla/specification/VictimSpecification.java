@@ -13,7 +13,7 @@ public class VictimSpecification {
     public static Specification<Victim> filterByCriteria(
             String fullName, List<String> incidentType, LocalDate startDate, LocalDate endDate,
             List<String> district, String policeStation, Integer ageFrom, Integer ageTo,
-            List<String> gender, String occupation, Boolean verified) {
+            List<String> gender, String occupation, String verificationStatus) {
 
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
@@ -72,9 +72,9 @@ public class VictimSpecification {
                         criteriaBuilder.equal(root.get("occupation"), occupation));
             }
 
-            if (verified != null) {
+            if (verificationStatus != null && !verificationStatus.isEmpty()) {
                 predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.equal(root.get("verified"), verified));
+                        criteriaBuilder.equal(root.get("verificationStatus"), verificationStatus));
             }
 
             return predicate;

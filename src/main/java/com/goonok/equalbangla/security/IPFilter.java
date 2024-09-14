@@ -41,6 +41,7 @@ public class IPFilter implements Filter {
         // Apply IP filtering only to /admin/** URLs
         if (requestURI.startsWith("/admin")) {
             if (!whitelistedIps.contains(ipAddress)) {
+                response.getWriter().write("IP Address " + ipAddress + " is not allowed to access this resource.");
                 throw new ServletException("IP Address " + ipAddress + " is not allowed to access this resource.");
             }
         }

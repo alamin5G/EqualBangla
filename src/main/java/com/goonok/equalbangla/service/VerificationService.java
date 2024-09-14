@@ -2,11 +2,15 @@ package com.goonok.equalbangla.service;
 
 import com.goonok.equalbangla.model.VerificationToken;
 import com.goonok.equalbangla.repository.VerificationTokenRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class VerificationService {
 
@@ -15,6 +19,20 @@ public class VerificationService {
 
     @Autowired
     private EmailService emailService;
+
+    public void save(VerificationToken verificationToken) {
+        verificationTokenRepository.save(verificationToken);
+    }
+
+    public void setTokenExpiryDate(String token, LocalDateTime date) {
+        Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
+        if (verificationToken.isPresent()) {
+            verificationToken.get().setExpiryDate(date);
+            verificationTokenRepository.save(verificationToken.get());
+        }else {
+            log.info("Token not found in the Verification Service");
+        }
+    }
 
     // Generate a verification token and send it via email
     public boolean generateVerificationToken(String email) {

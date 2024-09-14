@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}">
+    <title>Admin Management</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header th:replace="~{layout/navbar :: header}"></header>
+<main class="container mt-4">
+    <h2>User Management</h2>
+
+    <!-- Filters for admin/user management -->
+    <div class="mb-4 text-center">
+        <a class="btn btn-success" th:href="@{/admin/manage-admins?status=enabled}">Enabled</a>
+        -
+        <a class="btn btn-danger" th:href="@{/admin/manage-admins?status=disabled}">Disabled</a>
+        -
+        <a class="btn btn-success" th:href="@{/admin/manage-admins?status=power}">Powered</a>
+        -
+        <a class="btn btn-primary" th:href="@{/admin/manage-admins?status=normal}">Normal</a>
+        -
+        <a class="btn btn-secondary" th:href="@{/admin/manage-admins}">All Admins</a>
+    </div>
+
+    <!-- Admins Table -->
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Can Manage</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="admin : ${admins}">
+            <td th:text="${admin.username}">admin_username</td>
+            <td th:text="${admin.canManageAdmins}">can manage</td>
+            <td th:text="${admin.enabled ? 'Enabled' : 'Disabled'}">Status</td>
+            <td>
+                <!-- Power Admin Specific Actions (Visible only to certain admins) -->
+                <div th:if="${#authentication.principal.canManageAdmins}">
+
+                    <form th:action="@{'/admin/manage-admins/' + ${admin.id} + '/approve'}" method="post" style="display:inline;">
+                        <input type="hidden" th:value="${admin.id}" name="userId">
+                        <button type="submit" class="btn btn-success btn-sm" th:disabled="${admin.enabled}">Enable
+                        </button>
+                    </form>
+
+                    <form th:action="@{'/admin/manage-admins/' + ${admin.id} + '/disable'}" method="post" style="display:inline;">
+                        <input type="hidden" th:value="${admin.id}" name="userId">
+                        <button type="submit" class="btn btn-warning btn-sm" th:disabled="${!admin.enabled}">Disable
+                        </button>
+                    </form>
+                     <form th:action="@{'/admin/manage-admins/' + ${admin.id} + '/power'}" method="post" style="display:inline;">
+                        <input type="hidden" th:value="${admin.id}" name="userId">
+                        <button type="submit" class="btn btn-success btn-sm" th:disabled="${admin.canManageAdmins}">Powered
+                        </button>
+                    </form>
+
+                    <form th:action="@{'/admin/manage-admins/' + ${admin.id} + '/normal'}" method="post" style="display:inline;">
+                        <input type="hidden" th:value="${admin.id}" name="userId">
+                        <button type="submit" class="btn btn-warning btn-sm" th:disabled="${!admin.canManageAdmins}">Normal
+                        </button>
+                    </form>
+
+                    <!-- Edit Password Button -->
+                    <a th:href="@{'/admin/manage-admins/' + ${admin.id} + '/password'}" class="btn btn-info btn-sm">Edit Password</a>
+                </div>
+
+                <!-- Normal Admin Actions (Can't manage admins, but can view or edit) -->
+                <div th:if="${!#authentication.principal.canManageAdmins}">
+                    <!-- Only view actions, buttons disabled -->
+                    <form method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-success btn-sm" disabled>Cannot Manage</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+<footer th:replace="~{layout/footer :: footer}"></footer>
+</body>
+</html>

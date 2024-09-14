@@ -16,7 +16,7 @@ public class AdminReminderScheduler {
 
     @Scheduled(cron = "0 0 9 * * ?") // Every day at 9 AM
     public void sendReminder() {
-        List<Victim> unverifiedVictims = victimRepository.findByVerificationStatus("PENDING");
+        List<Victim> unverifiedVictims = victimRepository.findByVerificationStatus("2");
 
         if (!unverifiedVictims.isEmpty()) {
             // Logic to send email to admin (e.g., using JavaMailSender)

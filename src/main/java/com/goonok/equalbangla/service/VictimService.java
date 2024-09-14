@@ -40,7 +40,7 @@ public class VictimService {
             Integer ageTo,
             List<String> gender,
             String occupation,
-            Boolean verified,
+            String verificationStatus,
             int page,
             int size,
             String sortField,
@@ -54,7 +54,7 @@ public class VictimService {
         return victimRepository.findAll(
                 VictimSpecification.filterByCriteria(
                         fullName, incidentType, startDate, endDate, district, policeStation,
-                        ageFrom, ageTo, gender, occupation, verified),
+                        ageFrom, ageTo, gender, occupation, verificationStatus),
                 pageable
         );
     }
@@ -195,6 +195,14 @@ public class VictimService {
 
     public long countVictimsByIncidentType(String incidentType) {
         return victimRepository.countByIncidentType(incidentType);
+    }
+
+    public Victim getById(Long id) {
+        return victimRepository.findById(id).orElseThrow(() -> new RuntimeException("Victim not found"));
+    }
+
+    public void save(Victim victim) {
+        victimRepository.save(victim);
     }
 
 
