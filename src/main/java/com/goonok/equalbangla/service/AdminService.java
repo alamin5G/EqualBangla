@@ -50,6 +50,7 @@ public class AdminService implements UserDetailsService {
             admin.setUsername(username);
             admin.setPassword(new BCryptPasswordEncoder().encode(password));  // Encrypt the password
             admin.setCreatedBy(createdBy);  // Set the 'created_by' field
+            admin.setUpdatedBy(createdBy);  // Set the 'updated_by' field as it is first time updated
             admin.setCanManageAdmins(false); // Default to not managing admins (can be set later)
             admin.setEnabled(true);  // Set enabled to true by default
 
@@ -57,33 +58,33 @@ public class AdminService implements UserDetailsService {
         }
     }
 
-    // Method to update the canManageAdmins flag
-    public void updateCanManageAdmins(String username, boolean canManageAdmins) {
-        Admin admin = adminRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Admin not found"));
-
-        admin.setCanManageAdmins(canManageAdmins);
-        adminRepository.save(admin);
-    }
 
     // Enable or disable an admin
     public void updateAdminStatus(Long id, boolean enabled) {
         Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException("Admin not found"));
+        String updatedBy = SecurityContextHolder.getContext().getAuthentication().getName();
         admin.setEnabled(enabled);
+        admin.setUpdatedBy(updatedBy);
         adminRepository.save(admin);
     }
 
     public void updateManageAdminStatus(Long id, boolean enabled) {
         Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException("Admin not found"));
+        String updatedBy = SecurityContextHolder.getContext().getAuthentication().getName();
         admin.setCanManageAdmins(enabled);
+        admin.setUpdatedBy(updatedBy);
         adminRepository.save(admin);
     }
 
     public void updateAdminPassword(Long id, String newPassword) {
         Admin admin = adminRepository.findById(id).orElseThrow(() -> new RuntimeException("Admin not found"));
+        String updatedBy = SecurityContextHolder.getContext().getAuthentication().getName();
         admin.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+        admin.setUpdatedBy(updatedBy);
         adminRepository.save(admin);
     }
+
+
 
     public Optional<Admin> findByUsername(String username) {
         return adminRepository.findByUsername(username);

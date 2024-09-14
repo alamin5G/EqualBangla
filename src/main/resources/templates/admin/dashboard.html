@@ -7,7 +7,12 @@
 <main class="container mt-4">
     <div class="row">
         <div class="col-12 text-center">
-            <h1>Admin Dashboard</h1>
+            <!--display success message-->
+            <h3 th:text="${success  != null ? success : 'Admin Dashboard'}" class="alert alert-success text-success">Admin Dashboard</h3>
+            <!--Display error message-->
+            <div th:if="${error}" class="alert alert-danger mt-4">
+                <span th:text="${error}"></span>
+            </div>
             <p>Welcome to the Admin Dashboard. You can manage the application's various components from here.</p>
         </div>
     </div>

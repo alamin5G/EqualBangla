@@ -7,8 +7,12 @@
 <body>
 <header th:replace="~{layout/navbar :: header}"></header>
 <main class="container mt-4">
-    <h2>User Management</h2>
-
+    <!--display success message-->
+    <h3 th:text="${success  != null ? success : 'User Management'}" class="alert alert-success text-center text-success">User Management</h3>
+    <!--Display error message-->
+    <div th:if="${error}" class="alert alert-danger mt-4">
+        <span th:text="${error}"></span>
+    </div>
     <!-- Filters for admin/user management -->
     <div class="mb-4 text-center">
         <a class="btn btn-success" th:href="@{/admin/manage-admins?status=enabled}">Enabled</a>
@@ -65,7 +69,10 @@
                     </form>
 
                     <!-- Edit Password Button -->
-                    <a th:href="@{'/admin/manage-admins/' + ${admin.id} + '/password'}" class="btn btn-info btn-sm">Edit Password</a>
+                  <!--  <a th:href="@{'/admin/manage-admins/' + ${admin.id} + '/password'}" class="btn btn-info btn-sm">Edit Password</a>-->
+                    <!--Edit password button-->
+                    <a href="#" th:data-bs-toggle="modal" th:data-bs-target="'#editPasswordModal-' + ${admin.id}"
+                       class="btn btn-primary btn-sm">Password</a>
                 </div>
 
                 <!-- Normal Admin Actions (Can't manage admins, but can view or edit) -->
@@ -79,6 +86,34 @@
         </tr>
         </tbody>
     </table>
+
+
+    <!-- Password Edit Modal -->
+    <div th:each="admin : ${admins}">
+        <div th:id="'editPasswordModal-' + ${admin.id}" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title me-1">Edit Password for <span th:text="${admin.username}" class="text-warning"></span></h5>
+
+                        <h5 class="modal-title ms-1">New Password is <span th:text="${randomPassword}" class="text-success"></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{'/admin/manage-admins/' + ${admin.id} + '/password'}" method="post">
+                            <input type="hidden" name="userId" th:value="${admin.id}">
+                            <div class="mb-3">
+                                <label for="passwords" class="form-label text-danger">New Password: (Do not modify)</label>
+                                <input type="password" id="passwords" name="password" th:value="${randomPassword}" class="form-control" readonly>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Change Password</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 <footer th:replace="~{layout/footer :: footer}"></footer>
 </body>

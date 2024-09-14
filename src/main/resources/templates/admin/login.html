@@ -8,6 +8,10 @@
     <!--all content will be placed here-->
 
     <h2>Admin Login</h2>
+    <!--Display error message-->
+    <div th:if="${error}" class="alert alert-danger mt-4">
+        <span th:text="${error}"></span>
+    </div>
     <form action="/admin/login" method="post">
         <div class="form-group">
             <label for="username">Username</label>

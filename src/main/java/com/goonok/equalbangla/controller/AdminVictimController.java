@@ -143,18 +143,4 @@ public class AdminVictimController {
         return "redirect:/admin/victims";  // Redirect back to victim list
     }
 
-
-
-    // Method to update the verification status
-    @PostMapping("/{victimId}/update-status")
-    public String updateVerificationStatus(
-            @PathVariable Long victimId,
-            @RequestParam("status") String status,
-            RedirectAttributes redirectAttributes) {
-
-        victimService.updateVerificationStatus(victimId, status);
-        redirectAttributes.addFlashAttribute("success", "Verification status updated successfully!");
-
-        return "redirect:/admin/victims";
-    }
 }

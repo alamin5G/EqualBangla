@@ -5,6 +5,7 @@ import com.goonok.equalbangla.power_admin.CustomAdminDetails;
 import com.goonok.equalbangla.repository.VictimRepository;
 import com.goonok.equalbangla.security.JwtTokenProvider;
 import com.goonok.equalbangla.service.AdminService;
+import com.goonok.equalbangla.service.GreetingService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,8 +17,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Random;
 
 @Slf4j
 @Controller
@@ -26,6 +30,9 @@ public class AdminController {
 
     @Autowired
     private VictimRepository victimRepository;
+
+    @Autowired
+    private GreetingService greetingService;
 
     @Autowired
     private AdminService adminService;
@@ -43,7 +50,8 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password, Model model, HttpServletResponse response) {
+    public String login(@RequestParam String username, @RequestParam String password, Model model,
+                        HttpServletResponse response, RedirectAttributes redirectAttributes) {
         try {
             // Authenticate using form parameters
             Authentication authentication = authenticationManager.authenticate(
@@ -59,7 +67,7 @@ public class AdminController {
             jwtCookie.setPath("/"); // Make it available for the whole application
             jwtCookie.setMaxAge(3600); // Set the cookie expiry time (1 hour)
             response.addCookie(jwtCookie);
-
+            redirectAttributes.addFlashAttribute("success", greetingService.greet(LocalTime.now()) + ", " + username + "!" );
             // Redirect to the dashboard after login
             return "redirect:/admin/dashboard";
         } catch (Exception e) {
@@ -71,7 +79,7 @@ public class AdminController {
 
     // Registration form (GET request)
     @GetMapping("/register")
-    public String showRegistrationForm(HttpServletRequest request, Model model) {
+    public String showRegistrationForm(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
         // Extract token from the cookie or header
         String token = jwtTokenProvider.resolveToken(request);
 
@@ -81,19 +89,18 @@ public class AdminController {
             return "admin/register";  // Show registration page
         } else {
             log.info("Token is null: " + token);
+            redirectAttributes.addFlashAttribute("error", "Your session has been expired");
             return "redirect:/admin/login";  // Redirect to login if not authenticated
         }
     }
 
     // POST request for registration
     @PostMapping("/register")
-    public String registerNewAdmin(@ModelAttribute Admin newAdmin, Model model) {
+    public String registerNewAdmin(@ModelAttribute Admin newAdmin, Model model, RedirectAttributes redirectAttributes) {
         try {
-
             // Save the new admin to the database
             adminService.createAdmin(newAdmin.getUsername(), newAdmin.getPassword());
-
-            model.addAttribute("success", "Admin registered successfully!");
+            redirectAttributes.addFlashAttribute("success", "Admin registered successfully!");
             return "redirect:/admin/dashboard";  // Redirect after successful registration
         } catch (Exception e) {
             model.addAttribute("error", "Registration failed: " + e.getMessage());
@@ -102,7 +109,7 @@ public class AdminController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletResponse response) {
+    public String logout(HttpServletResponse response, RedirectAttributes redirectAttributes) {
         // Invalidate the JWT token by clearing the cookie
         Cookie jwtCookie = new Cookie("JWT_TOKEN", null);  // Set the JWT token to null
         jwtCookie.setPath("/");  // Make sure it applies to all routes
@@ -111,6 +118,7 @@ public class AdminController {
         response.addCookie(jwtCookie);
 
         // Redirect to the login page after logout
+        redirectAttributes.addFlashAttribute("success", "You have been logged out!");
         return "redirect:/admin/login";  // You can customize the redirection path
     }
 
@@ -122,12 +130,20 @@ public class AdminController {
     }
 
     @GetMapping("/manage-admins")
-    public String showAdminManagementPage(@RequestParam(value = "status", required = false) String status,  Authentication authentication, Model model) {
+    public String showAdminManagementPage(@RequestParam(value = "status", required = false) String status,  Authentication authentication, Model model, RedirectAttributes redirectAttributes) {
         CustomAdminDetails adminDetails = (CustomAdminDetails) authentication.getPrincipal();
 
         if (!adminDetails.canManageAdmins()) {
+            redirectAttributes.addFlashAttribute("error", "You do not have permission to view this page");
             return "redirect:/admin/dashboard";  // Redirect if the admin is not authorized to manage other admins
         }
+
+        // Generate a 6-digit random number as a string
+        Random random = new Random();
+        String randomPassword = String.format("%06d", random.nextInt(1000000));
+
+        // Add randomPassword to the model
+        model.addAttribute("randomPassword", randomPassword);
 
         List<Admin> adminList =  adminService.findAllByStatus(status);
 
@@ -138,29 +154,33 @@ public class AdminController {
 
     // Approve (Enable) admin
     @PostMapping("/manage-admins/{id}/approve")
-    public String approveAdmin(@PathVariable Long id) {
+    public String approveAdmin(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         adminService.updateAdminStatus(id, true);  // Set enabled to true
+        adminService.getAdminById(id).ifPresent(admin -> redirectAttributes.addFlashAttribute("success", admin.getUsername()+ " has been Enabled!"));
         return "redirect:/admin/manage-admins";
     }
 
     // Disable admin
     @PostMapping("/manage-admins/{id}/disable")
-    public String disableAdmin(@PathVariable Long id) {
+    public String disableAdmin(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         adminService.updateAdminStatus(id, false);  // Set enabled to false
+        adminService.getAdminById(id).ifPresent(admin -> redirectAttributes.addFlashAttribute("success", admin.getUsername()+ " has been disabled!"));
         return "redirect:/admin/manage-admins";
     }
 
     // Approve (Enable) admin
     @PostMapping("/manage-admins/{id}/power")
-    public String powerManageAdmin(@PathVariable Long id) {
+    public String powerManageAdmin(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         adminService.updateManageAdminStatus(id, true);  // Set enabled to true
+        adminService.getAdminById(id).ifPresent(admin -> redirectAttributes.addFlashAttribute("success", admin.getUsername()+ " got the power to manage another admins"));
         return "redirect:/admin/manage-admins";
     }
 
     // Disable admin
     @PostMapping("/manage-admins/{id}/normal")
-    public String normalManageAdmin(@PathVariable Long id) {
+    public String normalManageAdmin(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         adminService.updateManageAdminStatus(id, false);  // Set enabled to false
+        adminService.getAdminById(id).ifPresent(admin -> redirectAttributes.addFlashAttribute("success", admin.getUsername()+ " turns into normal admins"));
         return "redirect:/admin/manage-admins";
     }
 
@@ -169,14 +189,17 @@ public class AdminController {
     @GetMapping("/manage-admins/{id}/password")
     public String editAdminPassword(@PathVariable Long id, Model model) {
         Admin admin = adminService.getAdminById(id).orElseThrow(() -> new RuntimeException("Admin not found"));
+        // this method is not using for the edit password
         model.addAttribute("admin", admin);
         return "admin/edit-password";  // Thymeleaf template for password edit
     }
 
     // Save new password
     @PostMapping("/manage-admins/{id}/password")
-    public String saveAdminPassword(@PathVariable Long id, @RequestParam String password) {
+    public String saveAdminPassword(@PathVariable Long id, @RequestParam String password, RedirectAttributes redirectAttributes) {
+        //this method is used in the Edit Password Modal from the admin/manage-admin template
         adminService.updateAdminPassword(id, password);
+        adminService.getAdminById(id).ifPresent(admin -> redirectAttributes.addFlashAttribute("success", admin.getUsername()+ "' password has been updated!"));
         return "redirect:/admin/manage-admins";
     }
 

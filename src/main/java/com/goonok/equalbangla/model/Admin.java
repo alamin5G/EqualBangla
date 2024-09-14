@@ -21,6 +21,9 @@ public class Admin extends LogEntity{
     @Column(name = "created_by", nullable = false, updatable = false)
     private String createdBy;  // Store the username of the admin who created this user
 
+    @Column(name = "updated_by", nullable = false, updatable = false)
+    private String updatedBy;  // Store the username of the admin who created this user
+
     private boolean canManageAdmins = false; // Flag to indicate if this admin can manage other admins
     private boolean enabled = true; //is the admin can login or not - by default it is true;
 
