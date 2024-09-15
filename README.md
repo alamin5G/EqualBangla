@@ -5,3 +5,10 @@ docker run --detach --env MYSQL_ROOT_PASSWORD=252646 --env MYSQL_USER=root --env
 
 2nd:
 docker run --detach --env MYSQL_ROOT_PASSWORD=252646 --env MYSQL_PASSWORD=252646 --env MYSQL_DATABASE=equal_bangladeshl --publish 3306:3306 mysql:8-oracle
+
+
+3rd:
+mysqlsh
+\connect root@localhost:3306
+\sql
+use equal_bangladesh
