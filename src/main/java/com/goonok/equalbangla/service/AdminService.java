@@ -4,6 +4,7 @@ import com.goonok.equalbangla.model.Admin;
 import com.goonok.equalbangla.power_admin.CustomAdminDetails;
 import com.goonok.equalbangla.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -44,14 +45,24 @@ public class AdminService implements UserDetailsService {
 
     public void createAdmin(String username, String password) {
         if (adminRepository.findByUsername(username).isEmpty()) {
-            String createdBy = SecurityContextHolder.getContext().getAuthentication().getName();
+            String createdBy = "system";
+            Admin admin = new Admin(); //initialize first because, there I need to set some logic
+            admin.setCanManageAdmins(true); // if it is the first user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated()) {
+                String authName = authentication.getName();
+                if (authName != null && !authName.isEmpty()) {
+                    createdBy = authName; // if there is user then admin can manage another admins will be updated as false
+                    admin.setCanManageAdmins(false); // Default to not managing admins (can be set later)
+                }
+            }
 
-            Admin admin = new Admin();
+
             admin.setUsername(username);
             admin.setPassword(new BCryptPasswordEncoder().encode(password));  // Encrypt the password
             admin.setCreatedBy(createdBy);  // Set the 'created_by' field
             admin.setUpdatedBy(createdBy);  // Set the 'updated_by' field as it is first time updated
-            admin.setCanManageAdmins(false); // Default to not managing admins (can be set later)
+
             admin.setEnabled(true);  // Set enabled to true by default
 
             adminRepository.save(admin);
