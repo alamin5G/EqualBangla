@@ -24,7 +24,8 @@ public class IPFilter implements Filter {
         whitelistedIps.add("192.168.0.101"); // Add your allowed IPs here
         whitelistedIps.add("127.0.0.1");   // Localhost IP
         whitelistedIps.add("0:0:0:0:0:0:0:1"); // IPv6 Localhost
-        whitelistedIps.add("103.192.156.122"); // IPv6 Localhost
+        whitelistedIps.add("103.192.156.122"); // IPv4 Localhost for me
+        whitelistedIps.add("202.134.10.135"); // IPv4 Localhost for jeba
         whitelistedIps.add("172.16.65.46"); // IPv6 Localhost
     }
 

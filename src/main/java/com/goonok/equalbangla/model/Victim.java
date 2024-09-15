@@ -51,7 +51,7 @@ public class Victim {
 
     @NotBlank(message = "Contact number is mandatory")
     @Pattern(regexp = "^(\\+88)?01[3-9]{1}[0-9]{2}-?[0-9]{6}$", message = "Phone number is invalid")
-    private String contactNumber;
+    private String phoneNumber;
 
     @NotBlank(message = "National ID/Birth Certificate is required")
     private String nationalId;
@@ -101,10 +101,12 @@ public class Victim {
     @JoinColumn(name = "injury_details_id")
     private InjuryDetails injuryDetails;
 
-    @OneToOne(mappedBy = "victim", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL)  // Cascade save, update, delete, etc.
+    @JoinColumn(name = "missing_details_id")
     private MissingDetails missingDetails;
 
-    @OneToOne(mappedBy = "victim", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL)  // Cascade save, update, delete, etc.
+    @JoinColumn(name = "death_details_id")
     private DeathDetails deathDetails;
 
     @Column(name = "verification_status")

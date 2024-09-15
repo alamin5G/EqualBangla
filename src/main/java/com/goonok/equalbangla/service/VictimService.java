@@ -120,6 +120,7 @@ public class VictimService {
         }
 
         victim.setDeathDetails(deathDetails);
+        victim.getDeathDetails().setVictim(victim);
         victimRepository.save(victim);
     }
 
@@ -153,6 +154,7 @@ public class VictimService {
         }
 
         victim.setMissingDetails(missingDetails);
+        victim.getMissingDetails().setVictim(victim);
         victimRepository.save(victim);
     }
 
@@ -188,6 +190,7 @@ public class VictimService {
 
         victim.setInjuryDetails(injuryDetails);
         // Persist the victim, which will automatically persist the associated entities
+        victim.getInjuryDetails().setVictim(victim);
         victimRepository.save(victim);
     }
 

@@ -146,10 +146,10 @@
 
         <!-- Contact Number Field -->
         <div class="mb-3">
-            <label for="contactNumber" class="form-label">Contact Number</label>
-            <input type="text" class="form-control" id="contactNumber" th:field="*{contactNumber}" required>
-            <div th:if="${#fields.hasErrors('contactNumber')}" class="text-danger">
-                <p th:errors="*{contactNumber}">Contact number is required</p>
+            <label for="phoneNumber" class="form-label">Contact Number</label>
+            <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" required>
+            <div th:if="${#fields.hasErrors('phoneNumber')}" class="text-danger">
+                <p th:errors="*{phoneNumber}">Contact number is required</p>
             </div>
         </div>
 
