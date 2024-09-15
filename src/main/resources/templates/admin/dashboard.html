@@ -1,15 +1,15 @@
-<!-- layout/main.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/head :: head}"></head>
+<head th:replace="~{layout/head :: head}">
+</head>
 <body>
 <header th:replace="~{layout/navbar :: header}"></header>
 <main class="container mt-4">
     <div class="row">
         <div class="col-12 text-center">
-            <!--display success message-->
-            <h3 th:text="${success  != null ? success : 'Admin Dashboard'}" class="alert alert-success text-success">Admin Dashboard</h3>
-            <!--Display error message-->
+            <!-- Display success message -->
+            <h3 th:text="${success != null ? success : 'Admin Dashboard'}" class="alert alert-success text-success">Admin Dashboard</h3>
+            <!-- Display error message -->
             <div th:if="${error}" class="alert alert-danger mt-4">
                 <span th:text="${error}"></span>
             </div>
@@ -19,6 +19,7 @@
 
     <!-- Dashboard Navigation -->
     <div class="row mt-5">
+        <!-- Manage Victims Section -->
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
@@ -28,6 +29,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- Filter Victims Section -->
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
@@ -38,6 +41,7 @@
             </div>
         </div>
 
+        <!-- Manage Admins Section (Visible based on permission) -->
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
@@ -46,28 +50,29 @@
 
                     <!-- Check if the logged-in user can manage admins -->
                     <a th:href="@{/admin/manage-admins}" class="btn btn-primary"
-                       th:if="${#authentication.principal.canManageAdmins()}">Manage Admins</a>
+                       th:if="${#authentication.principal.canManageAdmins}">Manage Admins</a>
 
                     <!-- For admins who don't have permission, show a disabled button -->
-                    <button class="btn btn-secondary" th:if="${!#authentication.principal.canManageAdmins()}" disabled>Manage Admins</button>
+                    <button class="btn btn-secondary" th:if="${!#authentication.principal.canManageAdmins}" disabled>Manage Admins</button>
                 </div>
             </div>
         </div>
 
-
+        <!-- View Reports Section -->
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class="card-title">View Reports</h5>
                     <p class="card-text">Generate reports based on victim data.</p>
-                    <button th:href="@{/admin/reports}" class="btn btn-primary" disabled>View Reports</button>
+                    <a th:href="@{/admin/reports}" class="btn btn-primary">View Reports</a>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Additional Features -->
     <div class="row mt-5">
-
+        <!-- Manage Verification Section -->
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
@@ -78,6 +83,7 @@
             </div>
         </div>
 
+        <!-- Rate Limiting Logs Section -->
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
@@ -88,6 +94,7 @@
             </div>
         </div>
 
+        <!-- Logout Section -->
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
@@ -101,6 +108,5 @@
 </main>
 
 <footer th:replace="~{layout/footer :: footer}"></footer>
-
 </body>
 </html>

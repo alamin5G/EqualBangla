@@ -6,10 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface VictimRepository extends JpaRepository<Victim, Long>, JpaSpecificationExecutor<Victim> {
@@ -35,5 +37,36 @@ public interface VictimRepository extends JpaRepository<Victim, Long>, JpaSpecif
 
     Page<Victim> findByIncidentType(String incidentType, Pageable pageable);
 
+    // Count cases by incident type (e.g., Injured, Missing, Death)
+    @Query("SELECT v.incidentType, COUNT(v) FROM Victim v GROUP BY v.incidentType")
+    List<Object[]> countCasesByIncidentType();
 
+
+    // Count verified and unverified reports
+    @Query("SELECT v.verificationStatus, COUNT(v) FROM Victim v GROUP BY v.verificationStatus")
+    Map<String, Long> countVerificationStatus();
+
+    // Query to get counts grouped by month (cases over time)
+    @Query("SELECT FUNCTION('MONTH', v.incidentDate), COUNT(v) FROM Victim v GROUP BY FUNCTION('MONTH', v.incidentDate)")
+    List<Object[]> countCasesOverTime();
+
+    // Query to get counts grouped by district (cases by location)
+    @Query("SELECT v.district, COUNT(v) FROM Victim v GROUP BY v.district")
+    List<Object[]> countCasesByLocation();
+
+    // Query to get distinct locations
+    @Query("SELECT DISTINCT v.district FROM Victim v")
+    List<String> getDistinctLocations();
+
+    // Query to count verified cases
+    @Query("SELECT COUNT(v) FROM Victim v WHERE v.verificationStatus = '1'")
+    Long countVerified();
+
+    // Query to count unverified cases
+    @Query("SELECT COUNT(v) FROM Victim v WHERE v.verificationStatus = '2'")
+    Long countUnverified();
+
+    // Query to count unverified cases
+    @Query("SELECT COUNT(v) FROM Victim v WHERE v.verificationStatus = '0'")
+    Long countRejectedByVerificationStatus();
 }

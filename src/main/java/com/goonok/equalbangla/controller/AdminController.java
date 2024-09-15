@@ -19,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Random;
 
@@ -51,7 +50,7 @@ public class AdminController {
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password, Model model,
-                        HttpServletResponse response, RedirectAttributes redirectAttributes) {
+                        HttpServletResponse response, HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes) {
         try {
             // Authenticate using form parameters
             Authentication authentication = authenticationManager.authenticate(
@@ -67,8 +66,10 @@ public class AdminController {
             jwtCookie.setPath("/"); // Make it available for the whole application
             jwtCookie.setMaxAge(3600); // Set the cookie expiry time (1 hour)
             response.addCookie(jwtCookie);
-            redirectAttributes.addFlashAttribute("success", greetingService.greet(LocalTime.now()) + ", " + username + "!" );
-            // Redirect to the dashboard after login
+
+            String greetMessage = greetingService.greetUser(httpServletRequest) + ", " + username + "!";
+            redirectAttributes.addFlashAttribute("success", greetMessage);
+                    // Redirect to the dashboard after login
             return "redirect:/admin/dashboard";
         } catch (Exception e) {
             // On failure, return back to the login page with an error
