@@ -33,7 +33,7 @@ public class RateLimitingFilter implements Filter {
 
     // Define the rate limit parameters
     private static final long RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000; // 5 minutes window
-    private static final int MAX_REQUESTS_PER_WINDOW = 100;      // Max 100 requests per window
+    private static final int MAX_REQUESTS_PER_WINDOW = 150;      // Max 100 requests per window
     private static final long BLACKLIST_DURATION_MS = 10 * 60 * 1000; // 10-minute ban
 
     // Maximum size for memory consumption threshold (in number of entries)
