@@ -1,7 +1,9 @@
 package com.goonok.equalbangla.controller;
 
 import com.goonok.equalbangla.model.Victim;
+import com.goonok.equalbangla.service.ReportService;
 import com.goonok.equalbangla.service.VictimService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -9,7 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Controller
@@ -18,6 +23,9 @@ public class AdminVictimController {
 
     @Autowired
     private VictimService victimService;
+
+    @Autowired
+    private ReportService reportService;
 
     @GetMapping
     public String listVictims(
@@ -141,6 +149,35 @@ public class AdminVictimController {
         }
         victimService.save(victim);
         return "redirect:/admin/victims";  // Redirect back to victim list
+    }
+
+
+    @GetMapping("/export/csv")
+    public void exportFilteredVictimDataCsv(
+            @RequestParam(required = false) String incidentType,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            HttpServletResponse response) throws IOException {
+
+        // Convert startDate and endDate from String to LocalDate
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate start = null;
+        LocalDate end = null;
+
+        try {
+            if (startDate != null && !startDate.isEmpty()) {
+                start = LocalDate.parse(startDate, formatter);
+            }
+            if (endDate != null && !endDate.isEmpty()) {
+                end = LocalDate.parse(endDate, formatter);
+            }
+        } catch (DateTimeParseException e) {
+            // Handle the exception here, you can log it or return a specific error response
+            throw new IllegalArgumentException("Invalid date format. Please use yyyy-MM-dd.");
+        }
+
+        List<Victim> victims = victimService.getFilteredVictims(incidentType, start, end);
+        reportService.generateCsvReport(victims, response);
     }
 
 }

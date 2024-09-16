@@ -17,10 +17,11 @@
             </ul>
         </div>
 
+        
         <!-- Full Name Field -->
         <div class="mb-3">
-            <label for="fullName" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="fullName" th:field="*{fullName}" placeholder="Enter injured person's full name" required>
+            <label for="fullName" class="form-label">Full Name (সম্পূর্ণ নাম)</label>
+            <input type="text" class="form-control" id="fullName" th:field="*{fullName}" placeholder="নিখোঁজ ব্যক্তির সম্পূর্ণ নাম" required>
             <div th:if="${#fields.hasErrors('fullName')}" class="text-danger">
                 <p th:errors="*{fullName}">Full name is required</p>
             </div>
@@ -28,8 +29,8 @@
 
         <!-- Guardian's Name Field -->
         <div class="mb-3">
-            <label for="guardianName" class="form-label">Guardian's Name</label>
-            <input type="text" class="form-control" id="guardianName" th:field="*{guardianName}" required>
+            <label for="guardianName" class="form-label">Guardian's Name (অভিভাবকের নাম)</label>
+            <input type="text" class="form-control" id="guardianName" th:field="*{guardianName}" placeholder="নিখোঁজ ব্যক্তির অভিভাবকের নাম" required>
             <div th:if="${#fields.hasErrors('guardianName')}" class="text-danger">
                 <p th:errors="*{guardianName}">Guardian's name is required</p>
             </div>
@@ -37,7 +38,7 @@
 
         <!-- Gender Field -->
         <div class="mb-3">
-            <label for="gender" class="form-label">Gender</label>
+            <label for="gender" class="form-label">Gender (লিঙ্গ)</label>
             <select class="form-select" id="gender" th:field="*{gender}" required>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -50,8 +51,8 @@
 
         <!-- Age Field -->
         <div class="mb-3">
-            <label for="age" class="form-label">Age</label>
-            <input type="number" class="form-control" id="age" th:field="*{age}" required>
+            <label for="age" class="form-label">Age (বয়স)</label>
+            <input type="number" class="form-control" id="age" th:field="*{age}" placeholder="নিখোঁজ ব্যক্তির বয়স কত?" required>
             <div th:if="${#fields.hasErrors('age')}" class="text-danger">
                 <p th:errors="*{age}">Age is required</p>
             </div>
@@ -60,20 +61,20 @@
 
         <!-- Address Field -->
         <div class="mb-3">
-            <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="address" th:field="*{address}" required>
+            <label for="address" class="form-label">Address (ঠিকানা)</label>
+            <input type="text" class="form-control" id="address" th:field="*{address}" placeholder="নিখোঁজ ব্যক্তির বাসা/বাড়ী, এলাকা, রোড" required>
             <div th:if="${#fields.hasErrors('address')}" class="text-danger">
                 <p th:errors="*{address}">Address is required</p>
             </div>
 
-            <label for="policeStation" class="form-label">Police Station</label>
-            <input type="text" class="form-control" id="policeStation" th:field="*{policeStation}" required>
+            <label for="policeStation" class="form-label">Police Station (নিখোঁজ ব্যক্তির থানা)</label>
+            <input type="text" class="form-control" id="policeStation" th:field="*{policeStation}" placeholder="নিখোঁজ ব্যক্তি যেই থানার অধীনে বসবাস করেন" required>
             <div th:if="${#fields.hasErrors('policeStation')}" class="text-danger">
                 <p th:errors="*{policeStation}"></p>
             </div>
             <!-- District Field -->
             <div class="mb-3">
-                <label for="district" class="form-label">Select District</label>
+                <label for="district" class="form-label">Select District (বর্তমান জেলা)</label>
                 <select class="form-select" id="district" th:field="*{district}">
                     <option value="">Select District</option>
                     <option value="Bagerhat">Bagerhat</option>
@@ -146,8 +147,8 @@
 
         <!-- Contact Number Field -->
         <div class="mb-3">
-            <label for="phoneNumber" class="form-label">Contact Number</label>
-            <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" required>
+            <label for="phoneNumber" class="form-label">Phone Number (নিখোঁজ ব্যক্তির)</label>
+            <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" placeholder="নিখোঁজ ব্যক্তির ফোন নাম্বার" required>
             <div th:if="${#fields.hasErrors('phoneNumber')}" class="text-danger">
                 <p th:errors="*{phoneNumber}">Contact number is required</p>
             </div>
@@ -156,7 +157,7 @@
 
         <!-- National ID Field -->
         <div class="mb-3">
-            <label for="nationalId" class="form-label">National ID / Birth Certificate NO (make sure it is correct)</label>
+            <label for="nationalId" class="form-label">National ID / Birth Certificate NO (সঠিক নাম্বার প্রদান করুন)</label>
             <input type="text" class="form-control" id="nationalId" th:field="*{nationalId}" required>
             <div th:if="${#fields.hasErrors('nationalId')}" class="text-danger">
                 <p th:errors="*{nationalId}">National ID/Birth Certificate is required</p>
@@ -168,8 +169,8 @@
 
         <!-- Incident Location Field -->
         <div class="mb-3">
-            <label for="incidentLocation" class="form-label">Location of the Incident</label>
-            <input type="text" class="form-control" id="incidentLocation" th:field="*{incidentLocation}" required>
+            <label for="incidentLocation" class="form-label">Location of the Incident(ঘটনা ঘটার স্থান)</label>
+            <input type="text" class="form-control" id="incidentLocation" th:field="*{incidentLocation}" placeholder="রোড, এলাকা, জেলা" required>
             <div th:if="${#fields.hasErrors('incidentLocation')}" class="text-danger">
                 <p th:errors="*{incidentLocation}">Incident location is required</p>
             </div>
@@ -177,7 +178,7 @@
 
         <!-- Incident Date Field -->
         <div class="mb-3">
-            <label for="incidentDate" class="form-label">Incident Date</label>
+            <label for="incidentDate" class="form-label">Incident Date (কত তারিখে?) </label>
             <input type="date" class="form-control" id="incidentDate" th:field="*{incidentDate}" required>
             <div th:if="${#fields.hasErrors('incidentDate')}" class="text-danger">
                 <p th:errors="*{incidentDate}">Incident date is required</p>
@@ -186,8 +187,8 @@
 
         <!-- Incident Description Field -->
         <div class="mb-3">
-            <label for="incidentDescription" class="form-label">Incident Description</label>
-            <textarea class="form-control" id="incidentDescription" th:field="*{incidentDescription}" required></textarea>
+            <label for="incidentDescription" class="form-label">Incident Description ( সংক্ষেপে বর্ণনা করুন )</label>
+            <textarea class="form-control" id="incidentDescription" th:field="*{incidentDescription}" placeholder="ছাত্রলীগের সন্ত্রাসীরা গুলি করেছে বা পুলিশ টার্গেট করে গুলি ছুড়েছে তারপর আর খুঁজে পাইনি, আপনার নিজের মত বর্ণনা করুন" required></textarea>
             <div th:if="${#fields.hasErrors('incidentDescription')}" class="text-danger">
                 <p th:errors="*{incidentDescription}">Incident description is required</p>
             </div>
@@ -197,8 +198,8 @@
         <!-- Additional Fields -->
         <!-- Email Field (Optional) -->
         <div class="mb-3">
-            <label for="email" class="form-label">Email (Required)</label>
-            <input type="email" class="form-control" id="email" th:field="*{email}">
+            <label for="email" class="form-label">Email (Required) (ইমেইল)</label>
+            <input type="email" class="form-control" id="email" th:field="*{email}"  placeholder="নিখোঁজ ব্যক্তির ইমেইল দিন">
             <div th:if="${#fields.hasErrors('email')}" class="text-danger">
                 <p th:errors="*{email}">Email is required</p>
             </div>
@@ -206,8 +207,8 @@
 
         <!-- Occupation Field (Optional) -->
         <div class="mb-3">
-            <label for="occupation" class="form-label">Occupation (Optional)</label>
-            <input type="text" class="form-control" id="occupation" th:field="*{occupation}">
+            <label for="occupation" class="form-label">Occupation (required) (কী করেন?)</label>
+            <input type="text" class="form-control" id="occupation" th:field="*{occupation}" placeholder="নিখোঁজ ব্যক্তির পেশার নাম? Student/Teacher/Unemployment/Freelancing ">
             <div th:if="${#fields.hasErrors('occupation')}" class="text-danger">
                 <p th:errors="*{occupation}">Occupation is required</p>
             </div>
@@ -215,7 +216,7 @@
 
         <!-- Participation Role Field -->
         <div class="mb-3">
-            <label for="participationRole" class="form-label">Participation Role</label>
+            <label for="participationRole" class="form-label">Participation Role(ভূমিকা ছিলো: )</label>
             <select class="form-select" id="participationRole" th:field="*{participationRole}">
                 <option value="">Select Role</option>
                 <option value="Protester">Protester</option>
@@ -230,9 +231,8 @@
         <!-- Police Case Reference Field -->
         <div class="mb-3">
             <label for="policeCaseReference" class="form-label">Police Case Reference (Optional)</label>
-            <input type="text" class="form-control" id="policeCaseReference" th:field="*{policeCaseReference}">
+            <input type="text" class="form-control" id="policeCaseReference" th:field="*{policeCaseReference}" placeholder="যদি জিডি/মিসিং কেস থাকে">
         </div>
-
 
 <!--Missing Fields-->
 

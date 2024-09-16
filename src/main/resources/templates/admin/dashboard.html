@@ -72,6 +72,18 @@
 
     <!-- Additional Features -->
     <div class="row mt-5">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Generate Reports</h5>
+                    <p class="card-text">Download victim data as CSV, Excel, or PDF.</p>
+                    <a th:href="@{/admin/reports/export/csv}" class="btn btn-primary">Download CSV</a>
+                    <a th:href="@{/admin/reports/export/excel}" class="btn btn-primary">Download Excel</a>
+                    <a th:href="@{/admin/reports/export/pdf}" class="btn btn-primary">Download PDF</a>
+                </div>
+            </div>
+        </div>
+
         <!-- Manage Verification Section -->
         <div class="col-md-3">
             <div class="card">

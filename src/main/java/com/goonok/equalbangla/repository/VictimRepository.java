@@ -69,4 +69,9 @@ public interface VictimRepository extends JpaRepository<Victim, Long>, JpaSpecif
     // Query to count unverified cases
     @Query("SELECT COUNT(v) FROM Victim v WHERE v.verificationStatus = '0'")
     Long countRejectedByVerificationStatus();
+
+    @Query("SELECT v FROM Victim v WHERE v.incidentDate BETWEEN :startDate AND :endDate")
+    List<Victim> findVictimsBetweenDates(LocalDate startDate, LocalDate endDate);
+
+
 }

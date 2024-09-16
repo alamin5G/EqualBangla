@@ -80,4 +80,22 @@ public class VictimSpecification {
             return predicate;
         };
     }
+
+    public static Specification<Victim> hasIncidentType(String incidentType) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("incidentType"), incidentType);
+    }
+
+    public static Specification<Victim> incidentAfter(LocalDate startDate) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.greaterThanOrEqualTo(root.get("incidentDate"), startDate);
+    }
+
+    public static Specification<Victim> incidentBefore(LocalDate endDate) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.lessThanOrEqualTo(root.get("incidentDate"), endDate);
+    }
+
+    // You can add more filtering specifications as needed, like filtering by location, gender, etc.
+
 }

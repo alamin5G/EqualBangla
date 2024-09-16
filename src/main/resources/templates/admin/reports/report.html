@@ -1,86 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/head :: head}">
-  <title>Victim Data Reports</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
+<head th:replace="~{layout/head :: head}"></head>
 <body>
 <header th:replace="~{layout/navbar :: header}"></header>
-<main class="container mt-4">
+<main class="container mt-4 text-center">
   <h2>Victim Data Reports</h2>
 
-  <!-- Incident Type Distribution Chart -->
   <h3>Incident Type Distribution</h3>
-  <canvas id="incidentTypeChart"></canvas>
+  <img th:src="${incidentTypeChart}" alt="Incident Type Pie Chart">
 
-  <!-- Cases Over Time Chart -->
   <h3>Cases Over Time</h3>
-  <canvas id="casesOverTimeChart"></canvas>
+  <img th:src="${casesOverTimeChart}" alt="Cases Over Time Bar Chart">
 
-  <!-- Cases by Location Chart -->
   <h3>Cases by Location</h3>
-  <canvas id="casesByLocationChart"></canvas>
+  <img th:src="${casesByLocationChart}" alt="Cases by Location Bar Chart">
 
-  <!-- Verification Status Chart -->
   <h3>Verification Status</h3>
-  <canvas id="verificationStatusChart"></canvas>
+  <img th:src="${verificationStatusChart}" alt="Verification Status Pie Chart">
+
+  <h3>Cases Time Series</h3>
+  <img th:src="${timeSeriesChart}" alt="Cases Time Series Chart">
+
+  <h3>Stacked Bar Chart</h3>
+  <img th:src="${stackedBarChart}" alt="Stacked Bar Chart">
+
+  <h3>Horizontal Bar Chart</h3>
+  <img th:src="${horizontalBarChart}" alt="Horizontal Bar Chart">
+
+
+  <div th:if="${error}" class="alert alert-danger mt-3">
+    <p th:text="${error}"></p>
+  </div>
+  </div>
 </main>
 <footer th:replace="~{layout/footer :: footer}"></footer>
-
-<script>
-  // Incident Type Distribution Chart
-  var incidentTypeCtx = document.getElementById('incidentTypeChart').getContext('2d');
-  new Chart(incidentTypeCtx, {
-    type: 'pie',
-    data: {
-      labels: [[${incidentTypeStats.keySet()}]], // Thymeleaf expression to pass data
-      datasets: [{
-        data: [[${incidentTypeStats.values()}]], // Thymeleaf expression to pass data
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-      }]
-    }
-  });
-
-  // Cases Over Time Chart
-  var casesOverTimeCtx = document.getElementById('casesOverTimeChart').getContext('2d');
-  new Chart(casesOverTimeCtx, {
-    type: 'bar',
-    data: {
-      labels: [[${timeLabels}]], // Thymeleaf expression to pass data
-      datasets: [{
-        label: 'Cases Over Time',
-        data: [[${timeData}]], // Thymeleaf expression to pass data
-        backgroundColor: '#36A2EB',
-      }]
-    }
-  });
-
-  // Cases by Location Chart
-  var casesByLocationCtx = document.getElementById('casesByLocationChart').getContext('2d');
-  new Chart(casesByLocationCtx, {
-    type: 'bar',
-    data: {
-      labels: [[${locationLabels}]], // Thymeleaf expression to pass data
-      datasets: [{
-        label: 'Cases by Location',
-        data: [[${locationData}]], // Thymeleaf expression to pass data
-        backgroundColor: '#FFCE56',
-      }]
-    }
-  });
-
-  // Verification Status Chart
-  var verificationStatusCtx = document.getElementById('verificationStatusChart').getContext('2d');
-  new Chart(verificationStatusCtx, {
-    type: 'pie',
-    data: {
-      labels: ['Verified', 'Unverified'],
-      datasets: [{
-        data: [[${verificationStats}]], // Thymeleaf expression to pass data
-        backgroundColor: ['#4CAF50', '#F44336'],
-      }]
-    }
-  });
-</script>
 </body>
 </html>

@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -208,5 +209,34 @@ public class VictimService {
         victimRepository.save(victim);
     }
 
+    public List<Victim> getAllVictims(){
+        return victimRepository.findAll();
+    }
+
+    public List<Victim> getVictimsFromLastWeek() {
+        LocalDate today = LocalDate.now();
+        LocalDate oneWeekAgo = today.minusWeeks(1);
+        return victimRepository.findVictimsBetweenDates(oneWeekAgo, today);
+    }
+
+    public List<Victim> getFilteredVictims(String incidentType, LocalDate startDate, LocalDate endDate) {
+        Specification<Victim> spec = Specification.where(null);  // Start with a null specification
+
+        if (incidentType != null && !incidentType.isEmpty()) {
+            spec = spec.and(VictimSpecification.hasIncidentType(incidentType));
+        }
+
+        if (startDate != null) {
+            spec = spec.and(VictimSpecification.incidentAfter(startDate));
+        }
+
+        if (endDate != null) {
+            spec = spec.and(VictimSpecification.incidentBefore(endDate));
+        }
+
+        // Add more filters here if needed
+
+        return victimRepository.findAll(spec);
+    }
 
 }

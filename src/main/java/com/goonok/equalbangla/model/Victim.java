@@ -2,10 +2,7 @@ package com.goonok.equalbangla.model;
 
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -67,6 +64,7 @@ public class Victim {
 
     @Lob
     @NotBlank(message = "Explain the incident")
+    @Size(min = 10, max = 500, message = "Description should be in between 10 to 500 character")
     private String incidentDescription; // Detailed description of the incident
 
     // Optional Fields...
@@ -76,6 +74,7 @@ public class Victim {
     private String occupation;
     @NotBlank(message = "What was the role during movement?")
     private String participationRole;
+
     //optional if have
     private String policeCaseReference;
 
