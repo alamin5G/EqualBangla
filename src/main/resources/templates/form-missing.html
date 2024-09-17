@@ -297,14 +297,14 @@
 
         <!-- Death Photo Upload -->
         <div class="mb-3">
-            <label for="missingPhoto" class="form-label">Missing Persons Photo (Required) <a th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
+            <label for="missingPhoto" class="form-label">Missing Persons Photo (Required) <a th:href="@{/file-upload-instruction}">ছবি আপলোড করতে নির্দেশনা অনুসরণ করুন</a> </label>
             <input type="file" id="missingPhoto" name="missingDetails.missingPhotographFile" class="form-control" th:field="*{missingDetails.missingPhotographFile}" accept=".jpg, .jpeg, .png">
             <div class="text-danger" th:if="${#fields.hasErrors('missingDetails.missingPhotographFile')}" th:errors="*{missingDetails.missingPhotographFile}"></div>
         </div>
 
         <!-- Death Certificate Upload -->
         <div class="mb-3">
-            <label for="policeReport" class="form-label">Missing Report /GD (if available) <a th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
+            <label for="policeReport" class="form-label">Missing Report /GD (if available) <a th:href="@{/file-upload-instruction}">missing ও অন্যান্য তথ্যের PDF আপলোড করতে নির্দেশনা অনুসরণ করুন</a> </label>
             <input type="file" id="policeReport" name="missingDetails.policeReportFile" class="form-control" th:field="*{missingDetails.policeReportFile}" accept=".pdf">
             <div class="text-danger" th:if="${#fields.hasErrors('missingDetails.policeReportFile')}" th:errors="*{missingDetails.policeReportFile}"></div>
         </div>
@@ -314,7 +314,7 @@
         <h4>Contact Person Information</h4>
         <div class="mb-3">
             <label for="contactPersonName" class="form-label">Contact Person Name</label>
-            <input type="text" class="form-control" id="contactPersonName" th:field="*{contactName}" required>
+            <input type="text" class="form-control" id="contactPersonName" th:field="*{contactName}"  placeholder="যার সাথে যোগাযোগ করা যেতে পারে তার নাম লিখুন" required>
             <div th:if="${#fields.hasErrors('contactName')}" class="text-danger">
                 <p th:errors="*{contactName}">Contact person name is required</p>
             </div>
@@ -322,7 +322,7 @@
 
         <div class="mb-3">
             <label for="contactPersonRelationship" class="form-label">Relationship to Victim</label>
-            <input type="text" class="form-control" id="contactPersonRelationship" th:field="*{relationshipToVictim}" required>
+            <input type="text" class="form-control" id="contactPersonRelationship" th:field="*{relationshipToVictim}" placeholder="আহত ব্যক্তির সাথে সম্পর্ক" required>
             <div th:if="${#fields.hasErrors('relationshipToVictim')}" class="text-danger">
                 <p th:errors="*{relationshipToVictim}">Relationship to the victim is required</p>
             </div>
@@ -330,7 +330,7 @@
 
         <div class="mb-3">
             <label for="contactPersonPhoneNumber" class="form-label">Contact Person Phone Number</label>
-            <input type="text" class="form-control" id="contactPersonPhoneNumber" th:field="*{contactPhone}" required>
+            <input type="text" class="form-control" id="contactPersonPhoneNumber" th:field="*{contactPhone}" placeholder="যোগাযোগের নাম্বার দিন" required>
             <div th:if="${#fields.hasErrors('contactPhone')}" class="text-danger">
                 <p th:errors="*{contactPhone}">Phone number is required</p>
             </div>
@@ -338,7 +338,7 @@
 
         <div class="mb-3">
             <label for="contactPersonAddress" class="form-label">Contact Person Address</label>
-            <input type="text" class="form-control" id="contactPersonAddress" th:field="*{contactAddress}" required>
+            <input type="text" class="form-control" id="contactPersonAddress" th:field="*{contactAddress}" placeholder="যোগাযোগের ঠিকানা" required>
             <div th:if="${#fields.hasErrors('contactAddress')}" class="text-danger">
                 <p th:errors="*{contactAddress}">Phone number is required</p>
             </div>
@@ -347,12 +347,12 @@
         <!-- Optional fields for Contact Person -->
         <div class="mb-3">
             <label for="contactEmail" class="form-label">Contact Person Email (Optional)</label>
-            <input type="email" class="form-control" id="contactEmail" th:field="*{contactEmail}">
+            <input type="email" class="form-control" id="contactEmail" th:field="*{contactEmail}" placeholder="আপানার ইমেইল যদি থাকে">
         </div>
 
         <div class="mb-3">
             <label for="identificationDocument" class="form-label">Identification Document (Optional)</label>
-            <input type="text" class="form-control" id="identificationDocument" th:field="*{contactIdentificationDocument}">
+            <input type="text" class="form-control" id="identificationDocument" th:field="*{contactIdentificationDocument}" placeholder="আপনার পরিচয়পত্র যদি থাকে">
         </div>
 
         <button type="submit" class="btn btn-primary">Submit Injured Case</button>

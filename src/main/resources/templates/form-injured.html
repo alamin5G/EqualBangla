@@ -38,7 +38,7 @@
 
         <!-- Gender Field -->
         <div class="mb-3">
-            <label for="gender" class="form-label">Gender</label>
+            <label for="gender" class="form-label">Gender(লিঙ্গ)</label>
             <select class="form-select" id="gender" th:field="*{gender}" required>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -51,7 +51,7 @@
 
         <!-- Age Field -->
         <div class="mb-3">
-            <label for="age" class="form-label">Age</label>
+            <label for="age" class="form-label">Age(বয়স)</label>
             <input type="number" class="form-control" id="age" th:field="*{age}" placeholder="আহত ব্যক্তির বয়স কত?" required>
             <div th:if="${#fields.hasErrors('age')}" class="text-danger">
                 <p th:errors="*{age}">Age is required</p>
@@ -61,19 +61,19 @@
 
         <!-- Address Field -->
         <div class="mb-3">
-            <label for="address" class="form-label">Address</label>
+            <label for="address" class="form-label">Address(ঠিকানা)</label>
             <input type="text" class="form-control" id="address" th:field="*{address}" placeholder="আহত ব্যক্তির বাসা/বাড়ী, এলাকা, রোড" required>
             <div th:if="${#fields.hasErrors('address')}" class="text-danger">
                 <p th:errors="*{address}">Address is required</p>
             </div>
-            <label for="policeStation" class="form-label">Police Station</label>
+            <label for="policeStation" class="form-label">Police Station(আহত ব্যক্তির থানা)</label>
             <input type="text" class="form-control" id="policeStation" th:field="*{policeStation}" placeholder="আহত ব্যক্তি যেই থানার অধীনে বসবাস করেন" required>
             <div th:if="${#fields.hasErrors('policeStation')}" class="text-danger">
                 <p th:errors="*{policeStation}"></p>
             </div>
             <!-- District Field -->
             <div class="mb-3">
-                <label for="district" class="form-label">Select District</label>
+                <label for="district" class="form-label">Select District(বর্তমান জেলা)</label>
                 <select class="form-select" id="district" th:field="*{district}">
                     <option value="">Select District</option>
                     <option value="Bagerhat">Bagerhat</option>
@@ -146,7 +146,7 @@
 
         <!-- Contact Number Field -->
         <div class="mb-3">
-            <label for="phoneNumber" class="form-label">Contact Number</label>
+            <label for="phoneNumber" class="form-label">Phone Number</label>
             <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" placeholder="আহত ব্যক্তির ফোন নাম্বার" required>
             <div th:if="${#fields.hasErrors('phoneNumber')}" class="text-danger">
                 <p th:errors="*{phoneNumber}">Contact number is required</p>
@@ -155,7 +155,7 @@
 
         <!-- National ID Field -->
         <div class="mb-3">
-            <label for="nationalId" class="form-label">National ID / Birth Certificate NO (make sure it is correct)</label>
+            <label for="nationalId" class="form-label">National ID / Birth Certificate NO (সঠিক নাম্বার প্রদান করুন)</label>
             <input type="text" class="form-control" id="nationalId" th:field="*{nationalId}" placeholder="ব্যক্তির জন্মসনদ বা জাতীয় পরিচয় পত্রের সঠিক নাম্বার দিন" required>
             <div th:if="${#fields.hasErrors('nationalId')}" class="text-danger">
                 <p th:errors="*{nationalId}">National ID/Birth Certificate is required</p>
@@ -167,8 +167,8 @@
 
         <!-- Incident Location Field -->
         <div class="mb-3">
-            <label for="incidentLocation" class="form-label">Location of the Incident</label>
-            <input type="text" class="form-control" id="incidentLocation" th:field="*{incidentLocation}" placeholder="যেখানের ঘটনায় আহত হয়েছেন" required>
+            <label for="incidentLocation" class="form-label">Location of the Incident(ঘটনা ঘটার স্থান)</label>
+            <input type="text" class="form-control" id="incidentLocation" th:field="*{incidentLocation}" placeholder="রোড, এলাকা, জেলা" required>
             <div th:if="${#fields.hasErrors('incidentLocation')}" class="text-danger">
                 <p th:errors="*{incidentLocation}">Incident location is required</p>
             </div>
@@ -176,7 +176,7 @@
 
         <!-- Incident Date Field -->
         <div class="mb-3">
-            <label for="incidentDate" class="form-label">Incident Date</label>
+            <label for="incidentDate" class="form-label">Incident Date(কত তারিখে?)</label>
             <input type="date" class="form-control" id="incidentDate" th:field="*{incidentDate}" required>
             <div th:if="${#fields.hasErrors('incidentDate')}" class="text-danger">
                 <p th:errors="*{incidentDate}">Incident date is required</p>
@@ -185,7 +185,7 @@
 
         <!-- Incident Description Field -->
         <div class="mb-3">
-            <label for="incidentDescription" class="form-label">Incident Description</label>
+            <label for="incidentDescription" class="form-label">Incident Description( সংক্ষেপে বর্ণনা করুন )</label>
             <textarea class="form-control" id="incidentDescription" th:field="*{incidentDescription}" placeholder="ঘটনার স্থানে কি হয়েছিলো? ইংরেজীতে লিখতে পারলে ভালো না হয়, বাংলিশে লিখুন সংক্ষিপ্ত করে"
                       required></textarea>
             <div th:if="${#fields.hasErrors('incidentDescription')}" class="text-danger">
@@ -206,7 +206,7 @@
 
         <!-- Occupation Field (Optional) -->
         <div class="mb-3">
-            <label for="occupation" class="form-label">Occupation </label>
+            <label for="occupation" class="form-label">Occupation(কী করেন?) </label>
             <input type="text" class="form-control" id="occupation" th:field="*{occupation}" placeholder="পেশায় কী করেন? Student/Teacher/Driver/..?" required>
             <div th:if="${#fields.hasErrors('occupation')}" class="text-danger">
                 <p th:errors="*{occupation}">Occupation is required</p>
@@ -215,7 +215,7 @@
 
         <!-- Participation Role Field -->
         <div class="mb-3">
-            <label for="participationRole" class="form-label">Participation Role</label>
+            <label for="participationRole" class="form-label">Participation Role(ভূমিকা ছিলো: )</label>
             <select class="form-select" id="participationRole" th:field="*{participationRole}" required>
                 <option value="">Select Role</option>
                 <option value="Protester">Protester</option>
