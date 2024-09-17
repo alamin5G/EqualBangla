@@ -151,6 +151,22 @@
         </div>
     </form>
 
+    <!--to export the filtered data as csv format-->
+    <form th:action="@{/admin/victims/export/csv}" method="get" class="mb-4">
+        <input type="hidden" name="fullName" th:value="${fullName}">
+        <input type="hidden" name="incidentType" th:value="${incidentType}">
+        <input type="hidden" name="incidentDateFrom" th:value="${incidentDateFrom}">
+        <input type="hidden" name="incidentDateTo" th:value="${incidentDateTo}">
+        <input type="hidden" name="district" th:value="${district}">
+        <input type="hidden" name="policeStation" th:value="${policeStation}">
+        <input type="hidden" name="ageFrom" th:value="${ageFrom}">
+        <input type="hidden" name="ageTo" th:value="${ageTo}">
+        <input type="hidden" name="gender" th:value="${gender}">
+        <input type="hidden" name="occupation" th:value="${occupation}">
+        <input type="hidden" name="verificationStatus" th:value="${verificationStatus}">
+        <button type="submit" class="btn btn-primary">Export CSV</button>
+    </form>
+
 
     <!-- Victim Table -->
     <table class="table table-bordered table-hover">

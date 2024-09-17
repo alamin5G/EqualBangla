@@ -54,8 +54,11 @@ public class VerificationController {
             redirectAttributes.addFlashAttribute("message", "OTP verified successfully!");
             // If valid, store the verified email status in the session
             session.setAttribute("verifiedEmail", true);
-            session.setAttribute("verifiedEmailAddress", email);  // Store email in session for future use
+           // session.setAttribute("verifiedEmailAddress", email);  // Store email in session for future use
+           // session.setAttribute("tokenVerified", true);
+            session.setAttribute("verifiedToken", trimToken);
             model.addAttribute("message", "Email verified successfully!");
+
 
             verificationService.setTokenExpiryDate(trimToken, LocalDateTime.now()); // change the token validity expire time
 

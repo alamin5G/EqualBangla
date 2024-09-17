@@ -197,7 +197,7 @@
         <!-- Additional Fields -->
         <!-- Email Field (Optional) -->
         <div class="mb-3">
-            <label for="email" class="form-label">Email (Optional)</label>
+            <label for="email" class="form-label">Email </label>
             <input type="email" class="form-control" id="email" th:field="*{email}">
             <div th:if="${#fields.hasErrors('email')}" class="text-danger">
                 <p th:errors="*{email}">Email is required</p>
@@ -206,7 +206,7 @@
 
         <!-- Occupation Field (Optional) -->
         <div class="mb-3">
-            <label for="occupation" class="form-label">Occupation (Optional)</label>
+            <label for="occupation" class="form-label">Occupation </label>
             <input type="text" class="form-control" id="occupation" th:field="*{occupation}">
             <div th:if="${#fields.hasErrors('occupation')}" class="text-danger">
                 <p th:errors="*{occupation}">Occupation is required</p>
@@ -290,14 +290,14 @@
 
         <!-- Injured Person Photo Upload -->
         <div class="mb-3">
-            <label for="injuredPersonPhoto" class="form-label">Injured Persons Photo (Required) <a th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
+            <label for="injuredPersonPhoto" class="form-label">Injured Persons Photo (Required) <a th:href="@{/file-upload-instruction}">Follow the instruction before upload the photo</a> </label>
             <input type="file" id="injuredPersonPhoto" name="injuryDetails.injuredPersonPhotographFile" class="form-control" th:field="*{injuryDetails.injuredPersonPhotographFile}" accept=".jpg, .jpeg, .png">
             <div class="text-danger" th:if="${#fields.hasErrors('injuryDetails.injuredPersonPhotographFile')}" th:errors="*{injuryDetails.injuredPersonPhotographFile}"></div>
         </div>
 
         <!-- Medical Report Upload -->
         <div class="mb-3">
-            <label for="injuredReport" class="form-label">Medical Report (Required) <a th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
+            <label for="injuredReport" class="form-label">Medical Report (Only PDF Required) <a th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
             <input type="file" id="injuredReport" name="injuryDetails.medicalReportFile" class="form-control" th:field="*{injuryDetails.medicalReportFile}" accept=".pdf">
             <div class="text-danger" th:if="${#fields.hasErrors('injuryDetails.medicalReportFile')}" th:errors="*{injuryDetails.medicalReportFile}"></div>
         </div>
@@ -354,6 +354,75 @@
 
 
 </main>
+<!-- File Upload Validation Script -->
+<script>
+    // Function to check file uploads before form submission
+    document.querySelector("form").addEventListener("submit", function(event) {
+        // Get the file inputs
+        const injuredPersonPhotoInput = document.getElementById("injuredPersonPhoto");
+        const injuredReportInput = document.getElementById("injuredReport");
+
+        // Reset previous error styles
+        injuredPersonPhotoInput.classList.remove("input-error");
+        injuredReportInput.classList.remove("input-error");
+
+        // Check if the files are uploaded
+        if (injuredPersonPhotoInput.files.length === 0) {
+            alert("Please upload the injured person's photo, it is required!");
+            injuredPersonPhotoInput.classList.add("input-error"); // Add red border
+            injuredPersonPhotoInput.scrollIntoView({ behavior: "smooth" }); // Scroll to the field
+            event.preventDefault(); // Prevent form submission
+            return; // Exit the function
+        }
+
+        if (injuredReportInput.files.length === 0) {
+            alert("Please upload the medical report, it is required!");
+            injuredReportInput.classList.add("input-error"); // Add red border
+            injuredReportInput.scrollIntoView({ behavior: "smooth" }); // Scroll to the field
+            event.preventDefault(); // Prevent form submission
+            return; // Exit the function
+        }
+
+        // Check file sizes
+        if (injuredPersonPhotoInput.files[0].size / 1024 / 1024 > 1) {
+            alert("Injured person photo file size exceeds 1 MB\nPlease upload a photo less than 1MB in size.");
+            injuredPersonPhotoInput.classList.add("input-error"); // Add red border
+            injuredPersonPhotoInput.scrollIntoView({ behavior: "smooth" }); // Scroll to the field
+            event.preventDefault(); // Prevent form submission
+            return; // Exit the function
+        }
+
+        if (injuredReportInput.files[0].size / 1024 / 1024 > 5) {
+            alert("Medical report file size exceeds 5 MB\nPlease upload a PDF less than 5MB in size.");
+            injuredReportInput.classList.add("input-error"); // Add red border
+            injuredReportInput.scrollIntoView({ behavior: "smooth" }); // Scroll to the field
+            event.preventDefault(); // Prevent form submission
+            return; // Exit the function
+        }
+    });
+
+    // Separate validation when files are selected (optional, just to give immediate feedback)
+    document.getElementById("injuredPersonPhoto").addEventListener("change", function() {
+        this.classList.remove("input-error"); // Remove error style when a file is selected
+        if (this.files[0].size / 1024 / 1024 > 1) {
+            alert("Injured person photo file size exceeds 1 MB\nPlease upload a photo less than 1MB in size.");
+            this.classList.add("input-error"); // Add red border
+            this.value = ""; // Clear the input field
+        }
+    });
+
+    document.getElementById("injuredReport").addEventListener("change", function() {
+        this.classList.remove("input-error"); // Remove error style when a file is selected
+        if (this.files[0].size / 1024 / 1024 > 5) {
+            alert("Medical report file size exceeds 5 MB\nPlease upload a PDF less than 5MB in size.");
+            this.classList.add("input-error"); // Add red border
+            this.value = ""; // Clear the input field
+        }
+    });
+</script>
+
 <footer th:replace="~{layout/footer :: footer}"></footer>
+
+
 </body>
 </html>

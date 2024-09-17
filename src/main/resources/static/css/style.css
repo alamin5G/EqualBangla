@@ -31,3 +31,8 @@ code {
     border-radius: 3px;
     color: #d63384;
 }
+
+/* Red border for invalid inputs */
+.input-error {
+    border: 2px solid red;
+}

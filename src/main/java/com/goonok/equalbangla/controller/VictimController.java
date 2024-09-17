@@ -3,6 +3,7 @@ package com.goonok.equalbangla.controller;
 import com.goonok.equalbangla.model.*;
 import com.goonok.equalbangla.repository.VictimRepository;
 import com.goonok.equalbangla.service.InjuryDetailsService;
+import com.goonok.equalbangla.service.VerificationService;
 import com.goonok.equalbangla.service.VictimService;
 import com.goonok.equalbangla.util.FileUploadUtil;
 import jakarta.validation.Valid;
@@ -32,6 +33,8 @@ public class VictimController {
     private VictimRepository victimRepository;
     @Autowired
     private InjuryDetailsService injuryDetailsService;
+    @Autowired
+    private VerificationService verificationService;
 
     // Ensure the user is verified before accessing the form
     private boolean isVerified(HttpSession session) {
@@ -83,6 +86,14 @@ public class VictimController {
         // If there are no errors, save the death case
         victimService.saveDeathCase(victim, victim.getDeathDetails());
         model.addAttribute("message", "Death case submitted successfully!");
+
+        //update the verification token saving status
+        //if someone don't submitted a case successfully I am going to flag that as isSubmitted = false;
+        //so that I can delete the false filed after a while automatically
+        if (isVerified(session)) {
+            String token = session.getAttribute("verifiedToken").toString();
+            verificationService.updateVerificationToken(token);
+        }
         session.invalidate();
         return "confirmation";  // Return confirmation page after submission
     }
@@ -126,6 +137,15 @@ public class VictimController {
         // If there are no errors, save the missing case
         victimService.saveMissingCase(victim, victim.getMissingDetails());
         model.addAttribute("message", "Missing case submitted successfully!");
+
+        //update the verification token saving status
+        //if someone don't submitted a case successfully I am going to flag that as isSubmitted = false;
+        //so that I can delete the false filed after a while automatically
+        if (isVerified(session)) {
+            String token = session.getAttribute("verifiedToken").toString();
+            verificationService.updateVerificationToken(token);
+        }
+
         session.invalidate();
         return "confirmation";  // Return confirmation page after submission
     }
@@ -161,6 +181,15 @@ public class VictimController {
         // Save victim (which will also save injuryDetails due to cascading)
         victimService.saveInjuredCase(victim, victim.getInjuryDetails());
         model.addAttribute("message", "Injured case submitted successfully!");
+
+        //update the verification token saving status
+        //if someone don't submitted a case successfully I am going to flag that as isSubmitted = false;
+        //so that I can delete the false filed after a while automatically
+        if (isVerified(session)) {
+            String token = session.getAttribute("verifiedToken").toString();
+            verificationService.updateVerificationToken(token);
+        }
+
         session.invalidate();
         return "confirmation";  // Return confirmation page after successful submission
     }

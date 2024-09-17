@@ -23,6 +23,10 @@ public class VerificationToken {
     @Column(nullable = false)
     private LocalDateTime expiryDate; // Expiration date for the token (24 hours validity)
 
+    private boolean isVerified;
+
+    private boolean isSubmitted;
+
     // Method to check if the token is still valid
     public boolean isValid() {
         return LocalDateTime.now().isBefore(expiryDate);

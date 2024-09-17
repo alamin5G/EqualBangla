@@ -123,6 +123,8 @@ public class VictimService {
         victim.setDeathDetails(deathDetails);
         victim.getDeathDetails().setVictim(victim);
         victimRepository.save(victim);
+
+
     }
 
     // Save Missing Case
@@ -219,24 +221,27 @@ public class VictimService {
         return victimRepository.findVictimsBetweenDates(oneWeekAgo, today);
     }
 
-    public List<Victim> getFilteredVictims(String incidentType, LocalDate startDate, LocalDate endDate) {
-        Specification<Victim> spec = Specification.where(null);  // Start with a null specification
 
-        if (incidentType != null && !incidentType.isEmpty()) {
-            spec = spec.and(VictimSpecification.hasIncidentType(incidentType));
-        }
+    //used in AdminVictimController /export/csv
+    public List<Victim> getFilteredVictims(
+            String fullName,
+            List<String> incidentType,
+            LocalDate startDate,
+            LocalDate endDate,
+            List<String> district,
+            String policeStation,
+            Integer ageFrom,
+            Integer ageTo,
+            List<String> gender,
+            String occupation,
+            String verificationStatus) {
 
-        if (startDate != null) {
-            spec = spec.and(VictimSpecification.incidentAfter(startDate));
-        }
-
-        if (endDate != null) {
-            spec = spec.and(VictimSpecification.incidentBefore(endDate));
-        }
-
-        // Add more filters here if needed
-
-        return victimRepository.findAll(spec);
+        // Reuse the specification filtering logic but fetch all records
+        return victimRepository.findAll(
+                VictimSpecification.filterByCriteria(
+                        fullName, incidentType, startDate, endDate, district, policeStation,
+                        ageFrom, ageTo, gender, occupation, verificationStatus));
     }
+
 
 }

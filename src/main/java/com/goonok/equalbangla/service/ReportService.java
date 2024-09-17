@@ -300,20 +300,26 @@ public class ReportService {
     public void generateCsvReport(List<Victim> victims, HttpServletResponse response) throws IOException {
         response.setContentType("text/csv");
         response.setHeader("Content-Disposition", "attachment; filename=victim_report.csv");
-        PrintWriter writer = response.getWriter();
 
-        writer.println("ID,Full Name,Incident Type,District,Incident Date,Verification Status");
+        PrintWriter writer = response.getWriter();
+        writer.println("ID,Full Name,Incident Type,Incident Date,District,Police Station,Age,Gender,Occupation,Verification Status");
+
         for (Victim victim : victims) {
-            writer.println(victim.getId() + "," +
-                    victim.getFullName() + "," +
-                    victim.getIncidentType() + "," +
-                    victim.getDistrict() + "," +
-                    victim.getIncidentDate() + "," +
-                    victim.getVerificationStatus());
+            writer.println(String.join(",",
+                    String.valueOf(victim.getId()),
+                    victim.getFullName(),
+                    victim.getIncidentType(),
+                    victim.getIncidentDate().toString(),
+                    victim.getDistrict(),
+                    victim.getPoliceStation(),
+                    victim.getAge().toString(),
+                    victim.getGender(),
+                    victim.getOccupation(),
+                    victim.getVerificationStatus()
+            ));
         }
 
         writer.flush();
-        writer.close();
     }
 
     // Excel Report generation

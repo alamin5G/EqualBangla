@@ -7,8 +7,8 @@
 <main class="container mt-4">
     <!--all content will be placed here-->
 
-    <h2>Submit Death Case</h2>
-
+    <h3>Submit Death Case (সকল তথ্য দয়া করে ইংরেজীতে পূরণ করবেন)</h3>
+    <p class="text-center text-danger">আপনাদের বুঝার সুবিধার্থে বাংলা ভাষাতেও লিখা হয়েছে, তবে তথ্যের পরিবেশেন ও কাজকে সহজ করতে সকল তথ্য ইংরেজীতে দেওয়ার জন্য অনুরোধ করছি। তবে চাইলে বাংলিশও লিখতে পারেন।</p>
     <!-- Bind the form to the 'victim' object -->
     <form action="/victims/submit-death-form" method="post" th:object="${victim}" enctype="multipart/form-data">
         <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
@@ -22,8 +22,8 @@
 
         <!-- Full Name Field -->
         <div class="mb-3">
-            <label for="fullName" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="fullName" th:field="*{fullName}" placeholder="Enter full name"
+            <label for="fullName" class="form-label">Full Name (নিহত ব্যক্তির নাম) </label>
+            <input type="text" class="form-control" id="fullName" th:field="*{fullName}" placeholder="ইংরেজীতে সম্পূর্ণ নাম লিখুন"
                    required>
             <div th:if="${#fields.hasErrors('fullName')}" class="text-danger">
                 <p th:errors="*{fullName}"></p>
@@ -32,8 +32,8 @@
 
         <!-- Guardian's Name Field -->
         <div class="mb-3">
-            <label for="guardianName" class="form-label">Guardian's Name</label>
-            <input type="text" class="form-control" id="guardianName" th:field="*{guardianName}" required>
+            <label for="guardianName" class="form-label">Guardian's Name (অভিভাবকের নাম)</label>
+            <input type="text" class="form-control" id="guardianName" th:field="*{guardianName}" placeholder="অভিভাবকের নাম লিখুন" arequired>
             <div th:if="${#fields.hasErrors('guardianName')}" class="text-danger">
                 <p th:errors="*{guardianName}"></p>
             </div>
@@ -42,7 +42,7 @@
         <!-- Gender Field -->
         <div class="mb-3">
             <label for="gender" class="form-label">Gender</label>
-            <select class="form-select" id="gender" th:field="*{gender}" required>
+            <select class="form-select" id="gender" th:field="*{gender}"  required>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
@@ -55,7 +55,7 @@
         <!-- Age Field -->
         <div class="mb-3">
             <label for="age" class="form-label">Age</label>
-            <input type="number" class="form-control" id="age" th:field="*{age}" required>
+            <input type="number" class="form-control" id="age" th:field="*{age}" placeholder="নিহত ব্যক্তির বয়স কত?" required>
             <div th:if="${#fields.hasErrors('age')}" class="text-danger">
                 <p th:errors="*{age}"></p>
             </div>
@@ -63,8 +63,8 @@
 
         <!-- Contact Number Field -->
         <div class="mb-3">
-            <label for="phoneNumber" class="form-label">Contact Number</label>
-            <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" required>
+            <label for="phoneNumber" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" placeholder="নিহত ব্যক্তির বা তার পরিবারের ফোন নাম্বার" required>
             <div th:if="${#fields.hasErrors('phoneNumber')}" class="text-danger">
                 <p th:errors="*{phoneNumber}"></p>
             </div>
@@ -73,13 +73,13 @@
         <!-- Address Field -->
         <div class="mb-3">
             <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="address" th:field="*{address}" required>
+            <input type="text" class="form-control" id="address" th:field="*{address}"  placeholder="নিহত ব্যক্তির বাসা/বাড়ী, এলাকা, রোড" required>
             <div th:if="${#fields.hasErrors('address')}" class="text-danger">
                 <p th:errors="*{address}"></p>
             </div>
 
             <label for="policeStation" class="form-label">Police Station</label>
-            <input type="text" class="form-control" id="policeStation" th:field="*{policeStation}" required>
+            <input type="text" class="form-control" id="policeStation" th:field="*{policeStation}" placeholder="নিহত ব্যক্তি যেই থানার অধীনে বসবাস করতেন" required>
             <div th:if="${#fields.hasErrors('policeStation')}" class="text-danger">
                 <p th:errors="*{policeStation}"></p>
             </div>
@@ -161,7 +161,7 @@
         <div class="mb-3">
             <label for="nationalId" class="form-label">National ID / Birth Certificate NO (make sure it is
                 correct)</label>
-            <input type="text" class="form-control" id="nationalId" th:field="*{nationalId}" required>
+            <input type="text" class="form-control" id="nationalId" th:field="*{nationalId}" placeholder="নিহত ব্যক্তির জন্মসনদ বা জাতীয় পরিচয় পত্রের সঠিক নাম্বার দিন" required>
             <div th:if="${#fields.hasErrors('nationalId')}" class="text-danger">
                 <p th:errors="*{nationalId}"></p>
             </div>
@@ -170,7 +170,7 @@
         <!-- Incident Location Field -->
         <div class="mb-3">
             <label for="incidentLocation" class="form-label">Location of the Incident</label>
-            <input type="text" class="form-control" id="incidentLocation" th:field="*{incidentLocation}" required>
+            <input type="text" class="form-control" id="incidentLocation" th:field="*{incidentLocation}" placeholder="যেখানের ঘটনায় নিহত হয়েছেন" required>
             <div th:if="${#fields.hasErrors('incidentLocation')}" class="text-danger">
                 <p th:errors="*{incidentLocation}"></p>
             </div>
@@ -179,7 +179,7 @@
         <!-- Incident Date Field -->
         <div class="mb-3">
             <label for="incidentDate" class="form-label">Incident Date</label>
-            <input type="date" class="form-control" id="incidentDate" th:field="*{incidentDate}" required>
+            <input type="date" class="form-control" id="incidentDate" th:field="*{incidentDate}" placeholder="কত তারিখে ঘটনা ঘটেছিলেো?" required>
             <div th:if="${#fields.hasErrors('incidentDate')}" class="text-danger">
                 <p th:errors="*{incidentDate}"></p>
             </div>
@@ -188,7 +188,7 @@
         <!-- Incident Description Field -->
         <div class="mb-3">
             <label for="incidentDescription" class="form-label">Incident Description</label>
-            <textarea class="form-control" id="incidentDescription" th:field="*{incidentDescription}"
+            <textarea class="form-control" id="incidentDescription" th:field="*{incidentDescription}" placeholder="ঘটনার স্থানে কি হয়েছিলো? ইংরেজীতে লিখতে পারলে ভালো না হয়, বাংলিশে লিখুন সংক্ষিপ্ত করে"
                       required></textarea>
             <div th:if="${#fields.hasErrors('incidentDescription')}" class="text-danger">
                 <p th:errors="*{incidentDescription}"></p>
@@ -199,7 +199,7 @@
         <!-- Email Field (Optional) -->
         <div class="mb-3">
             <label for="email" class="form-label">Email (required)</label>
-            <input type="email" class="form-control" id="email" th:field="*{email}">
+            <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="যোগাযোগের জন্য ইমেইল দিন" required>
             <div th:if="${#fields.hasErrors('email')}" class="text-danger">
                 <p th:errors="*{email}"></p>
             </div>
@@ -208,7 +208,7 @@
         <!-- Occupation Field (Optional) -->
         <div class="mb-3">
             <label for="occupation" class="form-label">Occupation (Required)</label>
-            <input type="text" class="form-control" id="occupation" th:field="*{occupation}">
+            <input type="text" class="form-control" id="occupation" th:field="*{occupation}" placeholder="তিনি পেশায় কী ছিলেন? Student/Teacher/Driver/..?" required>
             <div th:if="${#fields.hasErrors('occupation')}" class="text-danger">
                 <p th:errors="*{occupation}"></p>
             </div>
@@ -217,7 +217,7 @@
         <!-- Participation Role Field -->
         <div class="mb-3">
             <label for="participationRole" class="form-label">Participation Role</label>
-            <select class="form-select" id="participationRole" th:field="*{participationRole}">
+            <select class="form-select" id="participationRole" th:field="*{participationRole}" required>
                 <option value="">Select Role</option>
                 <option value="Protester">Protester</option>
                 <option value="Supporter">Supporter</option>
@@ -228,7 +228,7 @@
         <!-- Police Case Reference Field -->
         <div class="mb-3">
             <label for="policeCaseReference" class="form-label">Police Case Reference (Optional)</label>
-            <input type="text" class="form-control" id="policeCaseReference" th:field="*{policeCaseReference}">
+            <input type="text" class="form-control" id="policeCaseReference" th:field="*{policeCaseReference}" placeholder="যদি কোর্ট/পুলিশের কোন রেফারেন্স থাকে">
         </div>
 
         <!--death fields-->
@@ -236,7 +236,7 @@
         <div class="mb-3">
             <label for="causeOfDeath" class="form-label">Cause of Death</label>
             <input type="text" id="causeOfDeath" name="causeOfDeath" class="form-control"
-                   th:field="*{deathDetails.causeOfDeath}" placeholder="Enter cause of death" required>
+                   th:field="*{deathDetails.causeOfDeath}"  placeholder="মৃত্যুর কারণ লিখুন নির্দিষ্ট করে (গুলিতে, রাবার বুলেট, পিটিয়ে) অন্যান্য" required>
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.causeOfDeath')}"
                  th:errors="*{deathDetails.causeOfDeath}"></div>
         </div>
@@ -263,7 +263,7 @@
         <div class="mb-3">
             <label for="burialCremationDetails" class="form-label">Burial/Cremation Details</label>
             <textarea id="burialCremationDetails" name="burialCremationDetails" class="form-control" rows="3"
-                      th:field="*{deathDetails.burialCremationDetails}" placeholder="Enter burial/cremation details"
+                      th:field="*{deathDetails.burialCremationDetails}" placeholder="সমাধি/দাহ সংক্রান্ত বিবরণ লিখুন: কোথায় কবর/দাহ দিয়েছেন, জানাজা পড়ানো হয়েছে কিনা ইত্যাদি"
                       required></textarea>
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.burialCremationDetails')}"
                  th:errors="*{deathDetails.burialCremationDetails}"></div>
@@ -273,14 +273,14 @@
         <div class="mb-3">
             <label for="witnessAccount" class="form-label">Witness Account</label>
             <textarea id="witnessAccount" name="witnessAccount" class="form-control" rows="3"
-                      th:field="*{deathDetails.witnessAccount}" placeholder="Enter witness account"></textarea>
+                      th:field="*{deathDetails.witnessAccount}" placeholder="সাক্ষীর বিবরণ লিখুন যেমনঃ নাম, ফোন, ঘটনার বিবরণ, তারিখ ইত্যাদি" required></textarea>
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.witnessAccount')}"
                  th:errors="*{deathDetails.witnessAccount}"></div>
         </div>
 
         <!-- Autopsy Performed -->
         <div class="mb-3">
-            <label class="form-label">Autopsy Performed?</label>
+            <label class="form-label">Autopsy Performed (ময়নাতদন্ত হয়েছে)?</label>
             <div class="form-check">
                 <input type="radio" id="autopsyYes" name="deathDetails.autopsyPerformed" value="true"
                        class="form-check-input" th:field="*{deathDetails.autopsyPerformed}">
@@ -288,7 +288,7 @@
             </div>
             <div class="form-check">
                 <input type="radio" id="autopsyNo" name="deathDetails.autopsyPerformed" value="false"
-                       class="form-check-input" th:field="*{deathDetails.autopsyPerformed}">
+                       class="form-check-input" th:field="*{deathDetails.autopsyPerformed}" >
                 <label for="autopsyNo" class="form-check-label">No</label>
             </div>
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.autopsyPerformed')}"
@@ -298,7 +298,7 @@
         <!-- Death Photo Upload -->
         <div class="mb-3">
             <label for="deathPhoto" class="form-label">Death Persons Photo (Required) <a
-                    th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
+                    th:href="@{/file-upload-instruction}">ছবি আপলোড করতে নির্দেশনা অনুসরণ করুন</a> </label>
             <input type="file" id="deathPhoto" name="deathDetails.deathPhotoFile" class="form-control"
                    th:field="*{deathDetails.deathPhotoFile}" accept=".jpg, .jpeg, .png">
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathPhotoFile')}"
@@ -308,7 +308,7 @@
         <!-- Death Certificate Upload -->
         <div class="mb-3">
             <label for="deathCertificate" class="form-label">Death Certificate (Required) <a
-                    th:href="@{/file-upload-instruction}">Follow the instruction before upload the file</a> </label>
+                    th:href="@{/file-upload-instruction}">মৃত্যুসনদ ও অন্যান্য তথ্যের PDF আপলোড করতে নির্দেশনা অনুসরণ করুন</a> </label>
             <input type="file" id="deathCertificate" name="deathDetails.deathCertificateFile" class="form-control"
                    th:field="*{deathDetails.deathCertificateFile}" accept=".pdf">
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathCertificateFile')}"
@@ -319,7 +319,7 @@
         <h4>Contact Person Information</h4>
         <div class="mb-3">
             <label for="contactPersonName" class="form-label">Contact Person Name</label>
-            <input type="text" class="form-control" id="contactPersonName" th:field="*{contactName}" required>
+            <input type="text" class="form-control" id="contactPersonName" th:field="*{contactName}" placeholder="যার সাথে যোগাযোগ করা যেতে পারে তার নাম লিখুন" required>
             <div th:if="${#fields.hasErrors('contactName')}" class="text-danger">
                 <p th:errors="*{contactName}">Contact person name is required</p>
             </div>
@@ -327,7 +327,7 @@
 
         <div class="mb-3">
             <label for="contactPersonRelationship" class="form-label">Relationship to Victim</label>
-            <input type="text" class="form-control" id="contactPersonRelationship" th:field="*{relationshipToVictim}"
+            <input type="text" class="form-control" id="contactPersonRelationship" th:field="*{relationshipToVictim}" placeholder="মৃত ব্যক্তির সাথে আপনার সম্পর্ক কী ছিলো?"
                    required>
             <div th:if="${#fields.hasErrors('relationshipToVictim')}" class="text-danger">
                 <p th:errors="*{relationshipToVictim}">Relationship to the victim is required</p>
@@ -336,7 +336,7 @@
 
         <div class="mb-3">
             <label for="contactPersonPhoneNumber" class="form-label">Contact Person Phone Number</label>
-            <input type="text" class="form-control" id="contactPersonPhoneNumber" th:field="*{contactPhone}" required>
+            <input type="text" class="form-control" id="contactPersonPhoneNumber" th:field="*{contactPhone}" placeholder="আপনার যোগাযোগের নাম্বার দিন" required>
             <div th:if="${#fields.hasErrors('contactPhone')}" class="text-danger">
                 <p th:errors="*{contactPhone}">Phone number is required</p>
             </div>
@@ -344,7 +344,7 @@
 
         <div class="mb-3">
             <label for="contactPersonAddress" class="form-label">Contact Person Address</label>
-            <input type="text" class="form-control" id="contactPersonAddress" th:field="*{contactAddress}" required>
+            <input type="text" class="form-control" id="contactPersonAddress" th:field="*{contactAddress}" placeholder="আপনার যোগাযোগের ঠিকানা" required>
             <div th:if="${#fields.hasErrors('contactAddress')}" class="text-danger">
                 <p th:errors="*{contactAddress}">Phone number is required</p>
             </div>
@@ -353,12 +353,12 @@
         <!-- Optional fields for Contact Person -->
         <div class="mb-3">
             <label for="contactEmail" class="form-label">Contact Person Email (Optional)</label>
-            <input type="email" class="form-control" id="contactEmail" th:field="*{contactEmail}">
+            <input type="email" class="form-control" id="contactEmail" th:field="*{contactEmail}" placeholder="আপানার ইমেইল যদি থাকে">
         </div>
 
         <div class="mb-3">
             <label for="identificationDocument" class="form-label">Identification Document (Optional)</label>
-            <input type="text" class="form-control" id="identificationDocument"
+            <input type="text" class="form-control" id="identificationDocument" placeholder="আপনার পরিচয়পত্র যদি থাকে"
                    th:field="*{contactIdentificationDocument}">
         </div>
 
@@ -368,5 +368,72 @@
 
 </main>
 <footer th:replace="~{layout/footer :: footer}"></footer>
+
+<script>
+    // Function to check file uploads before form submission
+    document.querySelector("form").addEventListener("submit", function(event) {
+        // Get the file inputs
+        const deathPersonPhotoInput = document.getElementById("deathPhoto");
+        const deathCertificateInput = document.getElementById("deathCertificate");
+
+        // Reset previous error styles
+        deathPersonPhotoInput.classList.remove("input-error");
+        deathCertificateInput.classList.remove("input-error");
+
+        // Check if the files are uploaded
+        if (deathPersonPhotoInput.files.length === 0) {
+            alert("Please upload the Died person's photo, it is required!");
+            deathPersonPhotoInput.classList.add("input-error"); // Add red border
+            deathPersonPhotoInput.scrollIntoView({ behavior: "smooth" }); // Scroll to the field
+            event.preventDefault(); // Prevent form submission
+            return; // Exit the function
+        }
+
+        if (deathCertificateInput.files.length === 0) {
+            alert("Please upload the death certificate, it is required!");
+            deathCertificateInput.classList.add("input-error"); // Add red border
+            deathCertificateInput.scrollIntoView({ behavior: "smooth" }); // Scroll to the field
+            event.preventDefault(); // Prevent form submission
+            return; // Exit the function
+        }
+
+        // Check file sizes
+        if (deathPersonPhotoInput.files[0].size / 1024 / 1024 > 1) {
+            alert("Died person photo file size exceeds 1 MB\nPlease upload a photo less than 1MB in size.");
+            deathPersonPhotoInput.classList.add("input-error"); // Add red border
+            deathPersonPhotoInput.scrollIntoView({ behavior: "smooth" }); // Scroll to the field
+            event.preventDefault(); // Prevent form submission
+            return; // Exit the function
+        }
+
+        if (deathCertificateInput.files[0].size / 1024 / 1024 > 5) {
+            alert("Death certificate file size exceeds 5 MB\nPlease upload a PDF less than 5MB in size.");
+            deathCertificateInput.classList.add("input-error"); // Add red border
+            deathCertificateInput.scrollIntoView({ behavior: "smooth" }); // Scroll to the field
+            event.preventDefault(); // Prevent form submission
+            return; // Exit the function
+        }
+    });
+
+    // Separate validation when files are selected (optional, just to give immediate feedback)
+    document.getElementById("deathPhoto").addEventListener("change", function() {
+        this.classList.remove("input-error"); // Remove error style when a file is selected
+        if (this.files[0].size / 1024 / 1024 > 1) {
+            alert("Died person's photo file size exceeds 1 MB\nPlease upload a photo less than 1MB in size.");
+            this.classList.add("input-error"); // Add red border
+            this.value = ""; // Clear the input field
+        }
+    });
+
+    document.getElementById("deathCertificate").addEventListener("change", function() {
+        this.classList.remove("input-error"); // Remove error style when a file is selected
+        if (this.files[0].size / 1024 / 1024 > 5) {
+            alert("Death Certificate file size exceeds 5 MB\nPlease upload a PDF less than 5MB in size.");
+            this.classList.add("input-error"); // Add red border
+            this.value = ""; // Clear the input field
+        }
+    });
+</script>
+
 </body>
 </html>

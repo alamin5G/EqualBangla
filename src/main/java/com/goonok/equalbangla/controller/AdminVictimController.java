@@ -77,14 +77,14 @@ public class AdminVictimController {
         LocalDate end = (incidentDateTo != null && !incidentDateTo.isEmpty()) ? LocalDate.parse(incidentDateTo) : null;
 
         // Process verification status
-       // Boolean verified = null;
+        // Boolean verified = null;
         if ("0".equals(verificationStatus)) {
             verificationStatus = "0";
         } else if ("1".equals(verificationStatus)) {
             verificationStatus = "1";
-        }else if ("2".equals(verificationStatus)) {
-            verificationStatus= "2";
-        }else {
+        } else if ("2".equals(verificationStatus)) {
+            verificationStatus = "2";
+        } else {
             verificationStatus = "";
         }
 
@@ -125,10 +125,10 @@ public class AdminVictimController {
         // Toggle between Pending (2) and Approved (1)
         if (victim.getVerificationStatus().equals("1")) {
             victim.setVerificationStatus("2");  // Make it Pending
-            redirectAttributes.addFlashAttribute("success",  victim.getFullName() + " has been set to in Pending list");
+            redirectAttributes.addFlashAttribute("success", victim.getFullName() + " has been set to in Pending list");
         } else {
             victim.setVerificationStatus("1");  // Approve
-            redirectAttributes.addFlashAttribute("success",  victim.getFullName() + "'s data has been approved");
+            redirectAttributes.addFlashAttribute("success", victim.getFullName() + "'s data has been approved");
         }
 
         victimService.save(victim);
@@ -143,41 +143,38 @@ public class AdminVictimController {
         if (victim.getVerificationStatus().equals("2")) { //if it is in pending state
             victim.setVerificationStatus("0"); //set to reject
             redirectAttributes.addFlashAttribute("success", victim.getFullName() + "'s data has been transfer to rejected list");
-        }else if (victim.getVerificationStatus().equals("0")) { // if it is in rejected state
+        } else if (victim.getVerificationStatus().equals("0")) { // if it is in rejected state
             victim.setVerificationStatus("2"); // set to pending list
-            redirectAttributes.addFlashAttribute("success",  victim.getFullName() + " has been set to in Pending list");
+            redirectAttributes.addFlashAttribute("success", victim.getFullName() + " has been set to in Pending list");
         }
         victimService.save(victim);
         return "redirect:/admin/victims";  // Redirect back to victim list
     }
 
-
     @GetMapping("/export/csv")
-    public void exportFilteredVictimDataCsv(
-            @RequestParam(required = false) String incidentType,
-            @RequestParam(required = false) String startDate,
-            @RequestParam(required = false) String endDate,
+    public void exportFilteredVictimsCsv(
+            @RequestParam(required = false) String fullName,
+            @RequestParam(required = false) List<String> incidentType,
+            @RequestParam(required = false) String incidentDateFrom,
+            @RequestParam(required = false) String incidentDateTo,
+            @RequestParam(required = false) List<String> district,
+            @RequestParam(required = false) String policeStation,
+            @RequestParam(required = false) Integer ageFrom,
+            @RequestParam(required = false) Integer ageTo,
+            @RequestParam(required = false) List<String> gender,
+            @RequestParam(required = false) String occupation,
+            @RequestParam(required = false) String verificationStatus,
             HttpServletResponse response) throws IOException {
 
-        // Convert startDate and endDate from String to LocalDate
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate start = null;
-        LocalDate end = null;
+        // Parse the dates from the request
+        LocalDate start = (incidentDateFrom != null && !incidentDateFrom.isEmpty()) ? LocalDate.parse(incidentDateFrom) : null;
+        LocalDate end = (incidentDateTo != null && !incidentDateTo.isEmpty()) ? LocalDate.parse(incidentDateTo) : null;
 
-        try {
-            if (startDate != null && !startDate.isEmpty()) {
-                start = LocalDate.parse(startDate, formatter);
-            }
-            if (endDate != null && !endDate.isEmpty()) {
-                end = LocalDate.parse(endDate, formatter);
-            }
-        } catch (DateTimeParseException e) {
-            // Handle the exception here, you can log it or return a specific error response
-            throw new IllegalArgumentException("Invalid date format. Please use yyyy-MM-dd.");
-        }
+        // Fetch the filtered victims
+        List<Victim> victims = victimService.getFilteredVictims(
+                fullName, incidentType, start, end, district, policeStation, ageFrom, ageTo, gender, occupation, verificationStatus);
 
-        List<Victim> victims = victimService.getFilteredVictims(incidentType, start, end);
+        // Generate and download the CSV
         reportService.generateCsvReport(victims, response);
     }
-
 }

@@ -27,6 +27,7 @@ public class VerificationService {
     public void setTokenExpiryDate(String token, LocalDateTime date) {
         Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
         if (verificationToken.isPresent()) {
+            verificationToken.get().setVerified(true);
             verificationToken.get().setExpiryDate(date);
             verificationTokenRepository.save(verificationToken.get());
         }else {
@@ -54,6 +55,8 @@ public class VerificationService {
         verificationToken.setEmail(email);
         verificationToken.setToken(token);
         verificationToken.setExpiryDate();  // Set expiry to 24 hours from now
+        verificationToken.setVerified(false);
+        verificationToken.setSubmitted(false);
         verificationTokenRepository.save(verificationToken);
 
         // Send the verification email with the token
@@ -85,5 +88,15 @@ public class VerificationService {
     public void deleteToken(String email) {
         Optional<VerificationToken> tokenOptional = verificationTokenRepository.findByEmail(email);
         tokenOptional.ifPresent(verificationToken -> verificationTokenRepository.delete(verificationToken));
+    }
+
+    public void updateVerificationToken(String token){
+        Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
+
+        if (verificationToken.isPresent()) {
+            verificationToken.get().setSubmitted(true);
+            log.info("token is submitted as true");
+            verificationTokenRepository.save(verificationToken.get());
+        }
     }
 }

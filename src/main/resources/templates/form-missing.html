@@ -361,5 +361,72 @@
 
 </main>
 <footer th:replace="~{layout/footer :: footer}"></footer>
+
+<!-- File Upload Validation Script -->
+<script>
+    // Function to check file uploads before form submission
+    document.querySelector("form").addEventListener("submit", function(event) {
+        // Get the file inputs
+        const missingPersonPhotoInput = document.getElementById("missingPhoto");
+        const policeReportInput = document.getElementById("policeReport");
+
+        // Reset previous error styles
+        missingPersonPhotoInput.classList.remove("input-error");
+        policeReportInput.classList.remove("input-error");
+
+        // Check if the files are uploaded
+        if (missingPersonPhotoInput.files.length === 0) {
+            alert("Please upload the Missing person's photo, it is required!");
+            missingPersonPhotoInput.classList.add("input-error"); // Add red border
+            missingPersonPhotoInput.scrollIntoView({ behavior: "smooth" }); // Scroll to the field
+            event.preventDefault(); // Prevent form submission
+            return; // Exit the function
+        }
+
+       /* if (policeReportInput.files.length === 0) {
+            alert("Please upload the medical report, it is required!");
+            policeReportInput.classList.add("input-error"); // Add red border
+            policeReportInput.scrollIntoView({ behavior: "smooth" }); // Scroll to the field
+            event.preventDefault(); // Prevent form submission
+            return; // Exit the function
+        }*/
+
+        // Check file sizes
+        if (missingPersonPhotoInput.files[0].size / 1024 / 1024 > 1) {
+            alert("Missing person photo file size exceeds 1 MB\nPlease upload a photo less than 1MB in size.");
+            missingPersonPhotoInput.classList.add("input-error"); // Add red border
+            missingPersonPhotoInput.scrollIntoView({ behavior: "smooth" }); // Scroll to the field
+            event.preventDefault(); // Prevent form submission
+            return; // Exit the function
+        }
+
+        if (policeReportInput.files[0].size / 1024 / 1024 > 5) {
+            alert("Police Case file size exceeds 5 MB\nPlease upload a PDF less than 5MB in size.");
+            policeReportInput.classList.add("input-error"); // Add red border
+            policeReportInput.scrollIntoView({ behavior: "smooth" }); // Scroll to the field
+            event.preventDefault(); // Prevent form submission
+             // Exit the function
+        }
+    });
+
+    // Separate validation when files are selected (optional, just to give immediate feedback)
+    document.getElementById("missingPhoto").addEventListener("change", function() {
+        this.classList.remove("input-error"); // Remove error style when a file is selected
+        if (this.files[0].size / 1024 / 1024 > 1) {
+            alert("Missing person photo file size exceeds 1 MB\nPlease upload a photo less than 1MB in size.");
+            this.classList.add("input-error"); // Add red border
+            this.value = ""; // Clear the input field
+        }
+    });
+
+    document.getElementById("policeReport").addEventListener("change", function() {
+        this.classList.remove("input-error"); // Remove error style when a file is selected
+        if (this.files[0].size / 1024 / 1024 > 5) {
+            alert("Police case file size exceeds 5 MB\nPlease upload a PDF less than 5MB in size.");
+            this.classList.add("input-error"); // Add red border
+            this.value = ""; // Clear the input field
+        }
+    });
+</script>
 </body>
 </html>
