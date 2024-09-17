@@ -327,7 +327,7 @@
 
         <div class="mb-3">
             <label for="contactPersonRelationship" class="form-label">Relationship to Victim</label>
-            <input type="text" class="form-control" id="contactPersonRelationship" th:field="*{relationshipToVictim}" placeholder="মৃত ব্যক্তির সাথে আপনার সম্পর্ক কী ছিলো?"
+            <input type="text" class="form-control" id="contactPersonRelationship" th:field="*{relationshipToVictim}" placeholder="মৃত ব্যক্তির সাথে সম্পর্ক কী ছিলো?"
                    required>
             <div th:if="${#fields.hasErrors('relationshipToVictim')}" class="text-danger">
                 <p th:errors="*{relationshipToVictim}">Relationship to the victim is required</p>
