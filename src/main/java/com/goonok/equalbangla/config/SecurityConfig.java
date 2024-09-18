@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/how", "/why", "/who", "/file-upload-instruction", "/css/**", "/images/**", "/about", "/verification/**", "/victims/**").permitAll()
                         .requestMatchers("/admin/login").permitAll()  // Allow unauthenticated access to the login page
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // Only admin users can access /admin URLs
+                        .requestMatchers("/admin/**", "/uploads/**").hasRole("ADMIN") // Only admin users can access /admin URLs
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractHttpConfigurer::disable)

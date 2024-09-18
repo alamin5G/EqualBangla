@@ -28,6 +28,9 @@ public class VictimService {
     @Autowired
     private InjuryDetailsService injuryDetailsService;
 
+    @Autowired
+    private EmailService emailService;
+
 
     public Page<Victim> filterVictims(
             String fullName,
@@ -248,6 +251,12 @@ public class VictimService {
         victim.setVerificationStatus(verificationStatus);
         victim.setVerificationRemarks(verificationRemarks);
         victimRepository.save(victim);
+
+        // Send email to the victim
+        String subject = "Your Report Verification Status";
+        String body = "Dear " + victim.getFullName() + ",\n\nYour report has been verified with status: " + verificationStatus
+                + ".\nRemarks: " + verificationRemarks + "\n\nThank you.";
+        emailService.sendVerificationEmail(victim.getEmail(), subject, body);
     }
 
 

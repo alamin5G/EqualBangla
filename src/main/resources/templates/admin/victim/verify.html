@@ -15,8 +15,9 @@
     <p>Incident Description: <span th:text="${victim.incidentDescription}"></span></p>
 
     <!-- Show supporting document links -->
-    <a th:href="@{/ + ${victim.injuryDetails.injuredPersonPhotographPath}}" target="_blank">View Injured Photo</a><br>
-    <a th:href="@{/ + ${victim.injuryDetails.medicalReportPath}}" target="_blank">View Medical Report</a>
+    <a th:href="@{'/' + ${victim.injuryDetails.injuredPersonPhotographPath}}" target="_blank">View Injured Photo</a>
+    <br>
+    <a th:href="@{'/' + ${victim.injuryDetails.medicalReportPath}}" target="_blank">View Medical Report</a>
   </div>
 
   <!-- Verification Form -->
