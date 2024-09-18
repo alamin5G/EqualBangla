@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+<header th:replace="~{layout/navbar :: header}"></header>
+<main class="container mt-4">
+  <h2>Verify Victim Report</h2>
+
+  <!-- Display Victim Details -->
+  <div>
+    <h3 th:text="${victim.fullName}">Victim Name</h3>
+    <p>Incident Type: <span th:text="${victim.incidentType}"></span></p>
+    <p>Phone: <span th:text="${victim.phoneNumber}"></span></p>
+    <p>Email: <span th:text="${victim.email}"></span></p>
+    <p>Incident Description: <span th:text="${victim.incidentDescription}"></span></p>
+
+    <!-- Show supporting document links -->
+    <a th:href="@{/ + ${victim.injuryDetails.injuredPersonPhotographPath}}" target="_blank">View Injured Photo</a><br>
+    <a th:href="@{/ + ${victim.injuryDetails.medicalReportPath}}" target="_blank">View Medical Report</a>
+  </div>
+
+  <!-- Verification Form -->
+  <form th:action="@{'/admin/victims/' + ${victim.id} + '/verify'}" method="post">
+    <div class="form-group">
+      <label for="verificationStatus">Verification Status:</label>
+      <select id="verificationStatus" name="verificationStatus" class="form-control">
+        <option value="VERIFIED" th:selected="${victim.verificationStatus == '1'}">Verified</option>
+        <option value="REJECTED" th:selected="${victim.verificationStatus == '0'}">Rejected</option>
+        <option value="PENDING" th:selected="${victim.verificationStatus == '2'}">Pending</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="verificationRemarks">Verification Remarks:</label>
+      <textarea id="verificationRemarks" name="verificationRemarks" class="form-control" rows="4"
+                th:text="${victim.verificationRemarks}" placeholder="write your comments on this data verification"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Verification</button>
+  </form>
+</main>
+<footer th:replace="~{layout/footer :: footer}"></footer>
+</body>
+</html>

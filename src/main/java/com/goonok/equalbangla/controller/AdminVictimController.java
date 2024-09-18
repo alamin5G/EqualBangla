@@ -13,8 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Controller
@@ -120,7 +118,7 @@ public class AdminVictimController {
 
     @PostMapping("/{id}/approveOrPending")
     public String approveOrTogglePending(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        Victim victim = victimService.getById(id);
+        Victim victim = victimService.getVictimById(id);
 
         // Toggle between Pending (2) and Approved (1)
         if (victim.getVerificationStatus().equals("1")) {
@@ -137,7 +135,7 @@ public class AdminVictimController {
 
     @PostMapping("/{id}/reject")
     public String rejectVictim(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        Victim victim = victimService.getById(id);
+        Victim victim = victimService.getVictimById(id);
 
         // Set verification status to Rejected (0)
         if (victim.getVerificationStatus().equals("2")) { //if it is in pending state
@@ -176,5 +174,24 @@ public class AdminVictimController {
 
         // Generate and download the CSV
         reportService.generateCsvReport(victims, response);
+    }
+
+    @GetMapping("/{id}/verify")
+    public String showVerificationPage(@PathVariable Long id, Model model) {
+        Victim victim = victimService.getVictimById(id);
+        model.addAttribute("victim", victim);
+        return "admin/victim/verify";  // Points to the verification page
+    }
+
+    @PostMapping("/{id}/verify")
+    public String verifyVictim(
+            @PathVariable Long id,
+            @RequestParam String verificationStatus,
+            @RequestParam String verificationRemarks,
+            RedirectAttributes redirectAttributes) {
+
+        victimService.verifyVictim(id, verificationStatus, verificationRemarks);
+        redirectAttributes.addFlashAttribute("success", "Victim verification updated successfully.");
+        return "redirect:/admin/victims";
     }
 }

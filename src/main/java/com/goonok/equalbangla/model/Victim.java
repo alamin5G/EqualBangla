@@ -111,4 +111,6 @@ public class Victim {
     @Column(name = "verification_status")
     private String verificationStatus = "2"; // Values: PENDING, VERIFIED, REJECTED -0 for REJECTED, 1 for VERIFIED, 2 for PENDING
 
+    private String verificationRemarks; // Remarks added by admin for verification
+
 }

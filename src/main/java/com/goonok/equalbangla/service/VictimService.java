@@ -8,7 +8,6 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -203,7 +202,7 @@ public class VictimService {
         return victimRepository.countByIncidentType(incidentType);
     }
 
-    public Victim getById(Long id) {
+    public Victim getVictimById(Long id) {
         return victimRepository.findById(id).orElseThrow(() -> new RuntimeException("Victim not found"));
     }
 
@@ -241,6 +240,14 @@ public class VictimService {
                 VictimSpecification.filterByCriteria(
                         fullName, incidentType, startDate, endDate, district, policeStation,
                         ageFrom, ageTo, gender, occupation, verificationStatus));
+    }
+
+
+    public void verifyVictim(Long id, String verificationStatus, String verificationRemarks) {
+        Victim victim = getVictimById(id);
+        victim.setVerificationStatus(verificationStatus);
+        victim.setVerificationRemarks(verificationRemarks);
+        victimRepository.save(victim);
     }
 
 
