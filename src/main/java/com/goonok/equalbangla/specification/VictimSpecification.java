@@ -98,4 +98,42 @@ public class VictimSpecification {
 
     // You can add more filtering specifications as needed, like filtering by location, gender, etc.
 
+
+
+    //advance search
+    public static Specification<Victim> advancedSearchByCriteria(
+            String fullName, String incidentType, LocalDate startDate, LocalDate endDate,
+            String region, String severity) {
+
+        return (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
+
+            if (fullName != null && !fullName.isEmpty()) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.like(criteriaBuilder.lower(root.get("fullName")), "%" + fullName.toLowerCase() + "%"));
+            }
+            if (incidentType != null && !incidentType.isEmpty()) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("incidentType"), incidentType));
+            }
+            if (startDate != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.greaterThanOrEqualTo(root.get("incidentDate"), startDate));
+            }
+            if (endDate != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.lessThanOrEqualTo(root.get("incidentDate"), endDate));
+            }
+            if (region != null && !region.isEmpty()) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("district"), region));
+            }
+            if (severity != null && !severity.isEmpty()) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("injuryDetails.severity"), severity));
+            }
+
+            return predicate;
+        };
+    }
 }

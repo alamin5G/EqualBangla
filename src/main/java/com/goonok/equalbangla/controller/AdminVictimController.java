@@ -194,4 +194,37 @@ public class AdminVictimController {
         redirectAttributes.addFlashAttribute("success", "Victim verification updated successfully.");
         return "redirect:/admin/victims";
     }
+
+    @GetMapping("/search")
+    public String searchVictims(@RequestParam String keyword, Model model) {
+        List<Victim> searchResults = victimService.searchVictims(keyword);
+        model.addAttribute("searchResults", searchResults);
+        return "admin/victim/search"; // Points to the Thymeleaf template for search results
+    }
+
+    @GetMapping("/advanced-search")
+    public String advancedSearchVictims(
+            @RequestParam(required = false) String fullName,
+            @RequestParam(required = false) String incidentType,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            @RequestParam(required = false) String region,
+            @RequestParam(required = false) String severity,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model) {
+
+        // Use pageable for pagination
+        Page<Victim> searchResults = victimService.advancedSearch(fullName, incidentType, startDate, endDate, region, severity, page, size);
+
+        model.addAttribute("searchResults", searchResults.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", searchResults.getTotalPages());
+        model.addAttribute("totalItems", searchResults.getTotalElements());
+
+        // Return the same page or another template where search results will be shown
+        return "admin/victim/advanced-search";
+    }
+
+
 }

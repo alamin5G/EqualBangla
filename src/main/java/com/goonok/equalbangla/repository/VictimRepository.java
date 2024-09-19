@@ -73,5 +73,11 @@ public interface VictimRepository extends JpaRepository<Victim, Long>, JpaSpecif
     @Query("SELECT v FROM Victim v WHERE v.incidentDate BETWEEN :startDate AND :endDate")
     List<Victim> findVictimsBetweenDates(LocalDate startDate, LocalDate endDate);
 
+    // Full-Text Search: Search by name, phone number, or national ID
+    @Query("SELECT v FROM Victim v WHERE " +
+            "LOWER(v.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(v.phoneNumber) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(v.nationalId) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    List<Victim> searchByKeyword(@Param("keyword") String keyword);
 
 }

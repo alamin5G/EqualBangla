@@ -6,6 +6,12 @@
 <main class="container mt-4">
     <h2>Victim List</h2>
 
+    <form th:action="@{/admin/victims/search}" method="get">
+        <input type="text" name="keyword" class="form-control" placeholder="Search by Name, Phone, or National ID" required>
+        <button type="submit" class="btn btn-primary mt-2">Search</button>
+    </form>
+
+
     <!-- Filters Form -->
     <form th:action="@{/admin/victims/filter}" method="get">
         <div class="row">

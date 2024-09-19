@@ -245,7 +245,7 @@ public class VictimService {
                         ageFrom, ageTo, gender, occupation, verificationStatus));
     }
 
-
+//update verification status and send confirmation email
     public void verifyVictim(Long id, String verificationStatus, String verificationRemarks) {
         Victim victim = getVictimById(id);
         victim.setVerificationStatus(verificationStatus);
@@ -257,6 +257,20 @@ public class VictimService {
         String body = "Dear " + victim.getFullName() + ",\n\nYour report has been verified with status: " + verificationStatus
                 + ".\nRemarks: " + verificationRemarks + "\n\nThank you.";
         emailService.sendVerificationEmail(victim.getEmail(), subject, body);
+    }
+
+
+    // Full-Text Search by keyword
+    public List<Victim> searchVictims(String keyword) {
+        return victimRepository.searchByKeyword(keyword);
+    }
+
+    //advance search
+    public List<Victim> advancedSearch(String fullName, String incidentType, String startDate, String endDate, String region, String severity) {
+        LocalDate start = (startDate != null && !startDate.isEmpty()) ? LocalDate.parse(startDate) : null;
+        LocalDate end = (endDate != null && !endDate.isEmpty()) ? LocalDate.parse(endDate) : null;
+
+        return victimRepository.findAll(VictimSpecification.advancedSearchByCriteria(fullName, incidentType, start, end, region, severity));
     }
 
 
