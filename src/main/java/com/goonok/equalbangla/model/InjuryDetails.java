@@ -52,4 +52,8 @@ public class InjuryDetails extends LogEntity {
     @Transient
     @NotNull(message = "Injured Persons photograph is required")
     private MultipartFile injuredPersonPhotographFile;
+
+
+    @Column(name = "updated_by", updatable = false)
+    private String updatedBy = "system";  // Store the username of the admin who updated this victim info
 }

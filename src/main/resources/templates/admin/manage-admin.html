@@ -31,6 +31,7 @@
         <thead>
         <tr>
             <th>Username</th>
+            <th>Email</th>
             <th>Can Manage</th>
             <th>Status</th>
             <th>Actions</th>
@@ -39,6 +40,7 @@
         <tbody>
         <tr th:each="admin : ${admins}">
             <td th:text="${admin.username}">admin_username</td>
+            <td th:text="${admin.email}">admin_email</td>
             <td th:text="${admin.canManageAdmins}">can manage</td>
             <td th:text="${admin.enabled ? 'Enabled' : 'Disabled'}">Status</td>
             <td>

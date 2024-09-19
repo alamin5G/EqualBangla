@@ -4,6 +4,7 @@ import com.goonok.equalbangla.model.VerificationToken;
 import com.goonok.equalbangla.repository.VerificationTokenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -98,5 +99,16 @@ public class VerificationService {
             log.info("token is submitted as true");
             verificationTokenRepository.save(verificationToken.get());
         }
+    }
+
+    /**
+     * Scheduled task to delete expired verification tokens.
+     * Runs every 60 minutes.
+     */
+    @Scheduled(fixedRate = 60 * 60 * 1000) // 60 minutes in milliseconds
+    public void deleteExpiredTokens() {
+        LocalDateTime now = LocalDateTime.now();
+        verificationTokenRepository.deleteExpiredTokens(now);
+        log.info("Not Verified nor submitted Expired verification tokens cleaned up at " + now);
     }
 }

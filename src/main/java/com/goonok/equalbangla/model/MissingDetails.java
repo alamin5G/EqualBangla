@@ -48,4 +48,8 @@ public class MissingDetails extends LogEntity {
 
     @Transient
     private MultipartFile policeReportFile;
+
+
+    @Column(name = "updated_by", updatable = false)
+    private String updatedBy = "system";  // Store the username of the admin who updated this victim info
 }

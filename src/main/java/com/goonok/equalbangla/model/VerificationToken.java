@@ -3,12 +3,23 @@ package com.goonok.equalbangla.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
+@Table(
+        name = "verification_token",
+        indexes = {
+                @Index(
+                        name = "idx_expiry_isverified_issubmitted",
+                        columnList = "expiry_date, is_verified, is_submitted"
+                )
+        }
+)
 @Data
-public class VerificationToken {
+public class VerificationToken extends LogEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +45,6 @@ public class VerificationToken {
 
     // Method to set the expiry date 24 hours from now
     public void setExpiryDate() {
-        this.expiryDate = LocalDateTime.now().plusHours(24);
+        this.expiryDate = LocalDateTime.now().plusHours(1);
     }
 }

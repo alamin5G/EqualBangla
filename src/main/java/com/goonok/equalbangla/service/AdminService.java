@@ -20,6 +20,7 @@ public class AdminService implements UserDetailsService {
 
     @Autowired
     private AdminRepository adminRepository;
+    private EmailService emailService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -43,7 +44,7 @@ public class AdminService implements UserDetailsService {
 
     }
 
-    public void createAdmin(String username, String password) {
+    public void createAdmin(String username, String password, String email) {
         if (adminRepository.findByUsername(username).isEmpty()) {
             String createdBy = "system";
             Admin admin = new Admin(); //initialize first because, there I need to set some logic
@@ -59,11 +60,12 @@ public class AdminService implements UserDetailsService {
 
 
             admin.setUsername(username);
+            admin.setEmail(email);
             admin.setPassword(new BCryptPasswordEncoder().encode(password));  // Encrypt the password
             admin.setCreatedBy(createdBy);  // Set the 'created_by' field
             admin.setUpdatedBy(createdBy);  // Set the 'updated_by' field as it is first time updated
 
-            admin.setEnabled(true);  // Set enabled to true by default
+            admin.setEnabled(false);  // Set enabled to false by default due to approval
 
             adminRepository.save(admin);
         }
@@ -93,6 +95,9 @@ public class AdminService implements UserDetailsService {
         admin.setPassword(new BCryptPasswordEncoder().encode(newPassword));
         admin.setUpdatedBy(updatedBy);
         adminRepository.save(admin);
+
+        String body = "Hello, " + admin.getUsername() + "!\n Your password has been changed by the admin (" + updatedBy + "). Your new password is: " + newPassword;
+        emailService.sendEmail(admin.getEmail(), "Your password has been changed", body);
     }
 
 

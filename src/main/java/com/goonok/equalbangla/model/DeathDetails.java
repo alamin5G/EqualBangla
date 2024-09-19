@@ -58,4 +58,7 @@ public class DeathDetails extends LogEntity {
     @Transient
     @NotNull(message = "upload in .jpg format")
     private MultipartFile deathPhotoFile;
+
+    @Column(name = "updated_by", updatable = false)
+    private String updatedBy = "system";  // Store the username of the admin who updated this victim info
 }

@@ -214,8 +214,12 @@ public class AdminVictimController {
             @RequestParam(defaultValue = "10") int size,
             Model model) {
 
+        // Convert String to LocalDate
+        LocalDate start = (startDate != null && !startDate.isEmpty()) ? LocalDate.parse(startDate) : null;
+        LocalDate end = (endDate != null && !endDate.isEmpty()) ? LocalDate.parse(endDate) : null;
+
         // Use pageable for pagination
-        Page<Victim> searchResults = victimService.advancedSearch(fullName, incidentType, startDate, endDate, region, severity, page, size);
+        Page<Victim> searchResults = victimService.advancedSearch(fullName, incidentType, start, end, region, severity, page, size);
 
         model.addAttribute("searchResults", searchResults.getContent());
         model.addAttribute("currentPage", page);

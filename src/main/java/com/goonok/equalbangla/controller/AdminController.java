@@ -100,7 +100,7 @@ public class AdminController {
     public String registerNewAdmin(@ModelAttribute Admin newAdmin, Model model, RedirectAttributes redirectAttributes) {
         try {
             // Save the new admin to the database
-            adminService.createAdmin(newAdmin.getUsername(), newAdmin.getPassword());
+            adminService.createAdmin(newAdmin.getUsername(), newAdmin.getPassword(), newAdmin.getEmail());
             redirectAttributes.addFlashAttribute("success", "Admin registered successfully!");
             return "redirect:/admin/dashboard";  // Redirect after successful registration
         } catch (Exception e) {
@@ -200,7 +200,8 @@ public class AdminController {
     public String saveAdminPassword(@PathVariable Long id, @RequestParam String password, RedirectAttributes redirectAttributes) {
         //this method is used in the Edit Password Modal from the admin/manage-admin template
         adminService.updateAdminPassword(id, password);
-        adminService.getAdminById(id).ifPresent(admin -> redirectAttributes.addFlashAttribute("success", admin.getUsername()+ "' password has been updated!"));
+
+        adminService.getAdminById(id).ifPresent(admin -> redirectAttributes.addFlashAttribute("success", admin.getUsername()+ "' password has been updated and emailed!"));
         return "redirect:/admin/manage-admins";
     }
 
@@ -212,7 +213,7 @@ public class AdminController {
             return "redirect:/admin/dashboard";  // Redirect if the admin is not authorized to manage other admins
         }
 
-        adminService.createAdmin(admin.getUsername(), admin.getPassword());
+        adminService.createAdmin(admin.getUsername(), admin.getPassword(), admin.getPassword());
         return "redirect:/admin/manage-admins";
     }
 }

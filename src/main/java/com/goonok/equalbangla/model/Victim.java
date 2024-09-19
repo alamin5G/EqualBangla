@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Transactional
 @Data
@@ -18,7 +20,7 @@ import java.time.LocalDate;
         @Index(name = "idx_gender", columnList = "gender"),
         @Index(name = "idx_occupation", columnList = "occupation")
 })
-public class Victim {
+public class Victim extends LogEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -112,5 +114,8 @@ public class Victim {
     private String verificationStatus = "2"; // Values: PENDING, VERIFIED, REJECTED -0 for REJECTED, 1 for VERIFIED, 2 for PENDING
 
     private String verificationRemarks; // Remarks added by admin for verification
+
+    @Column(name = "updated_by", updatable = false)
+    private String updatedBy = "system";  // Store the username of the admin who updated this victim info
 
 }

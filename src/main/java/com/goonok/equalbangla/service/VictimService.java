@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,9 +26,6 @@ public class VictimService {
 
     @Autowired
     private VictimRepository victimRepository;
-
-    @Autowired
-    private InjuryDetailsService injuryDetailsService;
 
     @Autowired
     private EmailService emailService;
@@ -247,9 +246,15 @@ public class VictimService {
 
 //update verification status and send confirmation email
     public void verifyVictim(Long id, String verificationStatus, String verificationRemarks) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = "system";
+        if (authentication != null && authentication.isAuthenticated()) {
+            username = authentication.getName();
+        }
         Victim victim = getVictimById(id);
         victim.setVerificationStatus(verificationStatus);
         victim.setVerificationRemarks(verificationRemarks);
+        victim.setUpdatedBy(username);
         victimRepository.save(victim);
 
         // Send email to the victim
@@ -266,11 +271,30 @@ public class VictimService {
     }
 
     //advance search
-    public List<Victim> advancedSearch(String fullName, String incidentType, String startDate, String endDate, String region, String severity) {
+    public List<Victim> advancedSearchList(String fullName, String incidentType, String startDate, String endDate, String region, String severity) {
         LocalDate start = (startDate != null && !startDate.isEmpty()) ? LocalDate.parse(startDate) : null;
         LocalDate end = (endDate != null && !endDate.isEmpty()) ? LocalDate.parse(endDate) : null;
 
         return victimRepository.findAll(VictimSpecification.advancedSearchByCriteria(fullName, incidentType, start, end, region, severity));
+    }
+
+    // Updated advanced search with pagination
+    public Page<Victim> advancedSearch(
+            String fullName,
+            String incidentType,
+            LocalDate startDate,
+            LocalDate endDate,
+            String region,
+            String severity,
+            int page,
+            int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Delegate the search to the repository using VictimSpecification
+        return victimRepository.findAll(
+                VictimSpecification.advancedSearchByCriteria(
+                        fullName, incidentType, startDate, endDate, region, severity), pageable);
     }
 
 

@@ -15,6 +15,6 @@ public class AdminInitializer implements ApplicationListener<ContextRefreshedEve
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        adminService.createAdmin("alamin", "alaminEqualBangladesh");
+        adminService.createAdmin("alamin", "alaminEqualBangladesh", "alaminvai5g@gmail.com");
     }
 }
