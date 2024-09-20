@@ -86,17 +86,6 @@
             </div>
         </div>
 
-        <!-- Manage Verification Section -->
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Manage Verification</h5>
-                    <p class="card-text">View and verify victim submissions.</p>
-                    <button th:href="@{/admin/verification}" class="btn btn-primary" disabled>Verify Victims</button>
-                </div>
-            </div>
-        </div>
-
         <!-- Rate Limiting Logs Section -->
         <div class="col-md-3">
             <div class="card">
@@ -107,6 +96,26 @@
                 </div>
             </div>
         </div>
+        <!-- Manage Admins Section (Visible based on permission) -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Download Database Backup</h5>
+                    <p class="card-text">Regularly create the Backup of the Data.</p>
+
+                    <!-- Check if the logged-in user can manage admins -->
+                    <a th:href="@{/admin/backup/download}" class="btn btn-primary"
+                       th:if="${#authentication.principal.canManageAdmins}">Download Backup</a>
+
+                    <a th:href="@{/admin/backup/upload}" class="btn btn-primary"
+                       th:if="${#authentication.principal.canManageAdmins}">Restore Backup</a>
+
+                    <!-- For admins who don't have permission, show a disabled button -->
+                    <button class="btn btn-secondary" th:if="${!#authentication.principal.canManageAdmins}" disabled>Download Backup</button>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Logout Section -->
         <div class="col-md-3">

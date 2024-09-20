@@ -7,8 +7,12 @@
 
 <!-- Main content area takes up remaining space -->
 <main class="container mt-4 flex-grow-1">
-  <!--all content will be placed here-->
-
+    <!--all content will be placed here-->
+    <h3 class="text-center text-warning">To Restore you Data upload the .sql backup file</h3>
+    <form action="/admin/backup/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="backupFile" accept=".sql">
+        <button type="submit" class="btn btn-success">Upload & Restore Backup</button>
+    </form>
 </main>
 <footer th:replace="~{layout/footer :: footer}"></footer>
 </body>
