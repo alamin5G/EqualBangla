@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+<main class="container mt-4">
+    <h2>Case Management Dashboard</h2>
+
+    <!-- Display assigned cases (victims) -->
+    <h3>Assigned Cases</h3>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Case ID</th>
+            <th>Victim Name</th>
+            <th>Assigned Admin</th>
+            <th>Case Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="victim : ${victimList}">
+            <td th:text="${victim.id}"></td>
+            <td th:text="${victim.fullName}"></td>
+            <td th:text="${victim.assignedAdmin != null ? victim.assignedAdmin.username : 'Unassigned'}"></td>
+            <td th:text="${victim.caseStatus}"></td>
+            <td>
+                <a th:href="@{/admin/cases/{victimId}/assign(victimId=${victim.id})}" class="btn btn-sm btn-primary">Assign Admin</a>
+                <a th:href="@{/admin/cases/{victimId}/status(victimId=${victim.id})}" class="btn btn-sm btn-info">Update Status</a>
+                <a th:href="@{/admin/cases/{victimId}/task(victimId=${victim.id})}" class="btn btn-sm btn-warning">Create Task</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Display tasks assigned to the current admin -->
+    <h3>Tasks Assigned to You</h3>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Task ID</th>
+            <th>Victim Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${tasks}">
+            <td th:text="${task.id}"></td>
+            <td th:text="${task.victim.fullName}"></td>
+            <td th:text="${task.description}"></td>
+            <td th:text="${task.taskStatus}"></td>
+            <td>
+                <form th:action="@{'/admin/tasks/{taskId}/complete'(taskId=${task.id})}" method="post">
+                    <button type="submit" class="btn btn-success" th:disabled="${task.taskStatus == 'COMPLETED'}">Mark as Completed</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

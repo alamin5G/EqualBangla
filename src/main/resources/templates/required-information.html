@@ -1,0 +1,98 @@
+<!-- layout/main.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+<header th:replace="~{layout/navbar :: header}"></header>
+<main class="container mt-4">
+    <!--all content will be placed here-->
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg">
+                <div class="card-header text-center bg-primary text-white">
+                    <h3>Submission Guidelines</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-center text-muted">Please review the following information carefully before starting
+                        the form submission process.</p>
+
+                    <!-- General Information Section -->
+                    <h5 class="text-primary">General Information</h5>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item">Full Name: <span
+                                class="text-muted">The full name of the victim</span></li>
+                        <li class="list-group-item">Guardian's Name: <span
+                                class="text-muted">The name of the guardian</span></li>
+                        <li class="list-group-item">Gender: <span class="text-muted">Select the gender (Male, Female, Other)</span>
+                        </li>
+                        <li class="list-group-item">Age: <span class="text-muted">The age of the victim</span></li>
+                        <li class="list-group-item">Address: <span class="text-muted">The full residential address of the victim</span>
+                        </li>
+                        <li class="list-group-item">Police Station & District: <span class="text-muted">Provide accurate police station and district details</span>
+                        </li>
+                        <li class="list-group-item">Contact Number: <span class="text-muted">A valid phone number following (+88)01XXXXXXXXX</span>
+                        </li>
+                        <li class="list-group-item">National ID/Birth Certificate: <span class="text-muted">Provide a valid identification document</span>
+                        </li>
+                        <li class="list-group-item">Email Address: <span class="text-muted">Ensure a valid email for further communication</span>
+                        </li>
+                        <li class="list-group-item">Participation Role: <span class="text-muted">Specify the role during the movement</span>
+                        </li>
+                    </ul>
+
+                    <!-- Incident Details Section -->
+                    <h5 class="text-primary">Incident Details</h5>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item">Incident Type: <span class="text-muted">Choose the type (Injured, Missing, Death)</span>
+                        </li>
+                        <li class="list-group-item">Incident Date: <span class="text-muted">The exact date of the incident</span>
+                        </li>
+                        <li class="list-group-item">Incident Location: <span class="text-muted">Location where the incident occurred</span>
+                        </li>
+                        <li class="list-group-item">Incident Description: <span class="text-muted">Provide a detailed description (min 10 chars, max 500 chars)</span>
+                        </li>
+                    </ul>
+
+                    <!-- Contact Person Information Section -->
+                    <h5 class="text-primary">Contact Information of Related Person</h5>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item">Contact Person Name: <span class="text-muted">Full name of the contact person</span>
+                        </li>
+                        <li class="list-group-item">Relationship to Victim: <span class="text-muted">Specify the relationship</span>
+                        </li>
+                        <li class="list-group-item">Contact Person's Phone: <span class="text-muted">Valid phone number of the contact person</span>
+                        </li>
+                        <li class="list-group-item">Contact Person's Address: <span class="text-muted">Address of the contact person</span>
+                        </li>
+                    </ul>
+
+                    <!-- Supporting Documents Section -->
+                    <h5 class="text-primary">Supporting Documents</h5>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item">Injured Person's Photo: <span class="text-muted">Upload a clear JPG/PNG photo (Max 1MB)</span>
+                        </li>
+                        <li class="list-group-item">Medical Report (PDF): <span class="text-muted">Upload a scanned PDF report (Max 5MB)</span>
+                        </li>
+                        <li class="list-group-item">Death Certificate: <span class="text-muted">Upload the death certificate for death cases (PDF)</span>
+                        </li>
+                        <li class="list-group-item">Police Report: <span class="text-muted">Upload a police report for missing cases (optional but recommended)</span>
+                        </li>
+                    </ul>
+
+                    <!-- Email Verification Section -->
+                    <h5 class="text-primary">Email Verification</h5>
+                    <p class="text-muted">Please ensure to verify your email before proceeding with the submission. A
+                        verification link will be sent to your email address upon initiating the process.</p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="/" class="btn btn-primary">Proceed to Email Verification</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+<footer th:replace="~{layout/footer :: footer}"></footer>
+</body>
+</html>

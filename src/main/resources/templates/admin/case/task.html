@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+<main class="container mt-4">
+    <h2>Create Follow-Up Task</h2>
+    <form th:action="@{/admin/cases/{victimId}/task(victimId=${victim.id})}" method="post">
+        <div class="mb-3">
+            <label for="admin">Assign to Admin:</label>
+            <select id="admin" name="adminId" class="form-control">
+                <option th:each="admin : ${admins}" th:value="${admin.id}" th:text="${admin.username}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="description">Task Description:</label>
+            <textarea id="description" name="description" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Task</button>
+    </form>
+</main>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}"></head>
+<body>
+<main class="container mt-4">
+    <h2>Update Case Status</h2>
+    <form th:action="@{/admin/cases/{victimId}/status(victimId=${victim.id})}" method="post">
+        <div class="mb-3">
+            <label for="status">Case Status:</label>
+            <select id="status" name="status" class="form-control">
+                <option value="NEW">New</option>
+                <option value="IN_REVIEW">In Review</option>
+                <option value="VERIFIED">Verified</option>
+                <option value="CLOSED">Closed</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Status</button>
+    </form>
+</main>
+</body>
+</html>

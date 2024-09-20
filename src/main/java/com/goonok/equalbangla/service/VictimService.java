@@ -1,6 +1,7 @@
 package com.goonok.equalbangla.service;
 
 import com.goonok.equalbangla.model.*;
+import com.goonok.equalbangla.repository.TaskRepository;
 import com.goonok.equalbangla.repository.VictimRepository;
 import com.goonok.equalbangla.specification.VictimSpecification;
 import com.goonok.equalbangla.util.FileUploadUtil;
@@ -29,6 +30,12 @@ public class VictimService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private TaskRepository taskRepository;
+
+    @Autowired
+    private AdminService adminService;
 
 
     public Page<Victim> filterVictims(
@@ -295,6 +302,41 @@ public class VictimService {
         return victimRepository.findAll(
                 VictimSpecification.advancedSearchByCriteria(
                         fullName, incidentType, startDate, endDate, region, severity), pageable);
+    }
+
+
+
+    ///task assign to admin
+    public Victim assignCaseToAdmin(Long victimId, Long adminId) {
+        Victim victim = victimRepository.findById(victimId).orElseThrow(() -> new RuntimeException("Victim not found"));
+        Admin admin = adminService.getAdminById(adminId).orElseThrow(() -> new RuntimeException("Admin not found"));
+
+        victim.setAssignedAdmin(admin);
+        victim.setCaseStatus("IN_REVIEW");
+        return victimRepository.save(victim);
+    }
+
+    public Victim updateCaseStatus(Long victimId, String status) {
+        Victim victim = victimRepository.findById(victimId).orElseThrow(() -> new RuntimeException("Victim not found"));
+        victim.setCaseStatus(status);
+        return victimRepository.save(victim);
+    }
+
+    public Task createTaskForCase(Long victimId, Long adminId, String description) {
+        Victim victim = victimRepository.findById(victimId).orElseThrow(() -> new RuntimeException("Victim not found"));
+        Admin admin = adminService.getAdminById(adminId).orElseThrow(() -> new RuntimeException("Admin not found"));
+
+        Task task = new Task();
+        task.setVictim(victim);
+        task.setAssignedAdmin(admin);
+        task.setDescription(description);
+        task.setTaskStatus("PENDING");
+
+        return taskRepository.save(task);
+    }
+
+    public List<Task> getTasksForAdmin(Admin admin) {
+        return taskRepository.findByAssignedAdmin(admin);
     }
 
 

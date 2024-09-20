@@ -14,16 +14,22 @@
         <span th:text="${error}"></span>
     </div>
     <!-- Filters for admin/user management -->
-    <div class="mb-4 text-center">
-        <a class="btn btn-success" th:href="@{/admin/manage-admins?status=enabled}">Enabled</a>
-        -
-        <a class="btn btn-danger" th:href="@{/admin/manage-admins?status=disabled}">Disabled</a>
-        -
-        <a class="btn btn-success" th:href="@{/admin/manage-admins?status=power}">Powered</a>
-        -
-        <a class="btn btn-primary" th:href="@{/admin/manage-admins?status=normal}">Normal</a>
-        -
-        <a class="btn btn-secondary" th:href="@{/admin/manage-admins}">All Admins</a>
+    <div class="row text-center">
+        <div class="col-10 mb-4">
+            <a class="btn btn-success" th:href="@{/admin/manage-admins?status=enabled}">Enabled</a>
+            -
+            <a class="btn btn-danger" th:href="@{/admin/manage-admins?status=disabled}">Disabled</a>
+            -
+            <a class="btn btn-success" th:href="@{/admin/manage-admins?status=power}">Powered</a>
+            -
+            <a class="btn btn-primary" th:href="@{/admin/manage-admins?status=normal}">Normal</a>
+            -
+            <a class="btn btn-secondary" th:href="@{/admin/manage-admins}">All Admins</a>
+        </div>
+
+        <div class="col-2 mb-4">
+            <a class="btn btn-outline-success" th:href="@{/admin/register}" >Create New Admin</a>
+        </div>
     </div>
 
     <!-- Admins Table -->

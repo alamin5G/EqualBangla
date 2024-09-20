@@ -1,5 +1,6 @@
 package com.goonok.equalbangla.model;
 
+import com.goonok.equalbangla.util.AuditListener;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.*;
@@ -7,7 +8,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @EqualsAndHashCode(callSuper = true)
+@EntityListeners(AuditListener.class)
 @Entity
 @Transactional
 @Data
@@ -118,4 +122,14 @@ public class Victim extends LogEntity{
     @Column(name = "updated_by", updatable = false)
     private String updatedBy = "system";  // Store the username of the admin who updated this victim info
 
+    // New Fields
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_admin_id")
+    private Admin assignedAdmin; // The admin who is assigned to this case
+
+    @Column(name = "case_status")
+    private String caseStatus = "NEW"; // NEW, IN_REVIEW, VERIFIED, CLOSED
+
+    @OneToMany(mappedBy = "victim", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks;  // List of follow-up tasks for this victim case
 }

@@ -20,6 +20,7 @@ public class AdminService implements UserDetailsService {
 
     @Autowired
     private AdminRepository adminRepository;
+    @Autowired
     private EmailService emailService;
 
     @Override
@@ -49,12 +50,14 @@ public class AdminService implements UserDetailsService {
             String createdBy = "system";
             Admin admin = new Admin(); //initialize first because, there I need to set some logic
             admin.setCanManageAdmins(true); // if it is the first user
+            admin.setEnabled(true);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication != null && authentication.isAuthenticated()) {
                 String authName = authentication.getName();
                 if (authName != null && !authName.isEmpty()) {
                     createdBy = authName; // if there is user then admin can manage another admins will be updated as false
                     admin.setCanManageAdmins(false); // Default to not managing admins (can be set later)
+                    admin.setEnabled(false);  // Set enabled to false by default due to approval
                 }
             }
 
@@ -64,8 +67,6 @@ public class AdminService implements UserDetailsService {
             admin.setPassword(new BCryptPasswordEncoder().encode(password));  // Encrypt the password
             admin.setCreatedBy(createdBy);  // Set the 'created_by' field
             admin.setUpdatedBy(createdBy);  // Set the 'updated_by' field as it is first time updated
-
-            admin.setEnabled(false);  // Set enabled to false by default due to approval
 
             adminRepository.save(admin);
         }

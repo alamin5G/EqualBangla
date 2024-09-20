@@ -101,8 +101,8 @@ public class AdminController {
         try {
             // Save the new admin to the database
             adminService.createAdmin(newAdmin.getUsername(), newAdmin.getPassword(), newAdmin.getEmail());
-            redirectAttributes.addFlashAttribute("success", "Admin registered successfully!");
-            return "redirect:/admin/dashboard";  // Redirect after successful registration
+            redirectAttributes.addFlashAttribute("success", "Clap! "+newAdmin.getUsername() + " is a new admin!");
+            return "redirect:/admin/manage-admins";  // Redirect after successful registration
         } catch (Exception e) {
             model.addAttribute("error", "Registration failed: " + e.getMessage());
             return "admin/register";  // Return to registration page on failure
@@ -205,17 +205,7 @@ public class AdminController {
         return "redirect:/admin/manage-admins";
     }
 
-    @PostMapping("/add")
-    public String addAdmin(Admin admin, Authentication authentication) {
-        CustomAdminDetails adminDetails = (CustomAdminDetails) authentication.getPrincipal();
 
-        if (!adminDetails.canManageAdmins()) {
-            return "redirect:/admin/dashboard";  // Redirect if the admin is not authorized to manage other admins
-        }
-
-        adminService.createAdmin(admin.getUsername(), admin.getPassword(), admin.getPassword());
-        return "redirect:/admin/manage-admins";
-    }
 }
 
 

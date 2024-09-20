@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head :: head}">
+  <title>Audit Logs</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header th:replace="~{layout/navbar :: header}"></header>
+<main class="container mt-4">
+  <h2>Audit Logs</h2>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>Entity Name</th>
+        <th>Entity ID</th>
+        <th>Action</th>
+        <th>Modified By</th>
+        <th>Timestamp</th>
+        <th>Old Value</th>
+        <th>New Value</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="log : ${auditLogs}">
+        <td th:text="${log.entityName}">Entity Name</td>
+        <td th:text="${log.entityId}">Entity ID</td>
+        <td th:text="${log.action}">Action</td>
+        <td th:text="${log.modifiedBy}">Modified By</td>
+        <td th:text="${#dates.format(log.timestamp, 'yyyy-MM-dd HH:mm:ss')}">Timestamp</td>
+        <td th:text="${log.oldValue}">Old Value</td>
+        <td th:text="${log.newValue}">New Value</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+<footer th:replace="~{layout/footer :: footer}"></footer>
+</body>
+</html>
