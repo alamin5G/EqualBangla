@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/head :: head}"></head>
-<body>
-<main class="container mt-4">
+<body class="d-flex flex-column min-vh-100"> <!-- Flexbox for full height -->
+<header th:replace="~{layout/navbar :: header}"></header>
+
+<!-- Main content area takes up remaining space -->
+<main class="container mt-4 flex-grow-1">
     <h2>Update Case Status</h2>
     <form th:action="@{/admin/cases/{victimId}/status(victimId=${victim.id})}" method="post">
         <div class="mb-3">

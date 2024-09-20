@@ -37,7 +37,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/how", "/why", "/who", "/file-upload-instruction", "/css/**", "/images/**", "/about", "/verification/**", "/victims/**").permitAll()
+                        .requestMatchers("/", "/how", "/why", "/who", "/required-information", "/file-upload-instruction", "/css/**", "/images/**", "/about", "/verification/**", "/victims/**").permitAll()
                         .requestMatchers("/admin/login").permitAll()  // Allow unauthenticated access to the login page
                         .requestMatchers("/admin/**", "/uploads/**").hasRole("ADMIN") // Only admin users can access /admin URLs
                         .anyRequest().authenticated()

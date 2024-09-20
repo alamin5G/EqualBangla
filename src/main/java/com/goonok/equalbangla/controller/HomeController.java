@@ -44,4 +44,9 @@ public class HomeController {
     public String showWhoPage() {
         return "who";
     }
+
+    @GetMapping("/required-information")
+    public String showRequiredInformationPage(Model model) {
+        return "required-information";
+    }
 }

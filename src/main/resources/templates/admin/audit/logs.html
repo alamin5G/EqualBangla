@@ -4,9 +4,11 @@
   <title>Audit Logs</title>
   <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100"> <!-- Flexbox for full height -->
 <header th:replace="~{layout/navbar :: header}"></header>
-<main class="container mt-4">
+
+<!-- Main content area takes up remaining space -->
+<main class="container mt-4 flex-grow-1">
   <h2>Audit Logs</h2>
 
   <div class="table-responsive">

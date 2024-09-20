@@ -4,9 +4,11 @@
     <title>Admin Management</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100"> <!-- Flexbox for full height -->
 <header th:replace="~{layout/navbar :: header}"></header>
-<main class="container mt-4">
+
+<!-- Main content area takes up remaining space -->
+<main class="container mt-4 flex-grow-1">
     <!--display success message-->
     <h3 th:text="${success  != null ? success : 'User Management'}" class="alert alert-success text-center text-success">User Management</h3>
     <!--Display error message-->

@@ -2,9 +2,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/head :: head}"></head>
-<body>
+<body class="d-flex flex-column min-vh-100"> <!-- Flexbox for full height -->
 <header th:replace="~{layout/navbar :: header}"></header>
-<main class="container">
+
+<!-- Main content area takes up remaining space -->
+<main class="container mt-4 flex-grow-1">
     <!--all content will be placed here-->
 
     <div th:replace="~{layout/slider :: slider}">
@@ -35,9 +37,12 @@
         </div>
     </section>
 
+    <div class="col text-center text-warning" >
+        <h5>Please <a class="link-danger link-underline-opacity-0" href="/required-information">visit this page </a>to know what information usually we ask</h5>
+    </div>
     <!-- Call-to-Action Button -->
     <div class="text-center mt-5">
-        <a href="/verification/email" class="btn btn-primary btn-lg">Submit a Form for Missing or Death or Injured</a>
+        <a href="/verification/email" class="btn btn-danger btn-lg bg-gradient">Submit a Form for Missing or Death or Injured</a>
     </div>
 
 </main>

@@ -2,9 +2,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/head :: head}"></head>
-<body>
+<body class="d-flex flex-column min-vh-100"> <!-- Flexbox for full height -->
 <header th:replace="~{layout/navbar :: header}"></header>
-<main class="container mt-4">
+
+<!-- Main content area takes up remaining space -->
+<main class="container mt-4 flex-grow-1">
     <!--all content will be placed here-->
     <h2>Who Are We?</h2>
     <p>We are a collective of activists, journalists, and concerned citizens committed to documenting the human rights violations happening in Bangladesh.</p>

@@ -2,9 +2,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/head :: head}"></head>
-<body>
+<body class="d-flex flex-column min-vh-100"> <!-- Flexbox for full height -->
 <header th:replace="~{layout/navbar :: header}"></header>
-<main class="container mt-4">
+
+<!-- Main content area takes up remaining space -->
+<main class="container mt-4 flex-grow-1">
     <!--all content will be placed here-->
 
     <div class="row justify-content-center">
@@ -86,7 +88,7 @@
                         verification link will be sent to your email address upon initiating the process.</p>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="/" class="btn btn-primary">Proceed to Email Verification</a>
+                    <a href="/verification/email" class="btn btn-primary">Proceed to Email Verification</a>
                 </div>
             </div>
         </div>
