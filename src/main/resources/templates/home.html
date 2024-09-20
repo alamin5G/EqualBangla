@@ -6,45 +6,81 @@
 <header th:replace="~{layout/navbar :: header}"></header>
 
 <!-- Main content area takes up remaining space -->
-<main class="container mt-4 flex-grow-1">
+<main class="container mt-1 flex-grow-1">
     <!--all content will be placed here-->
 
     <div th:replace="~{layout/slider :: slider}">
     </div>
 
-    <!-- About the Movement -->
+
+    <!-- Process Section -->
+    <section class="process-section">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4 process-card">
+                    <img src="/images/form-icon-green.ico" alt="Form">
+                    <h5>Submit a Report</h5>
+                    <p>Fill out the form with your or victim's information and submit it for review.</p>
+                </div>
+                <div class="col-md-4 process-card">
+                    <img src="/images/notification-icon.ico" alt="Notification">
+                    <h5>Receive Notification</h5>
+                    <p>Once your submission is reviewed, we will notify you about the status via email.</p>
+                </div>
+                <div class="col-md-4 process-card">
+                    <img src="/images/verified-icon.ico" alt="Confirmation">
+                    <h5>Get Verified</h5>
+                    <p>Once verified, your report will be processed, and necessary action will be taken.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner Section -->
+    <section class="banner-section text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="banner-card">
+                        <img src="/images/form-icon.ico" alt="NID">
+                        <div>
+                            <h3>Required information for Submission</h3>
+                            <p>Get ready with your details like NID, Phone, Medical report and other important information to submit a (Death/Missing/Injured) case.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons row">
+                <a href="/verification/email" class="btn btn-danger btn-lg bg-gradient">Submit a case</a>
+                <a href="/required-information" class="btn btn-success btn-lg bg-gradient">Check Required Information</a>
+            </div>
+        </div>
+    </section>
+    <div class="col mt-5 mb-5 text-center text-success">
+        <h5>Please <a class="link-danger link-underline-opacity-10" href="/required-information">visit this page</a> to
+            know what information we usually ask</h5>
+    </div>
+    <!-- About Section -->
     <section class="about-section">
         <div class="container">
             <h2>About the July-August Movement</h2>
             <p>In the summer of 2024, hundreds of students and protesters in Bangladesh were subjected to violence and
                 persecution by the regime of Sheikh Hasina. The anti-discrimination movement aimed to bring attention to
                 widespread government oppression. However, this peaceful movement was met with brutality, resulting in
-                the
-                deaths of many young lives.</p>
+                the deaths of many young lives.</p>
             <h3>Why We Collect Data</h3>
-            <p>This project, <strong>EqualBangla</strong>, seeks to collect, document, and preserve the stories and
-                facts
-                surrounding the tragic events of July-August 2024. By gathering this data, we aim to give a voice to the
-                victims and hold those responsible for atrocities accountable. The collected data will serve as a
-                historical
-                record of the events and help in future justice-seeking efforts.</p>
+            <p>This project, <strong>Equal Bangladesh</strong>, seeks to collect, document, and preserve the stories and
+                facts surrounding the tragic events of July-August 2024. By gathering this data, we aim to give a voice
+                to the victims and hold those responsible for atrocities accountable. The collected data will serve as a
+                historical record of the events and help in future justice-seeking efforts.</p>
             <h3>How This Project Works</h3>
             <p>We collect victim information through verified submissions. After a user verifies their email address,
-                they
-                are allowed to submit details related to the victims—whether injured, missing, or dead. Each submission
-                will
-                be stored in a secure database, reviewed for accuracy, and kept confidential.</p>
+                they are allowed to submit details related to the victims—whether injured, missing, or dead. Each
+                submission will be stored in a secure database, reviewed for accuracy, and kept confidential.</p>
         </div>
     </section>
-
-    <div class="col text-center text-warning" >
-        <h5>Please <a class="link-danger link-underline-opacity-0" href="/required-information">visit this page </a>to know what information usually we ask</h5>
-    </div>
-    <!-- Call-to-Action Button -->
-    <div class="text-center mt-5">
-        <a href="/verification/email" class="btn btn-danger btn-lg bg-gradient">Submit a Form for Missing or Death or Injured</a>
-    </div>
-
 </main>
 <footer th:replace="~{layout/footer :: footer}"></footer>
 </body>

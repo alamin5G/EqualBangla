@@ -82,18 +82,24 @@ public class AdminReportController {
     @GetMapping("/export/csv")
     public void exportVictimDataCsv(HttpServletResponse response) throws IOException {
         List<Victim> victims = victimService.getAllVictims(); // Fetch all victim data
+        log.info("downloading the CSV file of victims {}" , victims.getFirst());
+        log.info("downloading the CSV file of victims {}" , victims.getLast());
         reportService.generateCsvReport(victims, response);
     }
 
     @GetMapping("/export/excel")
     public void exportVictimDataExcel(HttpServletResponse response) throws IOException {
         List<Victim> victims = victimService.getAllVictims(); // Fetch all victim data
+        log.info("downloading the Excel file of victims {}" , victims.getFirst());
+        log.info("downloading the Excel file of victims {}" , victims.getLast());
         reportService.generateExcelReport(victims, response);
     }
 
     @GetMapping("/export/pdf")
     public void exportVictimDataPdf(HttpServletResponse response) throws IOException {
         List<Victim> victims = victimService.getAllVictims(); // Fetch all victim data
+        log.info("downloading the PDF file of victims {}" , victims.getFirst());
+        log.info("downloading the PDF file of victims {}" , victims.getLast());
         reportService.generatePdfReport(victims, response);
     }
 
