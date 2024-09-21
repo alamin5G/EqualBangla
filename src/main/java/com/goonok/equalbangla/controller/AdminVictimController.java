@@ -46,6 +46,7 @@ public class AdminVictimController {
 
         // Render the selected status back to the UI
         model.addAttribute("status", status);
+        model.addAttribute("pageTitle", "Victim List");
 
         return "admin/victim/victims";
     }
@@ -112,6 +113,7 @@ public class AdminVictimController {
         // Add verificationStatus to model to render it in the view
         model.addAttribute("verificationStatus", verificationStatus);
 
+        model.addAttribute("pageTitle", "Filter Victim List");
         return "admin/victim/list";  // Points to the Thymeleaf template for displaying the victims
     }
 
@@ -130,6 +132,7 @@ public class AdminVictimController {
         }
 
         victimService.save(victim);
+
         return "redirect:/admin/victims";  // Redirect back to victim list
     }
 
@@ -180,6 +183,7 @@ public class AdminVictimController {
     public String showVerificationPage(@PathVariable Long id, Model model) {
         Victim victim = victimService.getVictimById(id);
         model.addAttribute("victim", victim);
+        model.addAttribute("pageTitle", "Verify the Victim");
         return "admin/victim/verify";  // Points to the verification page
     }
 
@@ -199,6 +203,7 @@ public class AdminVictimController {
     public String searchVictims(@RequestParam String keyword, Model model) {
         List<Victim> searchResults = victimService.searchVictims(keyword);
         model.addAttribute("searchResults", searchResults);
+        model.addAttribute("pageTitle", "search victim");
         return "admin/victim/search"; // Points to the Thymeleaf template for search results
     }
 
@@ -226,6 +231,7 @@ public class AdminVictimController {
         model.addAttribute("totalPages", searchResults.getTotalPages());
         model.addAttribute("totalItems", searchResults.getTotalElements());
 
+        model.addAttribute("pageTitle", "Search victim");
         // Return the same page or another template where search results will be shown
         return "admin/victim/advanced-search";
     }

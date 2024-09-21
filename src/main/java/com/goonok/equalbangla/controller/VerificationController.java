@@ -20,7 +20,8 @@ public class VerificationController {
 
     // Show email input form for sending the verification code
     @GetMapping("/email")
-    public String showEmailVerificationForm() {
+    public String showEmailVerificationForm(Model model) {
+        model.addAttribute("pageTitle", "Enter your Email for Verification");
         return "verify-email";  // Thymeleaf page for entering the email
     }
 
@@ -28,17 +29,21 @@ public class VerificationController {
     @PostMapping("/send-code")
     public String sendVerificationCode(@RequestParam String email, Model model) {
         // Validate email domain (only allow Gmail, Yahoo, Hotmail)
+
         if (email.matches("^[\\w-\\.]+@(gmail|yahoo|hotmail)\\.com$")) {
             // Generate and send OTP
             boolean isExist = verificationService.generateVerificationToken(email);
             if (!isExist) {
                 model.addAttribute("error", "This email already exists, you can't use this email again");
+                model.addAttribute("pageTitle", "Enter another email");
                 return "verify-email";
             }
             model.addAttribute("email", email);
+            model.addAttribute("pageTitle", "Enter Verification Code");
             return "otp-form";  // Redirect to OTP form after sending OTP
         } else {
             model.addAttribute("error", "Invalid email domain. Please use Gmail, Yahoo, or Hotmail.");
+            model.addAttribute("pageTitle", "Enter Valid Email");
             return "verify-email";  // Return to the email form with error
         }
     }

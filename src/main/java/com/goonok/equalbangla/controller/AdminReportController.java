@@ -74,6 +74,7 @@ public class AdminReportController {
             model.addAttribute("error", "Unable to generate report charts.");
         }
 
+        model.addAttribute("pageTitle", "Statistical Report");
 
         return "admin/reports/report"; // Points to the Thymeleaf template
     }

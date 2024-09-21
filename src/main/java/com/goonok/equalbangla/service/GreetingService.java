@@ -3,11 +3,13 @@ package com.goonok.equalbangla.service;
 import com.goonok.equalbangla.geo_locaton.GeoLocationService;
 import com.goonok.equalbangla.geo_locaton.TimeZoneService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 
+@Slf4j
 @Service
 public class GreetingService {
 
@@ -17,20 +19,25 @@ public class GreetingService {
     @Autowired
     private TimeZoneService timeZoneService;
 
+    private static final String DEFAULT_TIME_ZONE = "Asia/Dhaka";  // Default to Dhaka time zone
+
     public String greetUser(HttpServletRequest request) {
 
         String clientIP = geoLocationService.getClientIP(request);
 
+        log.info("clientIP: " + clientIP);
         // Get the user's time zone based on their IP address
         String timeZone = geoLocationService.getTimeZone(clientIP);
-        if (timeZone != null) {
-            // Get the local time for the user's time zone
-            LocalTime userLocalTime = timeZoneService.getLocalTimeFromTimeZone(timeZone);
-            return greet(userLocalTime);
+        log.info("timeZone: " + timeZone);
 
-        } else {
-            return "Welcome";
+        if (timeZone == null) {
+            timeZone = DEFAULT_TIME_ZONE;
         }
+
+        // Get the local time for the user's time zone
+        LocalTime userLocalTime = timeZoneService.getLocalTimeFromTimeZone(timeZone);
+        log.info("userLocalTime: " + userLocalTime);
+        return greet(userLocalTime);
     }
 
 

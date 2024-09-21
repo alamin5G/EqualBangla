@@ -43,11 +43,12 @@ public class VictimController {
 
     // Show form selection after verification
     @GetMapping("/form-selection")
-    public String showFormSelection(HttpSession session, RedirectAttributes redirectAttributes) {
+    public String showFormSelection(HttpSession session, RedirectAttributes redirectAttributes, Model model) {
         if (!isVerified(session)) {
             redirectAttributes.addFlashAttribute("message", "Your request is not verified! Please, verify your (another) email for a new submission");
             return "redirect:/verification/email";
         }
+        model.addAttribute("pageTitle", "Select Related Form for Victim");
         return "form-selection";  // A Thymeleaf page with links to specific forms (Death, Missing, Injured)
     }
 
@@ -64,6 +65,7 @@ public class VictimController {
         victim.setIncidentType("Death");
         victim.setDeathDetails(new DeathDetails());
         model.addAttribute("victim", victim);
+        model.addAttribute("pageTitle", "Death Case Form");
         return "form-death";  // Thymeleaf form page for submitting a death case
     }
 
@@ -95,6 +97,7 @@ public class VictimController {
             verificationService.updateVerificationToken(token);
         }
         session.invalidate();
+        model.addAttribute("pageTitle", "Death Case Submitted Successfully");
         return "confirmation";  // Return confirmation page after submission
     }
 
@@ -111,6 +114,8 @@ public class VictimController {
         victim.setIncidentType("Missing");  // Set the default incident type
         victim.setMissingDetails(new MissingDetails());
         model.addAttribute("victim",victim);
+
+        model.addAttribute("pageTitle", "Missing Form");
         return "form-missing";  // Thymeleaf form page for submitting a missing case
     }
 
@@ -147,6 +152,7 @@ public class VictimController {
         }
 
         session.invalidate();
+        model.addAttribute("pageTitle", "Missing Form submitted Successfully");
         return "confirmation";  // Return confirmation page after submission
     }
 
@@ -163,6 +169,7 @@ public class VictimController {
         victim.setIncidentType("Injured");  // Set the default incident type
         victim.setInjuryDetails(new InjuryDetails());
         model.addAttribute("victim", victim);
+        model.addAttribute("pageTitle", "Injured Form");
         return "form-injured";  // Thymeleaf form page for submitting an injured case
     }
 
@@ -191,6 +198,7 @@ public class VictimController {
         }
 
         session.invalidate();
+        model.addAttribute("pageTitle", "Injured Form submitted Successfully");
         return "confirmation";  // Return confirmation page after successful submission
     }
 

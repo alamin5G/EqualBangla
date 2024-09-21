@@ -21,6 +21,8 @@ public class AuditLogController {
     public String viewAuditLogs(Model model) {
         List<AuditLog> auditLogs = auditLogRepository.findAll();
         model.addAttribute("auditLogs", auditLogs);
+
+        model.addAttribute("pageTitle", "Log Management");
         return "admin/audit/logs";
     }
 }

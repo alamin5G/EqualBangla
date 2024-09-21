@@ -39,6 +39,7 @@ public class AdminCasesController {
         model.addAttribute("tasks", tasks);
         model.addAttribute("currentAdmin", currentAdmin);
 
+        model.addAttribute("pageTitle", "All Cases");
         return "admin/case/cases";
     }
 
@@ -49,6 +50,7 @@ public class AdminCasesController {
         List<Admin> admins = adminService.getAllAdmins();
         model.addAttribute("victim", victim);
         model.addAttribute("admins", admins);
+        model.addAttribute("pageTitle", "Assign Case");
         return "admin/case/assign";
     }
 

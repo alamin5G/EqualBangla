@@ -44,8 +44,11 @@ public class AdminController {
 
     // GET request for login page
     @GetMapping("/login")
-    public String showLoginPage() {
+    public String showLoginPage(Model model) {
+
+        model.addAttribute("pageTitle", "Login Page");
         return "admin/login";  // Return the login page view
+
     }
 
     @PostMapping("/login")
@@ -87,6 +90,7 @@ public class AdminController {
         // Validate token
         if (token != null && jwtTokenProvider.validateToken(token)) {
             model.addAttribute("admin", new Admin());
+            model.addAttribute("pageTitle", "Registration Page");
             return "admin/register";  // Show registration page
         } else {
             log.info("Token is null: " + token);
@@ -127,6 +131,7 @@ public class AdminController {
     @GetMapping("/dashboard")
     public String showDashboard(Model model) {
 
+        model.addAttribute("pageTitle", "Admin Dashboard");
         return "admin/dashboard";  // Return the dashboard view
     }
 
@@ -150,6 +155,7 @@ public class AdminController {
 
         // Proceed with showing the admin management page
         model.addAttribute("admins", adminList);
+        model.addAttribute("pageTitle", "Admin Management");
         return "admin/manage-admin";
     }
 
@@ -192,6 +198,7 @@ public class AdminController {
         Admin admin = adminService.getAdminById(id).orElseThrow(() -> new RuntimeException("Admin not found"));
         // this method is not using for the edit password
         model.addAttribute("admin", admin);
+        model.addAttribute("pageTitle", "Edit Password");
         return "admin/edit-password";  // Thymeleaf template for password edit
     }
 
