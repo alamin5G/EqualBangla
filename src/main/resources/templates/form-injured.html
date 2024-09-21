@@ -8,9 +8,11 @@
 <!-- Main content area takes up remaining space -->
 <main class="container mt-4 flex-grow-1">
     <!--all content will be placed here-->
-    <h2>Submit Injured Case</h2>
+    <h3>Submit Injured Case(সকল তথ্য দয়া করে ইংরেজীতে পূরণ করবেন)</h3>
+        <p class="text-center text-danger">আপনাদের বুঝার সুবিধার্থে বাংলা ভাষাতেও লিখা হয়েছে, তবে তথ্যের পরিবেশেন ও কাজকে সহজ করতে সকল তথ্য ইংরেজীতে দেওয়ার জন্য অনুরোধ করছি। তবে চাইলে বাংলিশও লিখতে পারেন।</p>
+        <!-- Bind the form to the 'victim' object -->
 
-    <form action="/victims/submit-injured-form" method="post" th:object="${victim}" enctype="multipart/form-data">
+        <form action="/victims/submit-injured-form" method="post" th:object="${victim}" enctype="multipart/form-data">
 
         <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
             <h5 class="text-danger">Validation Error</h5>
@@ -293,14 +295,14 @@
 
         <!-- Injured Person Photo Upload -->
         <div class="mb-3">
-            <label for="injuredPersonPhoto" class="form-label">Injured Persons Photo (Required) <a th:href="@{/file-upload-instruction}">ছবি আপলোড করতে নির্দেশনা অনুসরণ করুন</a> </label>
+            <label for="injuredPersonPhoto" class="form-label">Injured Persons Photo (Required) <a th:href="@{/file-upload-instruction}" target="_blank">ছবি আপলোড করতে নির্দেশনা অনুসরণ করুন</a> </label>
             <input type="file" id="injuredPersonPhoto" name="injuryDetails.injuredPersonPhotographFile" class="form-control" th:field="*{injuryDetails.injuredPersonPhotographFile}" accept=".jpg, .jpeg, .png">
             <div class="text-danger" th:if="${#fields.hasErrors('injuryDetails.injuredPersonPhotographFile')}" th:errors="*{injuryDetails.injuredPersonPhotographFile}"></div>
         </div>
 
         <!-- Medical Report Upload -->
         <div class="mb-3">
-            <label for="injuredReport" class="form-label">Medical Report (Only PDF Required) <a th:href="@{/file-upload-instruction}">মেডিকেল রিপোর্ট ও অন্যান্য তথ্যের PDF আপলোড করতে নির্দেশনা অনুসরণ করুন</a> </label>
+            <label for="injuredReport" class="form-label">Medical Report (Only PDF Required) <a th:href="@{/file-upload-instruction}" target="_blank">মেডিকেল রিপোর্ট ও অন্যান্য তথ্যের PDF আপলোড করতে নির্দেশনা অনুসরণ করুন</a> </label>
             <input type="file" id="injuredReport" name="injuryDetails.medicalReportFile" class="form-control" th:field="*{injuryDetails.medicalReportFile}" accept=".pdf">
             <div class="text-danger" th:if="${#fields.hasErrors('injuryDetails.medicalReportFile')}" th:errors="*{injuryDetails.medicalReportFile}"></div>
         </div>

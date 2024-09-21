@@ -299,7 +299,7 @@
         <!-- Death Photo Upload -->
         <div class="mb-3">
             <label for="deathPhoto" class="form-label">Death Persons Photo (Required) <a
-                    th:href="@{/file-upload-instruction}">ছবি আপলোড করতে নির্দেশনা অনুসরণ করুন</a> </label>
+                    th:href="@{/file-upload-instruction}" target="_blank">ছবি আপলোড করতে নির্দেশনা অনুসরণ করুন</a> </label>
             <input type="file" id="deathPhoto" name="deathDetails.deathPhotoFile" class="form-control"
                    th:field="*{deathDetails.deathPhotoFile}" accept=".jpg, .jpeg, .png">
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathPhotoFile')}"
@@ -309,7 +309,7 @@
         <!-- Death Certificate Upload -->
         <div class="mb-3">
             <label for="deathCertificate" class="form-label">Death Certificate (Required) <a
-                    th:href="@{/file-upload-instruction}">মৃত্যুসনদ ও অন্যান্য তথ্যের PDF আপলোড করতে নির্দেশনা অনুসরণ করুন</a> </label>
+                    th:href="@{/file-upload-instruction}" target="_blank">মৃত্যুসনদ ও অন্যান্য তথ্যের PDF আপলোড করতে নির্দেশনা অনুসরণ করুন</a> </label>
             <input type="file" id="deathCertificate" name="deathDetails.deathCertificateFile" class="form-control"
                    th:field="*{deathDetails.deathCertificateFile}" accept=".pdf">
             <div class="text-danger" th:if="${#fields.hasErrors('deathDetails.deathCertificateFile')}"
